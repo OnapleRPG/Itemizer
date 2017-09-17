@@ -1,0 +1,33 @@
+plugins {
+    id 'org.spongepowered.plugin' version '0.8.1'
+}
+
+apply plugin: 'java'
+apply plugin: 'maven-publish'
+apply plugin: 'org.spongepowered.plugin'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId 'com.ylinor'
+            artifactId 'brawlator'
+            version '0.1'
+
+            from components.java
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+dependencies {
+    compile 'org.spongepowered:spongeapi:6.0.0'
+    compile 'org.xerial:sqlite-jdbc:3.7.2'
+    testCompile "junit:junit:4.11"
+}
