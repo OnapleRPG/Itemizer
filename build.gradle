@@ -13,7 +13,7 @@ publishing {
     publications {
         maven(MavenPublication) {
             groupId 'com.ylinor'
-            artifactId 'harvester'
+            artifactId 'itemizer'
             version '0.1'
 
             from components.java
