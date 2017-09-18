@@ -15,7 +15,7 @@ publishing {
         maven(MavenPublication) {
             groupId 'com.ylinor'
             artifactId 'itemizer'
-            version '0.1'
+            version '0.0.1'
 
             from components.java
         }
