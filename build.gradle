@@ -1,5 +1,6 @@
 plugins {
     id 'org.spongepowered.plugin' version '0.8.1'
+    id "org.sonarqube" version "2.5"
 }
 
 apply plugin: 'java'
@@ -30,4 +31,12 @@ dependencies {
     compile 'org.spongepowered:spongeapi:6.0.0'
     compile 'org.xerial:sqlite-jdbc:3.7.2'
     testCompile "junit:junit:4.11"
+}
+
+sonarqube {
+    properties {
+        property "sonar.projectName", "Itemizer"
+        property "sonar.organization", "ylinor-github"
+        property "sonar.host.url", "https://sonarcloud.io/"
+    }
 }
