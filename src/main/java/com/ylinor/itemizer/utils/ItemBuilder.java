@@ -26,6 +26,8 @@ public class ItemBuilder {
     private byte data;
     private String name;
     private boolean glow = false;
+    private boolean canDestroy = true;
+    private boolean canPlace = true;
     private ListValue<Text> lore;
     private Map<Enchantment, Integer> enchants = Maps.newHashMap();
 
@@ -52,7 +54,7 @@ public class ItemBuilder {
         this.enchantmentData = item.getOrCreate(EnchantmentData.class).get();
         this.enchantmentData.addElements(item.get(Keys.ITEM_ENCHANTMENTS).get());
     }
- 
+
     public ItemBuilder setAmount(int amount) {
         this.amount = amount;
         return this;
@@ -102,8 +104,6 @@ public class ItemBuilder {
         Validate.notNull(this.itemTypes, "Material cannot be null");
         ItemStack item = ItemStack.builder().itemType(itemTypes).build();
 
-        if (glow)
-            item.offer(Keys.GLOWING, true);
         if (this.name != null)
             item.offer(Keys.DISPLAY_NAME, Text.of(this.name));
         if (this.lore != null && !this.lore.isEmpty()) {
@@ -116,7 +116,21 @@ public class ItemBuilder {
                         .add(new ItemEnchantment(enchantment, enchants.get(enchantment))));
             }
         }
+
+        item.offer(Keys.HIDE_CAN_DESTROY, canDestroy);
+        item.offer(Keys.HIDE_CAN_PLACE, canPlace);
+        item.offer(Keys.GLOWING, glow);
+
         return item;
     }
 
+    public ItemBuilder setCanDestroy(boolean canDestroy) {
+        this.canDestroy = canDestroy;
+        return this;
+    }
+
+    public ItemBuilder setCanPlace(boolean canPlace) {
+        this.canPlace = canPlace;
+        return this;
+    }
 }
