@@ -41,6 +41,18 @@ public class ItemBuilder {
         enchantmentData = item.getOrCreate(EnchantmentData.class).get();
     }
 
+    public ItemBuilder(ItemStack item) {
+        this.itemTypes = item.getItem();
+        this.amount = item.getQuantity();
+        this.name = item.get(Keys.DISPLAY_NAME).orElse(Text.of(item.getTranslation().get())).toPlain();
+        this.glow = item.get(Keys.GLOWING).orElse(false);
+        this.loreData = Sponge.getDataManager().getManipulatorBuilder(LoreData.class).get().create();
+        this.lore = loreData.lore();
+        this.lore.addAll(item.get(Keys.ITEM_LORE).get());
+        this.enchantmentData = item.getOrCreate(EnchantmentData.class).get();
+        this.enchantmentData.addElements(item.get(Keys.ITEM_ENCHANTMENTS).get());
+    }
+
     public ItemBuilder setAmount(int amount) {
         this.amount = amount;
         return this;
