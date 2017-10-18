@@ -52,7 +52,7 @@ public class ItemBuilder {
         this.enchantmentData = item.getOrCreate(EnchantmentData.class).get();
         this.enchantmentData.addElements(item.get(Keys.ITEM_ENCHANTMENTS).get());
     }
-
+ 
     public ItemBuilder setAmount(int amount) {
         this.amount = amount;
         return this;
