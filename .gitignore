@@ -3,4 +3,6 @@
 build
 gradle
 *.iml
+gradlew
+gradlew.bat
 gradle.properties
