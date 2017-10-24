@@ -1,6 +1,7 @@
 package com.ylinor.itemizer.utils;
 
 import com.google.common.collect.Maps;
+import com.ylinor.itemizer.data.beans.ItemBean;
 import org.apache.commons.lang3.Validate;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.key.Keys;
@@ -15,6 +16,7 @@ import org.spongepowered.api.text.Text;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author Feedthecookie
@@ -132,5 +134,19 @@ public class ItemBuilder {
     public ItemBuilder setCanPlace(boolean canPlace) {
         this.canPlace = canPlace;
         return this;
+    }
+
+    /**
+     * Build an itemstack from an ItemBean
+     * @param itemBean Data of the item to build
+     * @return Optional of the itemstack
+     */
+    public static Optional<ItemStack> buildItemStack(ItemBean itemBean) {
+        Optional<ItemType> optionalType = Sponge.getRegistry().getType(ItemType.class, itemBean.getType());
+        if (optionalType.isPresent()) {
+            ItemStack itemStack = ItemStack.builder().itemType(optionalType.get()).build();
+            return Optional.ofNullable(itemStack);
+        }
+        return Optional.empty();
     }
 }

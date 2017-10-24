@@ -2,7 +2,9 @@ package com.ylinor.itemizer.data.handlers;
 
 import com.google.common.reflect.TypeToken;
 import com.ylinor.itemizer.Itemizer;
+import com.ylinor.itemizer.data.beans.ItemBean;
 import com.ylinor.itemizer.data.beans.MinerBean;
+import com.ylinor.itemizer.data.serializers.ItemSerializer;
 import com.ylinor.itemizer.data.serializers.MinerSerializer;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
@@ -23,8 +25,30 @@ public class ConfigurationHandler {
         return minerList;
     }
 
+    private static List<ItemBean> itemList;
+    public static List<ItemBean> getItemList(){
+        return itemList;
+    }
+
     /**
-     * Read configuration and interpret it
+     * Read items configuration and interpret it
+     * @param configurationNode ConfigurationNode to read from
+     */
+    public static void readItemsConfiguration(CommentedConfigurationNode configurationNode){
+        itemList = new ArrayList<>();
+        TypeSerializers.getDefaultSerializers().registerType(TypeToken.of(ItemBean.class), new ItemSerializer());
+        try {
+            itemList = configurationNode.getNode("items").getList(TypeToken.of(ItemBean.class));
+            for (ItemBean item: itemList) {
+                Itemizer.getLogger().info("Item from config : " + item.getId() + "-" + item.getType() + "-" + item.getLore());
+            }
+        } catch (ObjectMappingException e) {
+            Itemizer.getLogger().error("Error while reading configuration 'items' : " + e.getMessage());
+        }
+    }
+
+    /**
+     * Read miners configuration and interpret it
      * @param configurationNode ConfigurationNode to read from
      */
     public static void readMinerConfiguration(CommentedConfigurationNode configurationNode){
