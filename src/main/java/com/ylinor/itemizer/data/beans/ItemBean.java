@@ -11,12 +11,18 @@ public class ItemBean {
     private String name;
     /** Lore / description of the item **/
     private String lore;
+    /** Unbreakable attribute **/
+    private boolean unbreakable;
     /** Map of enchants and their levels **/
     private Map<String, Integer> enchants;
 
-    public ItemBean(int id, String type) {
+    public ItemBean(int id, String type, String name, String lore, boolean unbreakable, Map<String, Integer> enchants) {
         this.id = id;
         this.type = type;
+        this.name = name;
+        this.lore = lore;
+        this.unbreakable = unbreakable;
+        this.enchants = enchants;
     }
 
     public int getId() {
@@ -45,6 +51,13 @@ public class ItemBean {
     }
     public void setLore(String lore) {
         this.lore = lore;
+    }
+
+    public boolean isUnbreakable() {
+        return unbreakable;
+    }
+    public void setUnbreakable(boolean unbreakable) {
+        this.unbreakable = unbreakable;
     }
 
     public Map<String, Integer> getEnchants() {
