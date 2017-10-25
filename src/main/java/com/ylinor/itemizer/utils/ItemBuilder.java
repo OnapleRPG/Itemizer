@@ -2,8 +2,12 @@ package com.ylinor.itemizer.utils;
 
 import com.ylinor.itemizer.Itemizer;
 import com.ylinor.itemizer.data.beans.ItemBean;
+import com.ylinor.itemizer.data.beans.MinerBean;
+import com.ylinor.itemizer.data.handlers.ConfigurationHandler;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.data.key.Keys;
+import org.spongepowered.api.data.manipulator.mutable.item.BreakableData;
 import org.spongepowered.api.data.manipulator.mutable.item.EnchantmentData;
 import org.spongepowered.api.data.meta.ItemEnchantment;
 import org.spongepowered.api.item.Enchantment;
@@ -11,14 +15,8 @@ import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.text.Text;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
-/**
- * @author Feedthecookie
- */
 public class ItemBuilder {
     /**
      * Build an itemstack from an ItemBean
@@ -31,6 +29,7 @@ public class ItemBuilder {
             ItemStack itemStack = ItemStack.builder().itemType(optionalType.get()).build();
             itemStack = ItemBuilder.defineItemStack(itemStack, itemBean);
             itemStack = ItemBuilder.enchantItemStack(itemStack, itemBean);
+            itemStack = ItemBuilder.grantMining(itemStack, itemBean);
             return Optional.ofNullable(itemStack);
         } else {
             Itemizer.getLogger().warn("Unknown item type : " + itemBean.getType());
@@ -50,11 +49,13 @@ public class ItemBuilder {
             itemStack.offer(Keys.DISPLAY_NAME, Text.of(itemBean.getName()));
         }
         // Item lore
-        List<Text> lore = new ArrayList<>();
-        for (String loreLine : itemBean.getLore().split("\n")) {
-            lore.add(Text.of(loreLine));
+        if (itemBean.getLore() != null) {
+            List<Text> lore = new ArrayList<>();
+            for (String loreLine : itemBean.getLore().split("\n")) {
+                lore.add(Text.of(loreLine));
+            }
+            itemStack.offer(Keys.ITEM_LORE, lore);
         }
-        itemStack.offer(Keys.ITEM_LORE, lore);
         // Item attributes
         itemStack.offer(Keys.UNBREAKABLE, itemBean.isUnbreakable());
         return itemStack;
@@ -77,6 +78,31 @@ public class ItemBuilder {
             }
         }
         itemStack.offer(enchantmentData);
+        return itemStack;
+    }
+
+    /**
+     * Grant mining capabilities
+     * @param itemStack Item to add mining capability
+     * @param itemBean Data of the item
+     * @return Item with mining powers
+     */
+    private static ItemStack grantMining(ItemStack itemStack, ItemBean itemBean) {
+        BreakableData breakableData = itemStack.getOrCreate(BreakableData.class).get();
+        List<MinerBean> minerList = ConfigurationHandler.getMinerList();
+        for (int minerId : itemBean.getMiners()) {
+            for (MinerBean minerBean : minerList) {
+                if (minerBean.getId() == minerId) {
+                    for (String blockType : minerBean.getMineTypes()) {
+                        Optional<BlockType> optionalBlockType = Sponge.getRegistry().getType(BlockType.class, blockType);
+                        if (optionalBlockType.isPresent()) {
+                            breakableData.set(breakableData.breakable().add(optionalBlockType.get()));
+                        }
+                    }
+                }
+            }
+        }
+        itemStack.offer(breakableData);
         return itemStack;
     }
 }

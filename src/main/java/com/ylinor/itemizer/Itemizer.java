@@ -34,7 +34,7 @@ public class Itemizer {
 	@Listener
 	public void onServerStart(GameStartedServerEvent event) throws Exception {
 		ConfigurationHandler.readItemsConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer_items.conf"));
-		//ConfigurationHandler.readMinerConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer_miner.conf"));
+		ConfigurationHandler.readMinerConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer_miners.conf"));
 
 		CommandSpec retrieve = CommandSpec.builder()
 				.description(Text.of("Retrieve an item from a configuration file with its id."))
@@ -42,7 +42,7 @@ public class Itemizer {
 				.executor(new RetrieveCommand()).build();
 		Sponge.getCommandManager().register(this, retrieve, "retrieve");
 
-		logger.info("ITEMIZER initialized.");
+		logger.info("ITEMIZER initialized. ");
 	}
 
 }

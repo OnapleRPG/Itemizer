@@ -6,6 +6,7 @@ import com.ylinor.itemizer.data.beans.ItemBean;
 import com.ylinor.itemizer.data.beans.MinerBean;
 import com.ylinor.itemizer.data.serializers.ItemSerializer;
 import com.ylinor.itemizer.data.serializers.MinerSerializer;
+import com.ylinor.itemizer.utils.MinerUtil;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
@@ -39,9 +40,7 @@ public class ConfigurationHandler {
         TypeSerializers.getDefaultSerializers().registerType(TypeToken.of(ItemBean.class), new ItemSerializer());
         try {
             itemList = configurationNode.getNode("items").getList(TypeToken.of(ItemBean.class));
-            for (ItemBean item: itemList) {
-                Itemizer.getLogger().info("Item from config : " + item.getId() + "-" + item.getType() + "-" + item.getLore());
-            }
+            Itemizer.getLogger().info(itemList.size() + " items loaded from configuration.");
         } catch (ObjectMappingException e) {
             Itemizer.getLogger().error("Error while reading configuration 'items' : " + e.getMessage());
         }
@@ -56,9 +55,12 @@ public class ConfigurationHandler {
         TypeSerializers.getDefaultSerializers().registerType(TypeToken.of(MinerBean.class), new MinerSerializer());
         try {
             minerList = configurationNode.getNode("miners").getList(TypeToken.of(MinerBean.class));
+            MinerUtil minerUtil = new MinerUtil(minerList);
+            minerList = minerUtil.getExpandedMiners();
             for (MinerBean miner: minerList) {
-                Itemizer.getLogger().debug("Miner from config : " + miner.getId());
+                Itemizer.getLogger().debug("Miner from config : " + miner.getId() + " - " + miner.getMineTypes().size() + " blocks, " + miner.getInheritances().size() + " inheritances");
             }
+            Itemizer.getLogger().info(minerList.size() + " miners loaded from configuration.");
         } catch (ObjectMappingException e) {
             Itemizer.getLogger().error("Error while reading configuration 'harvestables' : " + e.getMessage());
         }
