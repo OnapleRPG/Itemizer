@@ -4,8 +4,10 @@ import com.google.common.reflect.TypeToken;
 import com.ylinor.itemizer.Itemizer;
 import com.ylinor.itemizer.data.beans.ItemBean;
 import com.ylinor.itemizer.data.beans.MinerBean;
+import com.ylinor.itemizer.data.beans.PoolBean;
 import com.ylinor.itemizer.data.serializers.ItemSerializer;
 import com.ylinor.itemizer.data.serializers.MinerSerializer;
+import com.ylinor.itemizer.data.serializers.PoolSerializer;
 import com.ylinor.itemizer.utils.MinerUtil;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
@@ -29,6 +31,11 @@ public class ConfigurationHandler {
     private static List<ItemBean> itemList;
     public static List<ItemBean> getItemList(){
         return itemList;
+    }
+
+    private static List<PoolBean> poolList;
+    public static List<PoolBean> getPoolList(){
+        return poolList;
     }
 
     /**
@@ -63,6 +70,21 @@ public class ConfigurationHandler {
             Itemizer.getLogger().info(minerList.size() + " miners loaded from configuration.");
         } catch (ObjectMappingException e) {
             Itemizer.getLogger().error("Error while reading configuration 'harvestables' : " + e.getMessage());
+        }
+    }
+
+    /**
+     * Read pools configuration and interpret it. Must be the last config file read.
+     * @param configurationNode ConfigurationNode to read from
+     */
+    public static void readPoolsConfiguration(CommentedConfigurationNode configurationNode){
+        poolList = new ArrayList<>();
+        TypeSerializers.getDefaultSerializers().registerType(TypeToken.of(PoolBean.class), new PoolSerializer());
+        try {
+            poolList = configurationNode.getNode("pools").getList(TypeToken.of(PoolBean.class));
+            Itemizer.getLogger().info(poolList.size() + " pools loaded from configuration.");
+        } catch (ObjectMappingException e) {
+            Itemizer.getLogger().error("Error while reading configuration 'pools' : " + e.getMessage());
         }
     }
 

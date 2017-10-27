@@ -1,4 +1,4 @@
-package com.ylinor.itemizer.data;
+package com.ylinor.itemizer.data.access;
 
 import com.ylinor.itemizer.data.beans.ItemBean;
 import com.ylinor.itemizer.data.handlers.ConfigurationHandler;

@@ -68,16 +68,19 @@ public class ItemBuilder {
      * @return Enchanted (or not) ItemStack
      */
     private static ItemStack enchantItemStack(ItemStack itemStack, ItemBean itemBean) {
-        EnchantmentData enchantmentData = itemStack.getOrCreate(EnchantmentData.class).get();
-        for (Map.Entry<String, Integer> enchant : itemBean.getEnchants().entrySet()) {
-            Optional<Enchantment> optionalEnchant = Sponge.getRegistry().getType(Enchantment.class, enchant.getKey());
-            if (optionalEnchant.isPresent()) {
-                enchantmentData.set(enchantmentData.enchantments().add(new ItemEnchantment(optionalEnchant.get(), enchant.getValue())));
-            } else {
-                Itemizer.getLogger().warn("Unknown enchant : " + enchant.getKey());
+        Map<String, Integer> enchants = itemBean.getEnchants();
+        if (!enchants.isEmpty()) {
+            EnchantmentData enchantmentData = itemStack.getOrCreate(EnchantmentData.class).get();
+            for (Map.Entry<String, Integer> enchant : enchants.entrySet()) {
+                Optional<Enchantment> optionalEnchant = Sponge.getRegistry().getType(Enchantment.class, enchant.getKey());
+                if (optionalEnchant.isPresent()) {
+                    enchantmentData.set(enchantmentData.enchantments().add(new ItemEnchantment(optionalEnchant.get(), enchant.getValue())));
+                } else {
+                    Itemizer.getLogger().warn("Unknown enchant : " + enchant.getKey());
+                }
             }
+            itemStack.offer(enchantmentData);
         }
-        itemStack.offer(enchantmentData);
         return itemStack;
     }
 

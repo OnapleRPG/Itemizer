@@ -1,5 +1,6 @@
 package com.ylinor.itemizer;
 
+import com.ylinor.itemizer.commands.FetchCommand;
 import com.ylinor.itemizer.commands.RetrieveCommand;
 import com.ylinor.itemizer.data.handlers.ConfigurationHandler;
 import org.slf4j.Logger;
@@ -35,12 +36,19 @@ public class Itemizer {
 	public void onServerStart(GameStartedServerEvent event) throws Exception {
 		ConfigurationHandler.readItemsConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer_items.conf"));
 		ConfigurationHandler.readMinerConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer_miners.conf"));
+		ConfigurationHandler.readPoolsConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer_pools.conf"));
 
 		CommandSpec retrieve = CommandSpec.builder()
 				.description(Text.of("Retrieve an item from a configuration file with its id."))
 				.arguments(GenericArguments.onlyOne(GenericArguments.string(Text.of("id"))))
 				.executor(new RetrieveCommand()).build();
 		Sponge.getCommandManager().register(this, retrieve, "retrieve");
+
+		CommandSpec fetch = CommandSpec.builder()
+				.description(Text.of("Try to retrieve an item from a pool describes in a configuration file with its id."))
+				.arguments(GenericArguments.onlyOne(GenericArguments.string(Text.of("id"))))
+				.executor(new FetchCommand()).build();
+		Sponge.getCommandManager().register(this, fetch, "fetch");
 
 		logger.info("ITEMIZER initialized. ");
 	}

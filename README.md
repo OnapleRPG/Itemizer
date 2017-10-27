@@ -1,8 +1,9 @@
 # Itemizer
 
-Itemizer is a Sponge Minecraft plugin that allow custom item creation as described in configuration files.
+Itemizer is a Sponge Minecraft plugin that allow custom item creation as described in configuration files, as well as random item generation.
 
-The plugin implements the command "__/retrieve *\<id\>*__", which gives a configured item to the player.
+The plugin implements the command "__/retrieve *\<id\>*__", which gives a configured item to the player.  
+It also implements "__/fetch *\<id\>*__", which gets a random item from a given item pool.
 
 ## Configuration files
 
@@ -78,3 +79,33 @@ miners = [
 ]
 ```
 _An item referencing miner 1 will be able to break coal and iron ore, whereas referencing miner 2 allow breaking of coal, iron and gold ore._
+
+### Items pool
+
+A file named __*itemizer_pools.conf*__ defines pools to select item randomly from.
+
+The root element must be __pools__.
+* An __id__ is used to enable a pool to be referenced.
+* __items__ is an array containing the items obtainable, it contains :
+    * A __probability__ between 0 and 1, giving the actual chances of having a given item. _The last item in a pool can have a probability of 1, it would then be the default drop_
+    * __ref__ is used as a reference to a configured item id (see _item creation_)
+    * __type__ will be used if _ref_ is absent or if no item were returned to generate an item with a given type
+
+```
+pools = [
+    {
+        id: 1,
+        items: [
+            {
+                probability: 0.5,
+                type: "minecraft:cooked_porkchop"
+            },
+            {
+                probability: 0.2,
+                ref: 1
+            }
+        ]
+    }
+]
+```
+_The first pool of item has a 50% chance of getting a porkchop, 20% chance of getting the configured item with id 1, and 30% chance of getting nothing._

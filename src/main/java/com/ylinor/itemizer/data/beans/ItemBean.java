@@ -1,24 +1,29 @@
 package com.ylinor.itemizer.data.beans;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class ItemBean {
     /** ID of the item in config **/
-    private int id;
+    private int id = 0;
     /** Type of the item **/
     private String type;
     /** Name of the item **/
-    private String name;
+    private String name = "";
     /** Lore / description of the item **/
-    private String lore;
+    private String lore = "";
     /** Unbreakable attribute **/
-    private boolean unbreakable;
+    private boolean unbreakable = false;
     /** Map of enchants and their levels **/
-    private Map<String, Integer> enchants;
+    private Map<String, Integer> enchants = new HashMap<>();
     /** IDs of the miner abilities associated **/
-    private List<Integer> miners;
+    private List<Integer> miners = new ArrayList<>();
 
+    public ItemBean(String type) {
+        this.type = type;
+    }
     public ItemBean(int id, String type, String name, String lore, boolean unbreakable, Map<String, Integer> enchants, List<Integer> miners) {
         this.id = id;
         this.type = type;

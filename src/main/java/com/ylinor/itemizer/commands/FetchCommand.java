@@ -1,9 +1,9 @@
 package com.ylinor.itemizer.commands;
 
 import com.ylinor.itemizer.Itemizer;
-import com.ylinor.itemizer.data.access.ItemDAO;
 import com.ylinor.itemizer.data.beans.ItemBean;
 import com.ylinor.itemizer.utils.ItemBuilder;
+import com.ylinor.itemizer.utils.PoolFetcher;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
@@ -16,31 +16,31 @@ import org.spongepowered.api.text.Text;
 import java.util.Optional;
 
 /**
- * Player command to retrieve an item from a configuration file
+ * Player command to fetch an item from a pool defined in a configuration file
  */
-public class RetrieveCommand implements CommandExecutor {
+public class FetchCommand implements CommandExecutor {
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
         if (src instanceof Player) {
-            String itemId = (args.getOne("id").isPresent()) ? args.<String>getOne("id").get() : "";
+            String poolId = (args.getOne("id").isPresent()) ? args.<String>getOne("id").get() : "";
             try {
-                int id = Integer.parseInt(itemId);
-                Optional<ItemBean> optionalItem = ItemDAO.getItem(id);
+                int id = Integer.parseInt(poolId);
+                Optional<ItemBean> optionalItem = PoolFetcher.fetchItemFromPool(id);
                 if (optionalItem.isPresent()) {
                     Optional<ItemStack> optionalItemStack = ItemBuilder.buildItemStack(optionalItem.get());
                     if (optionalItemStack.isPresent()) {
                         ((Player) src).getInventory().offer(optionalItemStack.get());
                     } else {
-                        ((Player) src).sendMessage(Text.of("Item " + id + " not valid."));
+                        ((Player) src).sendMessage(Text.of("Item from pool " + id + " not valid."));
                     }
                 } else {
-                    ((Player) src).sendMessage(Text.of("Item " + id + " not found."));
+                    ((Player) src).sendMessage(Text.of("Pool " + id + " returned nothing."));
                 }
             } catch (NumberFormatException e) {
-                ((Player) src).sendMessage(Text.of("Item id must be numeric."));
+                ((Player) src).sendMessage(Text.of("Pool id must be numeric."));
             }
         } else {
-            Itemizer.getLogger().warn("Retrieve command can only be executed by a player.");
+            Itemizer.getLogger().warn("Fetch command can only be executed by a player.");
         }
         return CommandResult.empty();
     }
