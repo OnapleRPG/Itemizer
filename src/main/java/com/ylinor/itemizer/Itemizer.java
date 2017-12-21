@@ -11,6 +11,7 @@ import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.plugin.Plugin;
+import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.text.Text;
 
 import javax.inject.Inject;
@@ -51,6 +52,25 @@ public class Itemizer {
 		Sponge.getCommandManager().register(this, fetch, "fetch");
 
 		logger.info("ITEMIZER initialized. ");
+
+
+		/*CustomItemService service = Sponge.getServiceManager().provide(CustomItemService.class)
+				.orElseThrow(() -> new IllegalStateException("Could not access the CustomItemLibrary service."));
+		service.register(
+				magicWandDefinition = CustomFeatureDefinition.itemToolBuilder()
+						// Required fields:
+						.plugin(Itemizer.getInstance())  // The owner plugin
+						.typeId("magic_wand")  // The definition id
+						.itemStackSnapshot(ItemTypes.SHEARS.getTemplate())  // Used to build magic wands
+						.defaultModel("magic_wand_primary")  // Models are located at `assets/%PLUGIN_ID%/models/tools/%MODEL%.json` in the JAR
+						// Optional fields:
+						.additionalModel("magic_wand_secondary")
+						.additionalAsset("textures/tools/magic_wand_texture.png")
+						.build()
+		);*/
+	}
+	public static PluginContainer getInstance(){
+		return  Sponge.getPluginManager().getPlugin("brawlator").get();
 	}
 
 }
