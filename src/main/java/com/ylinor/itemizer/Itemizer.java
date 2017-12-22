@@ -5,6 +5,8 @@ import com.ylinor.itemizer.commands.RetrieveCommand;
 import com.ylinor.itemizer.data.access.ItemDAO;
 import com.ylinor.itemizer.data.beans.ItemBean;
 import com.ylinor.itemizer.data.handlers.ConfigurationHandler;
+import com.ylinor.itemizer.service.FetchService;
+import com.ylinor.itemizer.service.IFetchService;
 import com.ylinor.itemizer.utils.ItemBuilder;
 import com.ylinor.itemizer.utils.PoolFetcher;
 import org.slf4j.Logger;
@@ -39,6 +41,7 @@ public class Itemizer {
 		return logger;
 	}
 
+
 	@Listener
 	public void onServerStart(GameStartedServerEvent event) throws Exception {
 		ConfigurationHandler.readItemsConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer_items.conf"));
@@ -57,9 +60,13 @@ public class Itemizer {
 				.executor(new FetchCommand()).build();
 		Sponge.getCommandManager().register(this, fetch, "fetch");
 
-		logger.info("ITEMIZER initialized. ");
+
+		Sponge.getServiceManager().setProvider(this, IFetchService.class,new FetchService());
+
+		logger.info("ITEMIZER initialized.");
 
 	}
+
 	public Optional<ItemStack> retrieve(int id){
 		Optional<ItemBean> optionalItem = ItemDAO.getItem(id);
 		if (optionalItem.isPresent()) {
@@ -68,14 +75,7 @@ public class Itemizer {
 		}
 		return Optional.empty();
 		}
-	public Optional<ItemStack> fetch(int id){
-		Optional<ItemBean> optionalItem = PoolFetcher.fetchItemFromPool(id);
-		if (optionalItem.isPresent()) {
-			Optional<ItemStack> optionalItemStack = ItemBuilder.buildItemStack(optionalItem.get());
-			return optionalItemStack;
-			}
-			return Optional.empty();
-		}
+
 	public static PluginContainer getInstance(){
 		return  Sponge.getPluginManager().getPlugin("brawlator").get();
 	}
