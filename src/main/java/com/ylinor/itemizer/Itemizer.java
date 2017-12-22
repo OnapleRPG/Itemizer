@@ -6,6 +6,7 @@ import com.ylinor.itemizer.data.access.ItemDAO;
 import com.ylinor.itemizer.data.beans.ItemBean;
 import com.ylinor.itemizer.data.handlers.ConfigurationHandler;
 import com.ylinor.itemizer.utils.ItemBuilder;
+import com.ylinor.itemizer.utils.PoolFetcher;
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.args.GenericArguments;
@@ -66,6 +67,14 @@ public class Itemizer {
 		return optionalItemStack;
 		}
 		return Optional.empty();
+		}
+	public Optional<ItemStack> fetch(int id){
+		Optional<ItemBean> optionalItem = PoolFetcher.fetchItemFromPool(id);
+		if (optionalItem.isPresent()) {
+			Optional<ItemStack> optionalItemStack = ItemBuilder.buildItemStack(optionalItem.get());
+			return optionalItemStack;
+			}
+			return Optional.empty();
 		}
 	public static PluginContainer getInstance(){
 		return  Sponge.getPluginManager().getPlugin("brawlator").get();
