@@ -15,6 +15,8 @@ import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.game.state.GameInitializationEvent;
+import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.plugin.Plugin;
@@ -43,6 +45,14 @@ public class Itemizer {
 
 
 	@Listener
+	public void onGamePreInitialization(GamePreInitializationEvent event) {
+		logger.info("Initalisation");
+
+		Sponge.getServiceManager().setProvider(getInstance(), IFetchService.class,new FetchService());
+
+	}
+
+	@Listener
 	public void onServerStart(GameStartedServerEvent event) throws Exception {
 		ConfigurationHandler.readItemsConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer_items.conf"));
 		ConfigurationHandler.readMinerConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer_miners.conf"));
@@ -61,23 +71,14 @@ public class Itemizer {
 		Sponge.getCommandManager().register(this, fetch, "fetch");
 
 
-		Sponge.getServiceManager().setProvider(this, IFetchService.class,new FetchService());
 
 		logger.info("ITEMIZER initialized.");
 
 	}
 
-	public Optional<ItemStack> retrieve(int id){
-		Optional<ItemBean> optionalItem = ItemDAO.getItem(id);
-		if (optionalItem.isPresent()) {
-			Optional<ItemStack> optionalItemStack = ItemBuilder.buildItemStack(optionalItem.get());
-		return optionalItemStack;
-		}
-		return Optional.empty();
-		}
 
 	public static PluginContainer getInstance(){
-		return  Sponge.getPluginManager().getPlugin("brawlator").get();
+		return  Sponge.getPluginManager().getPlugin("itemizer").get();
 	}
 
 }
