@@ -1,10 +1,10 @@
-package com.ylinor.itemizer.data.beans;
+package com.ylinor.itemizer;
 
 import org.spongepowered.api.item.inventory.ItemStack;
+import org.spongepowered.api.item.recipe.Recipe;
+import org.spongepowered.api.item.recipe.crafting.Ingredient;
 
-import java.util.HashMap;
-
-public class CraftingBean {
+public class CraftingRecipeRegister implements ICraftRecipes {
     /** ID **/
     private int id;
     /** Type **/
@@ -14,7 +14,7 @@ public class CraftingBean {
     /** result **/
     private ItemStack result;
 
-    public CraftingBean() {
+    public CraftingRecipeRegister() {
     }
 
     public int getId() {
@@ -42,7 +42,7 @@ public class CraftingBean {
         this.result = result;
     }
 
-    public CraftingBean(int id, String type, ItemStack content, ItemStack result) {
+    public CraftingRecipeRegister(int id, String type, ItemStack content, ItemStack result) {
         this.id = id;
         this.type = type;
         this.content = content;
@@ -55,5 +55,11 @@ public class CraftingBean {
 
     public void setContent(ItemStack content) {
         this.content = content;
+    }
+
+    @Override
+    public Recipe register() {
+        return  org.spongepowered.api.item.recipe.crafting.CraftingRecipe.shapelessBuilder().addIngredient(Ingredient.builder().with(this.getContent()).build()).
+                result(this.getResult()).build("craft", Itemizer.getInstance());
     }
 }

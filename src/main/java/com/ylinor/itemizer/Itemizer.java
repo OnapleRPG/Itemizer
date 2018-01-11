@@ -1,7 +1,6 @@
 package com.ylinor.itemizer;
 import com.ylinor.itemizer.commands.FetchCommand;
 import com.ylinor.itemizer.commands.RetrieveCommand;
-import com.ylinor.itemizer.data.beans.CraftingBean;
 import com.ylinor.itemizer.data.handlers.ConfigurationHandler;
 import com.ylinor.itemizer.utils.CraftingRegister;
 import com.ylinor.itemizer.service.ItemService;
@@ -19,6 +18,7 @@ import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.text.Text;
+import org.spongepowered.api.item.recipe.crafting.CraftingRecipe;
 import javax.inject.Inject;
 import java.nio.file.Path;
 
@@ -39,11 +39,11 @@ public class Itemizer {
 	}
 	@Listener
 	public void preInit(GamePreInitializationEvent event) {
-		CraftingBean craftingBean = new CraftingBean();
-		craftingBean.setType("CraftingRecipe");
-		craftingBean.setContent(ItemStack.of(ItemTypes.DIAMOND_ORE,1));
-		craftingBean.setResult(ItemStack.of(ItemTypes.DIAMOND,1));
-		CraftingRegister.register(craftingBean);
+		CraftingRecipeRegister craftingRecipe = new CraftingRecipeRegister();
+		craftingRecipe.setContent(ItemStack.of(ItemTypes.DIAMOND_ORE,1));
+		craftingRecipe.setResult(ItemStack.of(ItemTypes.DIAMOND,1));
+		Sponge.getGame().getRegistry().getCraftingRecipeRegistry().register((CraftingRecipe) craftingRecipe.register());
+
 	}
 
 	@Listener
