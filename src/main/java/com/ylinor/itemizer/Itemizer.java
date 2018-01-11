@@ -1,12 +1,11 @@
 package com.ylinor.itemizer;
-
 import com.ylinor.itemizer.commands.FetchCommand;
 import com.ylinor.itemizer.commands.RetrieveCommand;
-import com.ylinor.itemizer.data.access.ItemDAO;
 import com.ylinor.itemizer.data.beans.CraftingBean;
 import com.ylinor.itemizer.data.handlers.ConfigurationHandler;
 import com.ylinor.itemizer.utils.CraftingRegister;
-import com.ylinor.itemizer.utils.ItemBuilder;
+import com.ylinor.itemizer.service.ItemService;
+import com.ylinor.itemizer.service.IItemService;
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.args.GenericArguments;
@@ -20,10 +19,8 @@ import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.text.Text;
-
 import javax.inject.Inject;
 import java.nio.file.Path;
-import java.util.HashMap;
 
 @Plugin(id = "itemizer", name = "Itemizer", version = "0.0.1")
 public class Itemizer {
@@ -50,6 +47,12 @@ public class Itemizer {
 	}
 
 	@Listener
+	public void onGamePreInitialization(GamePreInitializationEvent event) {
+		logger.info("Initalisation");
+		Sponge.getServiceManager().setProvider(getInstance(), IItemService.class,new ItemService());
+	}
+
+	@Listener
 	public void onServerStart(GameStartedServerEvent event) throws Exception {
 		ConfigurationHandler.readItemsConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer_items.conf"));
 		ConfigurationHandler.readMinerConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer_miners.conf"));
@@ -67,7 +70,8 @@ public class Itemizer {
 				.executor(new FetchCommand()).build();
 		Sponge.getCommandManager().register(this, fetch, "fetch");
 
-		logger.info("ITEMIZER initialized. ");
+		logger.info("ITEMIZER initialized.");
+
 	}
 	public static PluginContainer getInstance(){
 		return  Sponge.getPluginManager().getPlugin("itemizer").get();

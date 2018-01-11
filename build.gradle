@@ -24,6 +24,10 @@ publishing {
 
 repositories {
     mavenCentral()
+    maven {
+        name = 'jitpack'
+        url = 'https://jitpack.io'
+    }
 }
 
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
