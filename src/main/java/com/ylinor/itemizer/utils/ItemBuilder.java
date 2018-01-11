@@ -9,9 +9,9 @@ import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.manipulator.mutable.item.BreakableData;
 import org.spongepowered.api.data.manipulator.mutable.item.EnchantmentData;
-import org.spongepowered.api.data.meta.ItemEnchantment;
-import org.spongepowered.api.item.Enchantment;
 import org.spongepowered.api.item.ItemType;
+import org.spongepowered.api.item.enchantment.Enchantment;
+import org.spongepowered.api.item.enchantment.EnchantmentType;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.text.Text;
 
@@ -72,9 +72,11 @@ public class ItemBuilder {
         if (!enchants.isEmpty()) {
             EnchantmentData enchantmentData = itemStack.getOrCreate(EnchantmentData.class).get();
             for (Map.Entry<String, Integer> enchant : enchants.entrySet()) {
-                Optional<Enchantment> optionalEnchant = Sponge.getRegistry().getType(Enchantment.class, enchant.getKey());
+                Optional<EnchantmentType> optionalEnchant = Sponge.getRegistry().getType(EnchantmentType.class, enchant.getKey());
                 if (optionalEnchant.isPresent()) {
-                    enchantmentData.set(enchantmentData.enchantments().add(new ItemEnchantment(optionalEnchant.get(), enchant.getValue())));
+                    enchantmentData.set(enchantmentData.enchantments().add(Enchantment.builder().
+                            type(optionalEnchant.get()).
+                            level(enchant.getValue()).build()));
                 } else {
                     Itemizer.getLogger().warn("Unknown enchant : " + enchant.getKey());
                 }
