@@ -3,7 +3,7 @@ package com.ylinor.itemizer;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.item.recipe.Recipe;
 
-public class SmeltingRecipe implements ICraftRecipes {
+public class SmeltingRecipeRegister implements ICraftRecipes {
     public ItemStack ingredient;
     public ItemStack result;
 
@@ -31,9 +31,6 @@ public class SmeltingRecipe implements ICraftRecipes {
                 ingredient(ingredient).
                 result(result).
                 build();
-    }
-
-    public SmeltingRecipe() {
     }
 
 

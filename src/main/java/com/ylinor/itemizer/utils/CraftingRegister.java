@@ -1,20 +1,32 @@
 package com.ylinor.itemizer.utils;
 
-import com.ylinor.itemizer.Itemizer;
-import com.ylinor.itemizer.CraftingRecipeRegister;
+import com.ylinor.itemizer.ICraftRecipes;
+import com.ylinor.itemizer.SmeltingRecipeRegister;
 import org.spongepowered.api.Sponge;
-import org.spongepowered.api.item.recipe.crafting.Ingredient;
+import org.spongepowered.api.item.recipe.Recipe;
+import org.spongepowered.api.item.recipe.crafting.ShapedCraftingRecipe;
 import org.spongepowered.api.item.recipe.crafting.ShapelessCraftingRecipe;
 
-public class CraftingRegister {
-    public static void register(CraftingRecipeRegister craft){
-        switch (craft.getType()){
-            case "CraftingRecipeRegister" :
-                ShapelessCraftingRecipe craftingRecipe = org.spongepowered.api.item.recipe.crafting.CraftingRecipe.shapelessBuilder().addIngredient(Ingredient.builder().with(craft.getContent()).build()).
-                        result(craft.getResult()).build("craft", Itemizer.getInstance());
+import java.util.List;
 
-                Sponge.getGame().getRegistry().getCraftingRecipeRegistry().register(craftingRecipe);
-                break;
+public class CraftingRegister {
+    public static List<ICraftRecipes> craftRecipes;
+    public static void register(){
+        for (ICraftRecipes recipe: craftRecipes
+             ) {
+
+            Recipe r= recipe.register();
+            if(r instanceof ShapelessCraftingRecipe){
+                Sponge.getGame().getRegistry().getCraftingRecipeRegistry().register((ShapelessCraftingRecipe)r);
+            }
+            if(r instanceof ShapedCraftingRecipe){
+                Sponge.getGame().getRegistry().getCraftingRecipeRegistry().register((ShapedCraftingRecipe)r);
+            }
+            if(r instanceof SmeltingRecipeRegister){
+                Sponge.getGame().getRegistry().getSmeltingRecipeRegistry().register((org.spongepowered.api.item.recipe.smelting.SmeltingRecipe) r);
+            }
+
         }
     }
+
 }

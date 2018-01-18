@@ -10,11 +10,13 @@ import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.config.ConfigDir;
+import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.inventory.ItemStack;
+import org.spongepowered.api.item.inventory.ItemStackSnapshot;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.text.Text;
@@ -41,6 +43,8 @@ public class Itemizer {
 	public void preInit(GamePreInitializationEvent event) {
 		CraftingRecipeRegister craftingRecipe = new CraftingRecipeRegister();
 		craftingRecipe.setContent(ItemStack.of(ItemTypes.DIAMOND_ORE,1));
+		ItemStackSnapshot itemStackSnapshot = ItemTypes.WOODEN_SWORD.getTemplate();
+		logger.info(itemStackSnapshot.getValue(Keys.ATTACK_DAMAGE).get().toString());
 		craftingRecipe.setResult(ItemStack.of(ItemTypes.DIAMOND,1));
 		Sponge.getGame().getRegistry().getCraftingRecipeRegistry().register((CraftingRecipe) craftingRecipe.register());
 
