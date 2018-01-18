@@ -36,6 +36,21 @@ public class ItemBuilder {
         }
         return Optional.empty();
     }
+    /**
+     * Build an itemstack from this name
+     * @param name Data of the item to build
+     * @return Optional of the itemstack
+     */
+    public static Optional<ItemStack> buildItemStack(String name) {
+        Optional<ItemType> optionalType = Sponge.getRegistry().getType(ItemType.class,name);
+        if (optionalType.isPresent()) {
+            ItemStack itemStack = ItemStack.builder().itemType(optionalType.get()).build();
+            return Optional.ofNullable(itemStack);
+        } else {
+            Itemizer.getLogger().warn("Unknown item type : " + name);
+        }
+        return Optional.empty();
+    }
 
     /**
      * Define the characteristics of an ItemStack from an ItemBean
