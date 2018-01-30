@@ -1,6 +1,7 @@
 package com.ylinor.itemizer.data.serializers;
 
 import com.google.common.reflect.TypeToken;
+import com.ylinor.itemizer.CraftingRecipeRegister;
 import com.ylinor.itemizer.ICraftRecipes;
 import com.ylinor.itemizer.data.access.ItemDAO;
 import com.ylinor.itemizer.data.beans.ItemBean;
@@ -17,47 +18,54 @@ import java.util.Optional;
 public class CraftingSerializer implements TypeSerializer<ICraftRecipes> {
     @Override
     public ICraftRecipes deserialize(TypeToken<?> type, ConfigurationNode value) throws ObjectMappingException {
+
         String craftingType = value.getNode("type").getString();
 
-        ConfigurationNode resultname = value.getNode("result");
+        ConfigurationNode resultNode = value.getNode("result");
+        Optional<ItemStack> itemStackOptional=getItemStack(resultNode);
 
+        ItemStack resultIngredient;
 
-        int reference = resultname.getNode("ref").getInt();
-
-
+        if(itemStackOptional.isPresent()){
+            resultIngredient = itemStackOptional.get();
+        }
 
         ItemStack singleIngredient;
         HashMap<Character,ItemStack> itemStackHashMap = new HashMap<>();
-        switch (craftingType){
-            case "CraftingRecipeRegister" :
-                String itemName = value.getNode("ingredient").getNode("name").getString();
-                Optional<ItemStack> itemStack = ItemBuilder.buildItemStack(itemName);
-                if(itemStack.isPresent()){
-                    singleIngredient = itemStack.get();
+        switch (craftingType) {
+            case "CraftingRecipeRegister":
+                ConfigurationNode configurationNode =  value.getNode("recipe");
+
+                Optional<ItemStack> RecepiceOptional=getItemStack(configurationNode);
+                if(RecepiceOptional.isPresent()){
+                    singleIngredient = RecepiceOptional.get();
+
                 }
-
-
                 break;
-            case "SmeltingRecipeRegister" :
-
+            case "SmeltingRecipeRegister":
                 break;
-            case "ShapedCrafting" :
-
+            case "ShapedCrafting":
         }
-
         return null;
     }
 
-
-    public Optional<ItemStack> getItemStack(int id){
-        Optional<ItemBean> itemBeanOptional =  ItemDAO.getItem(id);
-        ItemStack result;
-        if (itemBeanOptional.isPresent()){
-
-            Optional<ItemStack> itemStackOptional = ItemBuilder.buildItemStack(itemBeanOptional.get());
-            if(itemBeanOptional.isPresent()){
-                result = itemStackOptional.get();
+    public Optional<ItemStack> getItemStack(ConfigurationNode node){
+        int ref = node.getNode("ref").getInt();
+        if(ref>0) {
+            Optional<ItemBean> itemBeanOptional = ItemDAO.getItem(ref);
+            ItemStack result;
+            if (itemBeanOptional.isPresent()) {
+                Optional<ItemStack> itemStackOptional = ItemBuilder.buildItemStack(itemBeanOptional.get());
+                if (itemBeanOptional.isPresent()) {
+                    return itemStackOptional;
+                }
             }
+        } else {
+            String name = node.getNode("name").getString();
+            if(name != null){
+                 return ItemBuilder.buildItemStack(name);
+            }
+
         }
         return Optional.empty();
     }
