@@ -3,6 +3,7 @@ package com.ylinor.itemizer.data.serializers;
 import com.google.common.reflect.TypeToken;
 import com.ylinor.itemizer.CraftingRecipeRegister;
 import com.ylinor.itemizer.ICraftRecipes;
+import com.ylinor.itemizer.SmeltingRecipeRegister;
 import com.ylinor.itemizer.data.access.ItemDAO;
 import com.ylinor.itemizer.data.beans.ItemBean;
 import com.ylinor.itemizer.utils.ItemBuilder;
@@ -28,24 +29,33 @@ public class CraftingSerializer implements TypeSerializer<ICraftRecipes> {
 
         if(itemStackOptional.isPresent()){
             resultIngredient = itemStackOptional.get();
+
+            ItemStack singleIngredient;
+            HashMap<Character,ItemStack> itemStackHashMap = new HashMap<>();
+            switch (craftingType) {
+                case "CraftingRecipeRegister":
+                    ConfigurationNode shaplessIngredient =  value.getNode("recipe");
+
+                    Optional<ItemStack> RecipiceOptional=getItemStack(shaplessIngredient);
+                    if(RecipiceOptional.isPresent()){
+                        singleIngredient = RecipiceOptional.get();
+                        return new CraftingRecipeRegister(singleIngredient,resultIngredient);
+                    }
+                    break;
+                case "SmeltingRecipeRegister":
+                    ConfigurationNode configurationNode =  value.getNode("recipe");
+
+                    Optional<ItemStack> smeltingIngrediant=getItemStack(configurationNode);
+                    if(smeltingIngrediant.isPresent()){
+                        singleIngredient = smeltingIngrediant.get();
+                        return new SmeltingRecipeRegister(singleIngredient,resultIngredient);
+                    }
+                    break;
+                case "ShapedCrafting":
+
+            }
         }
 
-        ItemStack singleIngredient;
-        HashMap<Character,ItemStack> itemStackHashMap = new HashMap<>();
-        switch (craftingType) {
-            case "CraftingRecipeRegister":
-                ConfigurationNode configurationNode =  value.getNode("recipe");
-
-                Optional<ItemStack> RecepiceOptional=getItemStack(configurationNode);
-                if(RecepiceOptional.isPresent()){
-                    singleIngredient = RecepiceOptional.get();
-
-                }
-                break;
-            case "SmeltingRecipeRegister":
-                break;
-            case "ShapedCrafting":
-        }
         return null;
     }
 

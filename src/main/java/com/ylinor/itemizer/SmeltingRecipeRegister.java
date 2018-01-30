@@ -23,7 +23,10 @@ public class SmeltingRecipeRegister implements ICraftRecipes {
         this.result = result;
     }
 
-
+    public SmeltingRecipeRegister(ItemStack ingredient, ItemStack result) {
+        this.ingredient = ingredient;
+        this.result = result;
+    }
 
     @Override
     public Recipe register() {
