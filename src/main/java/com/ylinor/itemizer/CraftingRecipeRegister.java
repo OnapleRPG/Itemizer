@@ -3,6 +3,7 @@ package com.ylinor.itemizer;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.item.recipe.Recipe;
 import org.spongepowered.api.item.recipe.crafting.Ingredient;
+import org.spongepowered.api.item.recipe.crafting.ShapelessCraftingRecipe;
 
 public class CraftingRecipeRegister implements ICraftRecipes {
 
@@ -38,7 +39,7 @@ public class CraftingRecipeRegister implements ICraftRecipes {
     }
 
     @Override
-    public Recipe register() {
+    public ShapelessCraftingRecipe register() {
         return  org.spongepowered.api.item.recipe.crafting.CraftingRecipe.shapelessBuilder().addIngredient(Ingredient.builder().with(this.getContent()).build()).
                 result(this.getResult()).build("craft", Itemizer.getInstance());
     }
