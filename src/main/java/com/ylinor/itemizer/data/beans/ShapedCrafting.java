@@ -6,7 +6,9 @@ import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.item.recipe.Recipe;
 import org.spongepowered.api.item.recipe.crafting.Ingredient;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 
 import static org.spongepowered.api.item.recipe.crafting.CraftingRecipe.shapedBuilder;
 
@@ -16,14 +18,14 @@ public class ShapedCrafting implements ICraftRecipes {
     /** Schema **/
     private String[] schema;
     /** content **/
-    private HashMap<Character,Ingredient> content;
+    private Map<Character,Ingredient> content;
     /** result **/
     private ItemStack result;
 
     public ShapedCrafting() {
     }
 
-    public HashMap<Character, Ingredient> getContent() {
+    public Map<Character, Ingredient> getContent() {
         return content;
     }
 
@@ -52,16 +54,26 @@ public class ShapedCrafting implements ICraftRecipes {
         this.result = result;
     }
 
-    public ShapedCrafting(int id, String[] schema, HashMap<Character, Ingredient> content, ItemStack result) {
+    public ShapedCrafting(int id, String[] schema, Map<Character, Ingredient> content, ItemStack result) {
         this.id = id;
         this.schema = schema;
         this.content = content;
         this.result = result;
     }
 
+    @Override
+    public String toString() {
+        return "ShapedCrafting{" +
+                "id=" + id +
+                ", schema=" + Arrays.toString(schema) +
+                ", content=" + content +
+                ", result=" + result +
+                '}';
+    }
 
     @Override
     public Recipe register() {
+        this.toString();
        return shapedBuilder().
                 aisle(this.schema).
                 where(this.content).

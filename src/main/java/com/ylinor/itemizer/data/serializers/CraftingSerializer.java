@@ -1,19 +1,25 @@
 package com.ylinor.itemizer.data.serializers;
 
 import com.google.common.reflect.TypeToken;
+import com.ylinor.itemizer.Itemizer;
 import com.ylinor.itemizer.data.beans.CraftingRecipeRegister;
 import com.ylinor.itemizer.ICraftRecipes;
+import com.ylinor.itemizer.data.beans.ShapedCrafting;
 import com.ylinor.itemizer.data.beans.SmeltingRecipeRegister;
 import com.ylinor.itemizer.data.access.ItemDAO;
 import com.ylinor.itemizer.data.beans.ItemBean;
 import com.ylinor.itemizer.utils.ItemBuilder;
 import ninja.leaping.configurate.ConfigurationNode;
+import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import ninja.leaping.configurate.objectmapping.serialize.TypeSerializer;
 import org.spongepowered.api.item.inventory.ItemStack;
+import org.spongepowered.api.item.recipe.crafting.Ingredient;
 
-import java.util.HashMap;
-import java.util.Optional;
+import java.util.*;
+import java.util.logging.Logger;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public class CraftingSerializer implements TypeSerializer<ICraftRecipes> {
     @Override
@@ -53,6 +59,19 @@ public class CraftingSerializer implements TypeSerializer<ICraftRecipes> {
                     }
                     break;
                 case "ShapedCrafting":
+                    String[] shape = Arrays.copyOf(value.getNode("pattern").getList(TypeToken.of(String.class)).toArray(),
+                            value.getNode("pattern").getList(TypeToken.of(String.class)).toArray().length, String[].class);
+                    Map<Character,Ingredient> ingredients = new HashMap<>();
+                    List<Character> keys = new ArrayList<>();
+                   Map<Object,? extends ConfigurationNode> b = value.getNode("ingredients").getChildrenMap();
+                    for(Object prekey: b.keySet()){
+                        String key = (String) prekey;
+                        Itemizer.getLogger().info("key : " + key);
+                        Itemizer.getLogger().info(value.getNode("ingredients", key).getString());
+                        ingredients.put(key.charAt(0),Ingredient.of(getItemStack(value.getNode("ingredients",key)).get()));
+                    }
+
+                    return new ShapedCrafting(id,shape,ingredients,resultIngredient);
 
             }
         }
