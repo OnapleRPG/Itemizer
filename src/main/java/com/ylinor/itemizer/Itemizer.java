@@ -3,6 +3,7 @@ import com.ylinor.itemizer.commands.FetchCommand;
 import com.ylinor.itemizer.commands.RetrieveCommand;
 import com.ylinor.itemizer.data.access.CraftingDao;
 import com.ylinor.itemizer.data.access.ItemDAO;
+import com.ylinor.itemizer.data.beans.ShapedCrafting;
 import com.ylinor.itemizer.data.handlers.ConfigurationHandler;
 import com.ylinor.itemizer.service.ItemService;
 import com.ylinor.itemizer.service.IItemService;
@@ -15,16 +16,15 @@ import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
-import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.ItemTypes;
-import org.spongepowered.api.item.inventory.ItemStack;
-import org.spongepowered.api.item.recipe.crafting.ShapelessCraftingRecipe;
+import org.spongepowered.api.item.recipe.crafting.Ingredient;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.text.Text;
-import org.spongepowered.api.item.recipe.crafting.CraftingRecipe;
+
 import javax.inject.Inject;
 import java.nio.file.Path;
+import java.util.HashMap;
 
 @Plugin(id = "itemizer", name = "Itemizer", version = "0.0.1")
 public class Itemizer {
@@ -58,17 +58,25 @@ public class Itemizer {
 		ConfigurationHandler.readItemsConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer_items.conf"));
 		ConfigurationHandler.readMinerConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer_miners.conf"));
 		ConfigurationHandler.readPoolsConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer_pools.conf"));
+		ConfigurationHandler.readCraftConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer_crafts.conf"));
+		//ICraftRecipes craftRecipes = new CraftingRecipeRegister(ItemStack.of(ItemTypes.DIAMOND_ORE,1),ItemStack.of(ItemTypes.DIAMOND,1));
 
-		ICraftRecipes craftRecipes = new CraftingRecipeRegister(ItemStack.of(ItemTypes.DIAMOND_ORE,1),ItemStack.of(ItemTypes.DIAMOND,1));
-
-		craftingDao.add(craftRecipes);
+		//craftingDao.add(craftRecipes);
 
 		//ICraftRecipes craftRecipes1 = new SmeltingRecipeRegister(ItemStack.of(ItemTypes.COOKED_PORKCHOP,1),ItemBuilder.buildItemStack(ItemDAO.getItem(3).get()).get());
-		ICraftRecipes craftRecipes2 = new SmeltingRecipeRegister(ItemBuilder.buildItemStack(ItemDAO.getItem(3).get()).get(),ItemBuilder.buildItemStack(ItemDAO.getItem(4).get()).get());
+		//ICraftRecipes craftRecipes2 = new ShapedCrafting(,ItemBuilder.buildItemStack(ItemDAO.getItem(3).get()).get(),ItemBuilder.buildItemStack(ItemDAO.getItem(4).get()).get());
 
+		/*String[] pattern = {"AB ","   ","   "};
+		HashMap<Character,Ingredient> ingredientHashMap = new HashMap<>();
+
+		ingredientHashMap.put('A',Ingredient.of(ItemTypes.WHEAT));
+
+		ingredientHashMap.put('B',Ingredient.of(ItemTypes.PORKCHOP));
+
+		ICraftRecipes craftRecipes2 = new ShapedCrafting(1,pattern,ingredientHashMap,ItemBuilder.buildItemStack(ItemDAO.getItem(3).get()).get());
 		//craftingDao.add(craftRecipes1);
 		craftingDao.add(craftRecipes2);
-		logger.info(craftingDao.getSize() +" craft(s) loaded");
+		logger.info(craftingDao.getSize() +" craft(s) loaded");*/
 
 		craftingDao.register();
 

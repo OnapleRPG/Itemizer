@@ -1,10 +1,14 @@
-package com.ylinor.itemizer;
+package com.ylinor.itemizer.data.beans;
 
+import com.ylinor.itemizer.ICraftRecipes;
+import com.ylinor.itemizer.Itemizer;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.item.recipe.Recipe;
 import org.spongepowered.api.item.recipe.crafting.Ingredient;
 
 import java.util.HashMap;
+
+import static org.spongepowered.api.item.recipe.crafting.CraftingRecipe.shapedBuilder;
 
 public class ShapedCrafting implements ICraftRecipes {
     /** ID **/
@@ -58,10 +62,10 @@ public class ShapedCrafting implements ICraftRecipes {
 
     @Override
     public Recipe register() {
-       return org.spongepowered.api.item.recipe.crafting.CraftingRecipe.shapedBuilder().
+       return shapedBuilder().
                 aisle(this.schema).
-                where(content).
-                result(result).
-                build("craft", Itemizer.getInstance());
+                where(this.content).
+                result(this.result).
+                build("craft"+ id, Itemizer.getInstance());
     }
 }

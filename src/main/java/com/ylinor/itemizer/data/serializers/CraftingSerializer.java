@@ -1,16 +1,15 @@
 package com.ylinor.itemizer.data.serializers;
 
 import com.google.common.reflect.TypeToken;
-import com.ylinor.itemizer.CraftingRecipeRegister;
+import com.ylinor.itemizer.data.beans.CraftingRecipeRegister;
 import com.ylinor.itemizer.ICraftRecipes;
-import com.ylinor.itemizer.SmeltingRecipeRegister;
+import com.ylinor.itemizer.data.beans.SmeltingRecipeRegister;
 import com.ylinor.itemizer.data.access.ItemDAO;
 import com.ylinor.itemizer.data.beans.ItemBean;
 import com.ylinor.itemizer.utils.ItemBuilder;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import ninja.leaping.configurate.objectmapping.serialize.TypeSerializer;
-import org.spongepowered.api.entity.Item;
 import org.spongepowered.api.item.inventory.ItemStack;
 
 import java.util.HashMap;
@@ -19,6 +18,8 @@ import java.util.Optional;
 public class CraftingSerializer implements TypeSerializer<ICraftRecipes> {
     @Override
     public ICraftRecipes deserialize(TypeToken<?> type, ConfigurationNode value) throws ObjectMappingException {
+
+        int id = value.getNode("id").getInt();
 
         String craftingType = value.getNode("type").getString();
 
@@ -39,7 +40,7 @@ public class CraftingSerializer implements TypeSerializer<ICraftRecipes> {
                     Optional<ItemStack> RecipiceOptional=getItemStack(shaplessIngredient);
                     if(RecipiceOptional.isPresent()){
                         singleIngredient = RecipiceOptional.get();
-                        return new CraftingRecipeRegister(singleIngredient,resultIngredient);
+                        return new CraftingRecipeRegister(id, singleIngredient,resultIngredient);
                     }
                     break;
                 case "SmeltingRecipeRegister":
@@ -48,7 +49,7 @@ public class CraftingSerializer implements TypeSerializer<ICraftRecipes> {
                     Optional<ItemStack> smeltingIngrediant=getItemStack(configurationNode);
                     if(smeltingIngrediant.isPresent()){
                         singleIngredient = smeltingIngrediant.get();
-                        return new SmeltingRecipeRegister(singleIngredient,resultIngredient);
+                        return new SmeltingRecipeRegister(id, singleIngredient,resultIngredient);
                     }
                     break;
                 case "ShapedCrafting":

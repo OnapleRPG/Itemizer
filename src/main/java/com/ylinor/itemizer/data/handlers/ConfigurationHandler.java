@@ -1,10 +1,12 @@
 package com.ylinor.itemizer.data.handlers;
 
 import com.google.common.reflect.TypeToken;
+import com.ylinor.itemizer.ICraftRecipes;
 import com.ylinor.itemizer.Itemizer;
 import com.ylinor.itemizer.data.beans.ItemBean;
 import com.ylinor.itemizer.data.beans.MinerBean;
 import com.ylinor.itemizer.data.beans.PoolBean;
+import com.ylinor.itemizer.data.serializers.CraftingSerializer;
 import com.ylinor.itemizer.data.serializers.ItemSerializer;
 import com.ylinor.itemizer.data.serializers.MinerSerializer;
 import com.ylinor.itemizer.data.serializers.PoolSerializer;
@@ -70,6 +72,26 @@ public class ConfigurationHandler {
             Itemizer.getLogger().info(minerList.size() + " miners loaded from configuration.");
         } catch (ObjectMappingException e) {
             Itemizer.getLogger().error("Error while reading configuration 'harvestables' : " + e.getMessage());
+        }
+    }
+
+    /**
+     * Read Craft configuration and interpret it
+     * @param configurationNode ConfigurationNode to read from
+     */
+    public static void readCraftConfiguration(CommentedConfigurationNode configurationNode){
+        List<ICraftRecipes> craftRecipes = new ArrayList<>();
+        TypeSerializers.getDefaultSerializers().registerType(TypeToken.of(ICraftRecipes.class), new CraftingSerializer());
+        try {
+            craftRecipes = configurationNode.getNode("crafts").getList(TypeToken.of(ICraftRecipes.class));
+
+            for (ICraftRecipes iCraftRecipes: craftRecipes) {
+              //  Itemizer.getLogger().debug("Miner from config : " + craftRecipes + " - " + miner.getMineTypes().size() + " blocks, " + miner.getInheritances().size() + " inheritances");
+                Itemizer.getCraftingDao().add(iCraftRecipes);
+            }
+            Itemizer.getLogger().info( Itemizer.getCraftingDao().getSize() + " craft(s) loaded from configuration.");
+        } catch (ObjectMappingException e) {
+            Itemizer.getLogger().error("Error while reading configuration 'crafts' : " + e.getMessage());
         }
     }
 

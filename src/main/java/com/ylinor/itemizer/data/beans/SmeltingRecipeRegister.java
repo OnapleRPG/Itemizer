@@ -1,11 +1,14 @@
-package com.ylinor.itemizer;
+package com.ylinor.itemizer.data.beans;
 
+import com.ylinor.itemizer.ICraftRecipes;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.item.recipe.Recipe;
 
 public class SmeltingRecipeRegister implements ICraftRecipes {
-    public ItemStack ingredient;
-    public ItemStack result;
+    private int id;
+    private ItemStack ingredient;
+    private ItemStack result;
+
 
     public ItemStack getIngredient() {
         return ingredient;
@@ -23,7 +26,8 @@ public class SmeltingRecipeRegister implements ICraftRecipes {
         this.result = result;
     }
 
-    public SmeltingRecipeRegister(ItemStack ingredient, ItemStack result) {
+    public SmeltingRecipeRegister(int id, ItemStack ingredient, ItemStack result) {
+        this.id = id;
         this.ingredient = ingredient;
         this.result = result;
     }
