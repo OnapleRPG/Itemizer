@@ -1,5 +1,6 @@
 package com.ylinor.itemizer;
 import com.ylinor.itemizer.commands.FetchCommand;
+import com.ylinor.itemizer.commands.ReloadItemsCommand;
 import com.ylinor.itemizer.commands.RetrieveCommand;
 import com.ylinor.itemizer.data.access.CraftingDao;
 import com.ylinor.itemizer.data.access.ItemDAO;
@@ -59,35 +60,7 @@ public class Itemizer {
 		ConfigurationHandler.readMinerConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer_miners.conf"));
 		ConfigurationHandler.readPoolsConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer_pools.conf"));
 		ConfigurationHandler.readCraftConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer_crafts.conf"));
-		//ICraftRecipes craftRecipes = new CraftingRecipeRegister(ItemStack.of(ItemTypes.DIAMOND_ORE,1),ItemStack.of(ItemTypes.DIAMOND,1));
-
-		//craftingDao.add(craftRecipes);
-
-		//ICraftRecipes craftRecipes1 = new SmeltingRecipeRegister(ItemStack.of(ItemTypes.COOKED_PORKCHOP,1),ItemBuilder.buildItemStack(ItemDAO.getItem(3).get()).get());
-		//ICraftRecipes craftRecipes2 = new ShapedCrafting(,ItemBuilder.buildItemStack(ItemDAO.getItem(3).get()).get(),ItemBuilder.buildItemStack(ItemDAO.getItem(4).get()).get());
-
-		/*String[] pattern = {"AB ","   ","   "};
-		HashMap<Character,Ingredient> ingredientHashMap = new HashMap<>();
-
-		ingredientHashMap.put('A',Ingredient.of(ItemTypes.WHEAT));
-
-		ingredientHashMap.put('B',Ingredient.of(ItemTypes.PORKCHOP));
-
-		ICraftRecipes craftRecipes2 = new ShapedCrafting(1,pattern,ingredientHashMap,ItemBuilder.buildItemStack(ItemDAO.getItem(3).get()).get());
-		//craftingDao.add(craftRecipes1);
-		craftingDao.add(craftRecipes2);
-		logger.info(craftingDao.getSize() +" craft(s) loaded");*/
-
 		craftingDao.register();
-
-		//Sponge.getGame().getRegistry().getCraftingRecipeRegistry().register((ShapelessCraftingRecipe)craftRecipes.register());
-
-	/*	CraftingRecipeRegister craftingRecipe = new CraftingRecipeRegister();
-		craftingRecipe.setContent(ItemStack.of(ItemTypes.DIAMOND_ORE,1));
-		ItemStackSnapshot itemStackSnapshot = ItemTypes.WOODEN_SWORD.getTemplate();
-		logger.info(itemStackSnapshot.getValue(Keys.ATTACK_DAMAGE).get().toString());
-		craftingRecipe.setResult(ItemStack.of(ItemTypes.DIAMOND,1));
-		Sponge.getGame().getRegistry().getCraftingRecipeRegistry().register((CraftingRecipe) craftingRecipe.register());*/
 
 	}
 
@@ -111,6 +84,13 @@ public class Itemizer {
 				.arguments(GenericArguments.onlyOne(GenericArguments.string(Text.of("id"))))
 				.executor(new FetchCommand()).build();
 		Sponge.getCommandManager().register(this, fetch, "fetch");
+
+
+		CommandSpec reload = CommandSpec.builder()
+				.description(Text.of("Reload configurations files (except crafts)"))
+				.permission("itemizer.admin")
+				.executor(new ReloadItemsCommand()).build();
+		Sponge.getCommandManager().register(this, reload, "reloadItems");
 
 		logger.info("ITEMIZER initialized.");
 
