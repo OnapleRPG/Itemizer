@@ -40,6 +40,12 @@ public class ConfigurationHandler {
         return poolList;
     }
 
+    private static List<ICraftRecipes> craftList;
+    public static List<ICraftRecipes> getCraftList(){
+        return craftList;
+    }
+
+
     /**
      * Read items configuration and interpret it
      * @param configurationNode ConfigurationNode to read from
@@ -80,7 +86,7 @@ public class ConfigurationHandler {
      * @param configurationNode ConfigurationNode to read from
      */
     public static void readCraftConfiguration(CommentedConfigurationNode configurationNode){
-        List<ICraftRecipes> craftRecipes = new ArrayList<>();
+        List<ICraftRecipes> craftRecipes;
         TypeSerializers.getDefaultSerializers().registerType(TypeToken.of(ICraftRecipes.class), new CraftingSerializer());
         try {
             craftRecipes = configurationNode.getNode("crafts").getList(TypeToken.of(ICraftRecipes.class));
