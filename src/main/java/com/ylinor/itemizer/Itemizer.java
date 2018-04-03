@@ -55,13 +55,20 @@ public class Itemizer {
 
 		try {
 			loadItems();
-		} catch (ObjectMappingException e) {
+		}
+		catch (ObjectMappingException e) {
 			Itemizer.getLogger().error("Error while reading configuration 'items' : " + e.getMessage());
+		}
+		catch (Exception e){
+			Itemizer.getLogger().error(e.getMessage());
 		}
 		try {
 			loadMiners();
 		} catch (ObjectMappingException e) {
 			Itemizer.getLogger().error("Error while reading configuration 'miners' : " + e.getMessage());
+		}
+		catch (Exception e){
+			Itemizer.getLogger().error(e.getMessage());
 		}
 
 		try {
@@ -69,10 +76,16 @@ public class Itemizer {
 		} catch (ObjectMappingException e) {
 			Itemizer.getLogger().error("Error while reading configuration 'pools' : " + e.getMessage());
 		}
+		catch (Exception e){
+			Itemizer.getLogger().error(e.getMessage());
+		}
 		try {
 			loadCrafts();
 		} catch (ObjectMappingException e) {
 			Itemizer.getLogger().error("Error while reading configuration 'crafts' : " + e.getMessage());
+		}
+		catch (Exception e){
+			Itemizer.getLogger().error(e.getMessage());
 		}
 		craftRegister.register(ConfigurationHandler.getCraftList());
 /*
@@ -121,19 +134,19 @@ public class Itemizer {
 		return  Sponge.getPluginManager().getPlugin("itemizer").get();
 	}
 
-	public int loadItems() throws ObjectMappingException {
+	public int loadItems() throws Exception {
 		return ConfigurationHandler.readItemsConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer_items.conf"));
 	}
 
-	public int loadMiners() throws ObjectMappingException {
+	public int loadMiners() throws Exception {
 		return ConfigurationHandler.readMinerConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer_miners.conf"));
 	}
 
-	public int loadPools() throws ObjectMappingException {
+	public int loadPools() throws Exception {
 		return ConfigurationHandler.readPoolsConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer_pools.conf"));
 	}
 
-	public int loadCrafts() throws ObjectMappingException {
+	public int loadCrafts() throws Exception {
 		return ConfigurationHandler.readCraftConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer_crafts.conf"));
 	}
 

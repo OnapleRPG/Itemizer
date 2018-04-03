@@ -38,6 +38,12 @@ public class ReloadCommand implements CommandExecutor {
                     .build());
 
         }
+        catch (Exception e){
+            src.sendMessage(Text.builder()
+                    .append(Text.builder("Items configuration reload failed. ").color(TextColors.DARK_RED).build())
+                    .append(Text.builder(e.getMessage()).color(TextColors.RED).build())
+                    .build());
+        }
 
         try {
             int minersCount = Itemizer.getItemizer().loadMiners();
@@ -49,6 +55,12 @@ public class ReloadCommand implements CommandExecutor {
         } catch (ObjectMappingException e) {
             src.sendMessage(Text.builder()
                     .append(Text.builder("Miners configuration reload failed. ").color(TextColors.DARK_RED).build())
+                    .append(Text.builder(e.getMessage()).color(TextColors.RED).build())
+                    .build());
+        }
+        catch (Exception e){
+            src.sendMessage(Text.builder()
+                    .append(Text.builder("Items configuration reload failed. ").color(TextColors.DARK_RED).build())
                     .append(Text.builder(e.getMessage()).color(TextColors.RED).build())
                     .build());
         }
@@ -66,6 +78,12 @@ public class ReloadCommand implements CommandExecutor {
                     .append(Text.builder(e.getMessage()).color(TextColors.RED).build())
                     .build());
         }
+        catch (Exception e){
+            src.sendMessage(Text.builder()
+                    .append(Text.builder("Items configuration reload failed. ").color(TextColors.DARK_RED).build())
+                    .append(Text.builder(e.getMessage()).color(TextColors.RED).build())
+                    .build());
+        }
 
 
         try {
@@ -80,6 +98,12 @@ public class ReloadCommand implements CommandExecutor {
         } catch (ObjectMappingException e) {
             src.sendMessage(Text.builder()
                     .append(Text.builder("Crafts configuration reload failed. ").color(TextColors.DARK_RED).build())
+                    .append(Text.builder(e.getMessage()).color(TextColors.RED).build())
+                    .build());
+        }
+        catch (Exception e){
+            src.sendMessage(Text.builder()
+                    .append(Text.builder("Items configuration reload failed. ").color(TextColors.DARK_RED).build())
                     .append(Text.builder(e.getMessage()).color(TextColors.RED).build())
                     .build());
         }

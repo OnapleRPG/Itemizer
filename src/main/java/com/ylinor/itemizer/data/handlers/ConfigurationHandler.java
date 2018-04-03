@@ -112,13 +112,13 @@ public class ConfigurationHandler {
      * @param configName Name of the configuration in the configuration folder
      * @return Configuration ready to be used
      */
-    public static CommentedConfigurationNode loadConfiguration(String configName) {
+    public static CommentedConfigurationNode loadConfiguration(String configName) throws Exception {
         ConfigurationLoader<CommentedConfigurationNode> configLoader = HoconConfigurationLoader.builder().setPath(Paths.get(configName)).build();
         CommentedConfigurationNode configNode = null;
-        try {
+       try {
             configNode = configLoader.load();
         } catch (IOException e) {
-            Itemizer.getLogger().error("Error while loading configuration '" + configName + "' : " + e.getMessage());
+            throw new Exception("Error while loading configuration '" + configName + "' : " + e.getMessage());
         }
         return configNode;
     }
