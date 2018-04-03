@@ -1,5 +1,6 @@
 package com.ylinor.itemizer;
 import com.ylinor.itemizer.commands.FetchCommand;
+import com.ylinor.itemizer.commands.ReloadCommand;
 import com.ylinor.itemizer.commands.RetrieveCommand;
 import com.ylinor.itemizer.data.access.CraftingDao;
 import com.ylinor.itemizer.data.access.ItemDAO;
@@ -8,6 +9,7 @@ import com.ylinor.itemizer.data.handlers.ConfigurationHandler;
 import com.ylinor.itemizer.service.ItemService;
 import com.ylinor.itemizer.service.IItemService;
 import com.ylinor.itemizer.utils.ItemBuilder;
+import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.args.GenericArguments;
@@ -28,6 +30,10 @@ import java.util.HashMap;
 
 @Plugin(id = "itemizer", name = "Itemizer", version = "0.0.1")
 public class Itemizer {
+
+	private static Itemizer itemizer;
+	public static Itemizer getItemizer(){return itemizer;}
+
 
 	@Inject
 	@ConfigDir(sharedRoot=true)
@@ -55,45 +61,34 @@ public class Itemizer {
 	@Listener
 	public void preInit(GamePreInitializationEvent event) {
 
-		ConfigurationHandler.readItemsConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer_items.conf"));
-		ConfigurationHandler.readMinerConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer_miners.conf"));
-		ConfigurationHandler.readPoolsConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer_pools.conf"));
-		ConfigurationHandler.readCraftConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer_crafts.conf"));
-		//ICraftRecipes craftRecipes = new CraftingRecipeRegister(ItemStack.of(ItemTypes.DIAMOND_ORE,1),ItemStack.of(ItemTypes.DIAMOND,1));
+		try {
+			loadItems();
+		} catch (ObjectMappingException e) {
+			Itemizer.getLogger().error("Error while reading configuration 'items' : " + e.getMessage());
+		}
+		try {
+			loadMiners();
+		} catch (ObjectMappingException e) {
+			Itemizer.getLogger().error("Error while reading configuration 'miners' : " + e.getMessage());
+		}
 
-		//craftingDao.add(craftRecipes);
-
-		//ICraftRecipes craftRecipes1 = new SmeltingRecipeRegister(ItemStack.of(ItemTypes.COOKED_PORKCHOP,1),ItemBuilder.buildItemStack(ItemDAO.getItem(3).get()).get());
-		//ICraftRecipes craftRecipes2 = new ShapedCrafting(,ItemBuilder.buildItemStack(ItemDAO.getItem(3).get()).get(),ItemBuilder.buildItemStack(ItemDAO.getItem(4).get()).get());
-
-		/*String[] pattern = {"AB ","   ","   "};
-		HashMap<Character,Ingredient> ingredientHashMap = new HashMap<>();
-
-		ingredientHashMap.put('A',Ingredient.of(ItemTypes.WHEAT));
-
-		ingredientHashMap.put('B',Ingredient.of(ItemTypes.PORKCHOP));
-
-		ICraftRecipes craftRecipes2 = new ShapedCrafting(1,pattern,ingredientHashMap,ItemBuilder.buildItemStack(ItemDAO.getItem(3).get()).get());
-		//craftingDao.add(craftRecipes1);
-		craftingDao.add(craftRecipes2);
-		logger.info(craftingDao.getSize() +" craft(s) loaded");*/
-
+		try {
+			loadPools();
+		} catch (ObjectMappingException e) {
+			Itemizer.getLogger().error("Error while reading configuration 'pools' : " + e.getMessage());
+		}
+		try {
+			loadCrafts();
+		} catch (ObjectMappingException e) {
+			Itemizer.getLogger().error("Error while reading configuration 'crafts' : " + e.getMessage());
+		}
 		craftingDao.register();
-
-		//Sponge.getGame().getRegistry().getCraftingRecipeRegistry().register((ShapelessCraftingRecipe)craftRecipes.register());
-
-	/*	CraftingRecipeRegister craftingRecipe = new CraftingRecipeRegister();
-		craftingRecipe.setContent(ItemStack.of(ItemTypes.DIAMOND_ORE,1));
-		ItemStackSnapshot itemStackSnapshot = ItemTypes.WOODEN_SWORD.getTemplate();
-		logger.info(itemStackSnapshot.getValue(Keys.ATTACK_DAMAGE).get().toString());
-		craftingRecipe.setResult(ItemStack.of(ItemTypes.DIAMOND,1));
-		Sponge.getGame().getRegistry().getCraftingRecipeRegistry().register((CraftingRecipe) craftingRecipe.register());*/
-
 	}
 
 	@Listener
 	public void onGamePreInitialization(GamePreInitializationEvent event) {
 		logger.info("Initalisation");
+		itemizer = this;
 		Sponge.getServiceManager().setProvider(getInstance(), IItemService.class,new ItemService());
 	}
 
@@ -112,11 +107,38 @@ public class Itemizer {
 				.executor(new FetchCommand()).build();
 		Sponge.getCommandManager().register(this, fetch, "fetch");
 
+		CommandSpec reload = CommandSpec.builder()
+				.description(Text.of("Reaload Itemizer configuration from files."))
+				.executor(new ReloadCommand()).build();
+		Sponge.getCommandManager().register(this, reload, "reload-itemizer");
+
+
+
 		logger.info("ITEMIZER initialized.");
 
 	}
 	public static PluginContainer getInstance(){
 		return  Sponge.getPluginManager().getPlugin("itemizer").get();
 	}
+
+	public int loadItems() throws ObjectMappingException {
+		return ConfigurationHandler.readItemsConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer_items.conf"));
+	}
+
+	public int loadMiners() throws ObjectMappingException {
+		return ConfigurationHandler.readItemsConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer_miners.conf"));
+	}
+
+	public int loadPools() throws ObjectMappingException {
+		return ConfigurationHandler.readItemsConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer_pools.conf"));
+	}
+
+	public int loadCrafts() throws ObjectMappingException {
+		return ConfigurationHandler.readItemsConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer_crafts.conf"));
+	}
+
+
+
+
 
 }

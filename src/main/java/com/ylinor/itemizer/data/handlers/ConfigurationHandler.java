@@ -44,25 +44,25 @@ public class ConfigurationHandler {
      * Read items configuration and interpret it
      * @param configurationNode ConfigurationNode to read from
      */
-    public static void readItemsConfiguration(CommentedConfigurationNode configurationNode){
+    public static int readItemsConfiguration(CommentedConfigurationNode configurationNode) throws ObjectMappingException {
         itemList = new ArrayList<>();
         TypeSerializers.getDefaultSerializers().registerType(TypeToken.of(ItemBean.class), new ItemSerializer());
-        try {
+       // try {
             itemList = configurationNode.getNode("items").getList(TypeToken.of(ItemBean.class));
             Itemizer.getLogger().info(itemList.size() + " items loaded from configuration.");
-        } catch (ObjectMappingException e) {
-            Itemizer.getLogger().error("Error while reading configuration 'items' : " + e.getMessage());
-        }
+            return itemList.size();
+       // } catch (ObjectMappingException e) {
+      //  }
     }
 
     /**
      * Read miners configuration and interpret it
      * @param configurationNode ConfigurationNode to read from
      */
-    public static void readMinerConfiguration(CommentedConfigurationNode configurationNode){
+    public static int readMinerConfiguration(CommentedConfigurationNode configurationNode) throws ObjectMappingException {
         minerList = new ArrayList<>();
         TypeSerializers.getDefaultSerializers().registerType(TypeToken.of(MinerBean.class), new MinerSerializer());
-        try {
+
             minerList = configurationNode.getNode("miners").getList(TypeToken.of(MinerBean.class));
             MinerUtil minerUtil = new MinerUtil(minerList);
             minerList = minerUtil.getExpandedMiners();
@@ -70,19 +70,19 @@ public class ConfigurationHandler {
                 Itemizer.getLogger().debug("Miner from config : " + miner.getId() + " - " + miner.getMineTypes().size() + " blocks, " + miner.getInheritances().size() + " inheritances");
             }
             Itemizer.getLogger().info(minerList.size() + " miners loaded from configuration.");
-        } catch (ObjectMappingException e) {
-            Itemizer.getLogger().error("Error while reading configuration 'harvestables' : " + e.getMessage());
-        }
+
+            return minerList.size();
+
     }
 
     /**
      * Read Craft configuration and interpret it
      * @param configurationNode ConfigurationNode to read from
      */
-    public static void readCraftConfiguration(CommentedConfigurationNode configurationNode){
+    public static int readCraftConfiguration(CommentedConfigurationNode configurationNode) throws ObjectMappingException {
         List<ICraftRecipes> craftRecipes = new ArrayList<>();
         TypeSerializers.getDefaultSerializers().registerType(TypeToken.of(ICraftRecipes.class), new CraftingSerializer());
-        try {
+
             craftRecipes = configurationNode.getNode("crafts").getList(TypeToken.of(ICraftRecipes.class));
 
             for (ICraftRecipes iCraftRecipes: craftRecipes) {
@@ -90,24 +90,20 @@ public class ConfigurationHandler {
                 Itemizer.getCraftingDao().add(iCraftRecipes);
             }
             Itemizer.getLogger().info( Itemizer.getCraftingDao().getSize() + " craft(s) loaded from configuration.");
-        } catch (ObjectMappingException e) {
-            Itemizer.getLogger().error("Error while reading configuration 'crafts' : " + e.getMessage());
-        }
+            return  Itemizer.getCraftingDao().getSize();
     }
 
     /**
      * Read pools configuration and interpret it. Must be the last config file read.
      * @param configurationNode ConfigurationNode to read from
      */
-    public static void readPoolsConfiguration(CommentedConfigurationNode configurationNode){
+    public static int readPoolsConfiguration(CommentedConfigurationNode configurationNode) throws ObjectMappingException {
         poolList = new ArrayList<>();
         TypeSerializers.getDefaultSerializers().registerType(TypeToken.of(PoolBean.class), new PoolSerializer());
-        try {
+
             poolList = configurationNode.getNode("pools").getList(TypeToken.of(PoolBean.class));
             Itemizer.getLogger().info(poolList.size() + " pools loaded from configuration.");
-        } catch (ObjectMappingException e) {
-            Itemizer.getLogger().error("Error while reading configuration 'pools' : " + e.getMessage());
-        }
+      return poolList.size();
     }
 
     /**
