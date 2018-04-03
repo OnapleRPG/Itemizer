@@ -60,7 +60,7 @@ public class ReloadCommand implements CommandExecutor {
         }
         catch (Exception e){
             src.sendMessage(Text.builder()
-                    .append(Text.builder("Items configuration reload failed. ").color(TextColors.DARK_RED).build())
+                    .append(Text.builder("Miners configuration reload failed. ").color(TextColors.DARK_RED).build())
                     .append(Text.builder(e.getMessage()).color(TextColors.RED).build())
                     .build());
         }
@@ -80,7 +80,7 @@ public class ReloadCommand implements CommandExecutor {
         }
         catch (Exception e){
             src.sendMessage(Text.builder()
-                    .append(Text.builder("Items configuration reload failed. ").color(TextColors.DARK_RED).build())
+                    .append(Text.builder("Pools configuration reload failed. ").color(TextColors.DARK_RED).build())
                     .append(Text.builder(e.getMessage()).color(TextColors.RED).build())
                     .build());
         }
@@ -103,7 +103,7 @@ public class ReloadCommand implements CommandExecutor {
         }
         catch (Exception e){
             src.sendMessage(Text.builder()
-                    .append(Text.builder("Items configuration reload failed. ").color(TextColors.DARK_RED).build())
+                    .append(Text.builder("crafts configuration reload failed. ").color(TextColors.DARK_RED).build())
                     .append(Text.builder(e.getMessage()).color(TextColors.RED).build())
                     .build());
         }
