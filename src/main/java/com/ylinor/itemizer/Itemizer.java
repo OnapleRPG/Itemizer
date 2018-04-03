@@ -1,14 +1,13 @@
 package com.ylinor.itemizer;
 import com.ylinor.itemizer.commands.FetchCommand;
+
 import com.ylinor.itemizer.commands.ReloadCommand;
+
 import com.ylinor.itemizer.commands.RetrieveCommand;
-import com.ylinor.itemizer.data.access.CraftingDao;
-import com.ylinor.itemizer.data.access.ItemDAO;
-import com.ylinor.itemizer.data.beans.ShapedCrafting;
 import com.ylinor.itemizer.data.handlers.ConfigurationHandler;
 import com.ylinor.itemizer.service.ItemService;
 import com.ylinor.itemizer.service.IItemService;
-import com.ylinor.itemizer.utils.ItemBuilder;
+import com.ylinor.itemizer.utils.CraftRegister;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
@@ -18,15 +17,12 @@ import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
-import org.spongepowered.api.item.ItemTypes;
-import org.spongepowered.api.item.recipe.crafting.Ingredient;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.text.Text;
 
 import javax.inject.Inject;
 import java.nio.file.Path;
-import java.util.HashMap;
 
 @Plugin(id = "itemizer", name = "Itemizer", version = "0.0.1")
 public class Itemizer {
@@ -48,18 +44,14 @@ public class Itemizer {
 		return logger;
 	}
 
-
-	private static CraftingDao craftingDao;
 	@Inject
-	private void setCraftingDao(CraftingDao craftingDao) {
-		this.craftingDao = craftingDao;
-	}
-	public static CraftingDao getCraftingDao() {
-		return craftingDao;
-	}
+	private CraftRegister craftRegister;
+
+
 
 	@Listener
 	public void preInit(GamePreInitializationEvent event) {
+
 
 		try {
 			loadItems();
@@ -82,7 +74,15 @@ public class Itemizer {
 		} catch (ObjectMappingException e) {
 			Itemizer.getLogger().error("Error while reading configuration 'crafts' : " + e.getMessage());
 		}
+		craftRegister.register(ConfigurationHandler.getCraftList());
+/*
+		ConfigurationHandler.readItemsConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer_items.conf"));
+		ConfigurationHandler.readMinerConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer_miners.conf"));
+		ConfigurationHandler.readPoolsConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer_pools.conf"));
+		ConfigurationHandler.readCraftConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer_crafts.conf"));
 		craftingDao.register();
+*/
+
 	}
 
 	@Listener
@@ -107,12 +107,12 @@ public class Itemizer {
 				.executor(new FetchCommand()).build();
 		Sponge.getCommandManager().register(this, fetch, "fetch");
 
+
 		CommandSpec reload = CommandSpec.builder()
 				.description(Text.of("Reaload Itemizer configuration from files."))
+				.permission("itemizer.admin")
 				.executor(new ReloadCommand()).build();
 		Sponge.getCommandManager().register(this, reload, "reload-itemizer");
-
-
 
 		logger.info("ITEMIZER initialized.");
 
@@ -126,15 +126,15 @@ public class Itemizer {
 	}
 
 	public int loadMiners() throws ObjectMappingException {
-		return ConfigurationHandler.readItemsConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer_miners.conf"));
+		return ConfigurationHandler.readMinerConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer_miners.conf"));
 	}
 
 	public int loadPools() throws ObjectMappingException {
-		return ConfigurationHandler.readItemsConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer_pools.conf"));
+		return ConfigurationHandler.readPoolsConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer_pools.conf"));
 	}
 
 	public int loadCrafts() throws ObjectMappingException {
-		return ConfigurationHandler.readItemsConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer_crafts.conf"));
+		return ConfigurationHandler.readCraftConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer_crafts.conf"));
 	}
 
 

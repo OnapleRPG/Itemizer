@@ -40,6 +40,12 @@ public class ConfigurationHandler {
         return poolList;
     }
 
+    private static List<ICraftRecipes> craftList;
+    public static List<ICraftRecipes> getCraftList(){
+        return craftList;
+    }
+
+
     /**
      * Read items configuration and interpret it
      * @param configurationNode ConfigurationNode to read from
@@ -80,17 +86,12 @@ public class ConfigurationHandler {
      * @param configurationNode ConfigurationNode to read from
      */
     public static int readCraftConfiguration(CommentedConfigurationNode configurationNode) throws ObjectMappingException {
-        List<ICraftRecipes> craftRecipes = new ArrayList<>();
+
         TypeSerializers.getDefaultSerializers().registerType(TypeToken.of(ICraftRecipes.class), new CraftingSerializer());
 
-            craftRecipes = configurationNode.getNode("crafts").getList(TypeToken.of(ICraftRecipes.class));
-
-            for (ICraftRecipes iCraftRecipes: craftRecipes) {
-              //  Itemizer.getLogger().debug("Miner from config : " + craftRecipes + " - " + miner.getMineTypes().size() + " blocks, " + miner.getInheritances().size() + " inheritances");
-                Itemizer.getCraftingDao().add(iCraftRecipes);
-            }
-            Itemizer.getLogger().info( Itemizer.getCraftingDao().getSize() + " craft(s) loaded from configuration.");
-            return  Itemizer.getCraftingDao().getSize();
+            craftList = configurationNode.getNode("crafts").getList(TypeToken.of(ICraftRecipes.class));
+            Itemizer.getLogger().info( craftList.size() + " craft(s) loaded from configuration.");
+            return  craftList.size();
     }
 
     /**
