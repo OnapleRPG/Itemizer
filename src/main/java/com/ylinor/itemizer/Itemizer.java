@@ -32,7 +32,7 @@ public class Itemizer {
 
 
 	@Inject
-	@ConfigDir(sharedRoot=true)
+	@ConfigDir(sharedRoot=false)
 	private Path configDir;
 
 	private static Logger logger;
@@ -135,15 +135,15 @@ public class Itemizer {
 	}
 
 	public int loadItems() throws Exception {
-		return ConfigurationHandler.readItemsConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer_items.conf"));
+		return ConfigurationHandler.readItemsConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/items.conf"));
 	}
 
 	public int loadMiners() throws Exception {
-		return ConfigurationHandler.readMinerConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer_miners.conf"));
+		return ConfigurationHandler.readMinerConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/miners.conf"));
 	}
 
 	public int loadPools() throws Exception {
-		return ConfigurationHandler.readPoolsConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer_pools.conf"));
+		return ConfigurationHandler.readPoolsConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/pools.conf"));
 	}
 
 	public int loadCrafts() throws Exception {
