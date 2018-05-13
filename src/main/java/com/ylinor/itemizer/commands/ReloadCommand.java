@@ -29,7 +29,7 @@ public class ReloadCommand implements CommandExecutor {
             src.sendMessage(Text.builder()
                     .append(Text.builder("Items configuration reload successful. ").color(TextColors.GREEN).build())
                     .append(Text.builder("" + itemCount).color(TextColors.GOLD).build())
-                    .append(Text.builder(" dialogs are loaded.").color(TextColors.GREEN).build())
+                    .append(Text.builder(" items are loaded.").color(TextColors.GREEN).build())
                     .build());
         } catch (ObjectMappingException e) {
             src.sendMessage(Text.builder()
