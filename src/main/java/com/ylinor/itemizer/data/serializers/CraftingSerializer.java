@@ -40,7 +40,7 @@ public class CraftingSerializer implements TypeSerializer<ICraftRecipes> {
             ItemStack singleIngredient;
             HashMap<Character,ItemStack> itemStackHashMap = new HashMap<>();
             switch (craftingType) {
-                case "CraftingRecipeRegister":
+                case "ShapelessCrafting":
                     ConfigurationNode shaplessIngredient =  value.getNode("recipe");
 
                     Optional<ItemStack> RecipiceOptional=getItemStack(shaplessIngredient);
@@ -49,7 +49,7 @@ public class CraftingSerializer implements TypeSerializer<ICraftRecipes> {
                         return new CraftingRecipeRegister(id, singleIngredient,resultIngredient);
                     }
                     break;
-                case "SmeltingRecipeRegister":
+                case "Smelting":
                     ConfigurationNode configurationNode =  value.getNode("recipe");
 
                     Optional<ItemStack> smeltingIngrediant=getItemStack(configurationNode);
