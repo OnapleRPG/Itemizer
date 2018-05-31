@@ -88,13 +88,6 @@ public class Itemizer {
 			Itemizer.getLogger().error(e.getMessage());
 		}
 		craftRegister.register(ConfigurationHandler.getCraftList());
-/*
-		ConfigurationHandler.readItemsConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer_items.conf"));
-		ConfigurationHandler.readMinerConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer_miners.conf"));
-		ConfigurationHandler.readPoolsConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer_pools.conf"));
-		ConfigurationHandler.readCraftConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer_crafts.conf"));
-		craftingDao.register();
-*/
 
 	}
 

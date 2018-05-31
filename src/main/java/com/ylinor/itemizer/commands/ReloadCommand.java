@@ -27,9 +27,9 @@ public class ReloadCommand implements CommandExecutor {
         try {
             int itemCount = Itemizer.getItemizer().loadItems();
             src.sendMessage(Text.builder()
-                    .append(Text.builder("Items configuration reload successful. ").color(TextColors.GREEN).build())
+                    .append(Text.builder("Items configuration successfully reloaded. ").color(TextColors.GREEN).build())
                     .append(Text.builder("" + itemCount).color(TextColors.GOLD).build())
-                    .append(Text.builder(" dialogs are loaded.").color(TextColors.GREEN).build())
+                    .append(Text.builder(" items loaded.").color(TextColors.GREEN).build())
                     .build());
         } catch (ObjectMappingException e) {
             src.sendMessage(Text.builder()
@@ -48,7 +48,7 @@ public class ReloadCommand implements CommandExecutor {
         try {
             int minersCount = Itemizer.getItemizer().loadMiners();
             src.sendMessage(Text.builder()
-                    .append(Text.builder("Miners configuration reload successful. ").color(TextColors.GREEN).build())
+                    .append(Text.builder("Miners configuration successfully reloaded. ").color(TextColors.GREEN).build())
                     .append(Text.builder("" + minersCount).color(TextColors.GOLD).build())
                     .append(Text.builder(" miners are loaded.").color(TextColors.GREEN).build())
                     .build());
@@ -68,7 +68,7 @@ public class ReloadCommand implements CommandExecutor {
         try {
             int poolCount = Itemizer.getItemizer().loadPools();
             src.sendMessage(Text.builder()
-                    .append(Text.builder("Pools configuration reload successful. ").color(TextColors.GREEN).build())
+                    .append(Text.builder("Pools configuration successfully reloaded. ").color(TextColors.GREEN).build())
                     .append(Text.builder("" + poolCount).color(TextColors.GOLD).build())
                     .append(Text.builder(" pools are loaded.").color(TextColors.GREEN).build())
                     .build());
@@ -89,7 +89,7 @@ public class ReloadCommand implements CommandExecutor {
         try {
             int craftCount = Itemizer.getItemizer().loadCrafts();
             src.sendMessage(Text.builder()
-                    .append(Text.builder("Crafts configuration reload successful. ").color(TextColors.GREEN).build())
+                    .append(Text.builder("Crafts configuration successfully reloaded. ").color(TextColors.GREEN).build())
                     .append(Text.builder("" + craftCount).color(TextColors.GOLD).build())
                     .append(Text.builder(" crafts are loaded.").color(TextColors.GREEN).build())
                     .build());
