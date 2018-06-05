@@ -5,9 +5,13 @@ Itemizer is a Sponge Minecraft plugin that allow custom item creation as describ
 The plugin implements the command "__/retrieve *\<id\>*__", which gives a configured item to the player.  
 It also implements "__/fetch *\<id\>*__", which gets a random item from a given item pool.
 
+# Get Started
+## Installation
+To install this plugin you must have a sponge server 1.12. Download the file [on this link](https://github.com/Ylinor/Itemizer/releases/download/V1.0/Itemizer.jar) and drag and drop it into your server's `mods/` folder. Then restart your server.
+
 ## Configuration files
 
-All configuration files use HOCON format.
+All configuration files use HOCON format. When you first install the plugin a default configuration with example is loaded in your `config/itemizer/` folder.
 
 ### Item creation
 
