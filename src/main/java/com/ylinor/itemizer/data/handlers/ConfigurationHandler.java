@@ -3,13 +3,11 @@ package com.ylinor.itemizer.data.handlers;
 import com.google.common.reflect.TypeToken;
 import com.ylinor.itemizer.ICraftRecipes;
 import com.ylinor.itemizer.Itemizer;
+import com.ylinor.itemizer.data.beans.AttributeBean;
 import com.ylinor.itemizer.data.beans.ItemBean;
 import com.ylinor.itemizer.data.beans.MinerBean;
 import com.ylinor.itemizer.data.beans.PoolBean;
-import com.ylinor.itemizer.data.serializers.CraftingSerializer;
-import com.ylinor.itemizer.data.serializers.ItemSerializer;
-import com.ylinor.itemizer.data.serializers.MinerSerializer;
-import com.ylinor.itemizer.data.serializers.PoolSerializer;
+import com.ylinor.itemizer.data.serializers.*;
 import com.ylinor.itemizer.utils.MinerUtil;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
@@ -53,6 +51,7 @@ public class ConfigurationHandler {
     public static int readItemsConfiguration(CommentedConfigurationNode configurationNode) throws ObjectMappingException {
         itemList = new ArrayList<>();
         TypeSerializers.getDefaultSerializers().registerType(TypeToken.of(ItemBean.class), new ItemSerializer());
+        TypeSerializers.getDefaultSerializers().registerType(TypeToken.of(AttributeBean.class), new AttributeSerializer());
        // try {
             itemList = configurationNode.getNode("items").getList(TypeToken.of(ItemBean.class));
             Itemizer.getLogger().info(itemList.size() + " items loaded from configuration.");

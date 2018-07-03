@@ -1,9 +1,6 @@
 package com.ylinor.itemizer;
-import com.ylinor.itemizer.commands.FetchCommand;
+import com.ylinor.itemizer.commands.*;
 
-import com.ylinor.itemizer.commands.ReloadCommand;
-
-import com.ylinor.itemizer.commands.RetrieveCommand;
 import com.ylinor.itemizer.data.handlers.ConfigurationHandler;
 import com.ylinor.itemizer.service.ItemService;
 import com.ylinor.itemizer.service.IItemService;
@@ -15,7 +12,6 @@ import org.spongepowered.api.asset.Asset;
 import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.config.ConfigDir;
-import org.spongepowered.api.config.DefaultConfig;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
@@ -57,8 +53,6 @@ public class Itemizer {
 
 	@Listener
 	public void preInit(GamePreInitializationEvent event) {
-
-		//getLogger().info(configDir+"/itemizer/items.conf");
 
 		try {
 			loadItems();
@@ -126,6 +120,17 @@ public class Itemizer {
 				.permission("itemizer.admin")
 				.executor(new ReloadCommand()).build();
 		Sponge.getCommandManager().register(this, reload, "reload-itemizer");
+
+
+		CommandSpec analyse = CommandSpec.builder()
+				.executor(new GetUnsafeDataCommand()).build();
+		Sponge.getCommandManager().register(this,analyse,"analysedata");
+
+		CommandSpec giveItem = CommandSpec.builder()
+				.executor(new giveTestObjectCommand()).build();
+		Sponge.getCommandManager().register(this,giveItem,"give-test");
+
+
 
 		logger.info("ITEMIZER initialized.");
 

@@ -1,11 +1,14 @@
 package com.ylinor.itemizer.utils;
 
 import com.ylinor.itemizer.Itemizer;
+import com.ylinor.itemizer.data.beans.AttributeBean;
 import com.ylinor.itemizer.data.beans.ItemBean;
 import com.ylinor.itemizer.data.beans.MinerBean;
 import com.ylinor.itemizer.data.handlers.ConfigurationHandler;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockType;
+import org.spongepowered.api.data.DataContainer;
+import org.spongepowered.api.data.DataQuery;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.manipulator.mutable.item.BreakableData;
 import org.spongepowered.api.data.manipulator.mutable.item.EnchantmentData;
@@ -27,9 +30,11 @@ public class ItemBuilder {
         Optional<ItemType> optionalType = Sponge.getRegistry().getType(ItemType.class, itemBean.getType());
         if (optionalType.isPresent()) {
             ItemStack itemStack = ItemStack.builder().itemType(optionalType.get()).build();
-            itemStack = ItemBuilder.defineItemStack(itemStack, itemBean);
+
+           itemStack = ItemBuilder.defineItemStack(itemStack, itemBean);
             itemStack = ItemBuilder.enchantItemStack(itemStack, itemBean);
             itemStack = ItemBuilder.grantMining(itemStack, itemBean);
+            itemStack = ItemBuilder.setAttribute(itemStack,itemBean);
             return Optional.ofNullable(itemStack);
         } else {
             Itemizer.getLogger().warn("Unknown item type : " + itemBean.getType());
@@ -73,6 +78,9 @@ public class ItemBuilder {
         }
         // Item attributes
         itemStack.offer(Keys.UNBREAKABLE, itemBean.isUnbreakable());
+        if(itemBean.getDurability()>0){
+            itemStack.offer(Keys.ITEM_DURABILITY,itemBean.getDurability());
+        }
         return itemStack;
     }
 
@@ -125,4 +133,43 @@ public class ItemBuilder {
         itemStack.offer(breakableData);
         return itemStack;
     }
+
+    private static DataContainer createAttributeModifier(AttributeBean attribute){
+
+        UUID uuid = UUID.randomUUID();// UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A33DB5CF");
+        DataContainer dataContainer = DataContainer.createNew();
+        dataContainer.set(DataQuery.of("AttributeName"),attribute.getName());
+        dataContainer.set(DataQuery.of("Name"),attribute.getName());
+        dataContainer.set(DataQuery.of("Amount"),attribute.getAmount());
+        dataContainer.set(DataQuery.of("Operation"),attribute.getOperation());
+        dataContainer.set(DataQuery.of("Slot"),attribute.getSlot());
+        dataContainer.set(DataQuery.of("UUIDMost"),uuid.getMostSignificantBits());
+        dataContainer.set(DataQuery.of("UUIDLeast"),uuid.getLeastSignificantBits());
+        return dataContainer;
+    }
+
+    private static ItemStack setAttribute(ItemStack itemStack, ItemBean itemBean){
+
+        List<DataContainer> containers = new ArrayList();
+
+        for(AttributeBean att : itemBean.getAttributeList()){
+            DataContainer dc = createAttributeModifier(att);
+            containers.add(dc);
+        }
+
+        DataContainer c = itemStack.toContainer();
+        c.set(DataQuery.of("UnsafeData","AttributeModifiers"),containers);
+
+        ItemStack modifiedItem = ItemStack.builder().fromContainer(c).build();
+
+        return  modifiedItem;
+
+    }
+
+
+
+
+
+
+
 }

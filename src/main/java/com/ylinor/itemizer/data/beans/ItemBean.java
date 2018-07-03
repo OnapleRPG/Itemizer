@@ -14,24 +14,39 @@ public class ItemBean {
     private String name = "";
     /** Lore / description of the item **/
     private String lore = "";
+    /** number of use of the item**/
+    private int durability;
     /** Unbreakable attribute **/
     private boolean unbreakable = false;
     /** Map of enchants and their levels **/
     private Map<String, Integer> enchants = new HashMap<>();
     /** IDs of the miner abilities associated **/
     private List<Integer> miners = new ArrayList<>();
+    /** List of custom attribute of the item */
+    private List<AttributeBean> attributeList ;
 
     public ItemBean(String type) {
         this.type = type;
+        this.attributeList = new ArrayList<>();
     }
-    public ItemBean(int id, String type, String name, String lore, boolean unbreakable, Map<String, Integer> enchants, List<Integer> miners) {
+    public ItemBean(int id, String type, String name, String lore, int durability, boolean unbreakable, Map<String, Integer> enchants, List<Integer> miners, List<AttributeBean> attributeList) {
         this.id = id;
         this.type = type;
         this.name = name;
         this.lore = lore;
+        this.durability = durability;
         this.unbreakable = unbreakable;
         this.enchants = enchants;
         this.miners = miners;
+        this.attributeList = attributeList;
+    }
+
+    public int getDurability() {
+        return durability;
+    }
+
+    public void setDurability(int durability) {
+        this.durability = durability;
     }
 
     public int getId() {
@@ -82,4 +97,13 @@ public class ItemBean {
     public void setMiners(List<Integer> miners) {
         this.miners = miners;
     }
+
+    public List<AttributeBean> getAttributeList() {
+        return attributeList;
+    }
+
+    public void setAttributeList(List<AttributeBean> attributeList) {
+        this.attributeList = attributeList;
+    }
 }
+
