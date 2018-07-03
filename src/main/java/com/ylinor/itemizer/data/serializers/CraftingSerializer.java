@@ -10,16 +10,12 @@ import com.ylinor.itemizer.data.access.ItemDAO;
 import com.ylinor.itemizer.data.beans.ItemBean;
 import com.ylinor.itemizer.utils.ItemBuilder;
 import ninja.leaping.configurate.ConfigurationNode;
-import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import ninja.leaping.configurate.objectmapping.serialize.TypeSerializer;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.item.recipe.crafting.Ingredient;
 
 import java.util.*;
-import java.util.logging.Logger;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 public class CraftingSerializer implements TypeSerializer<ICraftRecipes> {
     @Override
@@ -30,34 +26,27 @@ public class CraftingSerializer implements TypeSerializer<ICraftRecipes> {
         String craftingType = value.getNode("type").getString();
 
         ConfigurationNode resultNode = value.getNode("result");
-        Optional<ItemStack> itemStackOptional=getItemStack(resultNode);
+        ItemStack itemStackOptional=getItemStack(resultNode);
 
         ItemStack resultIngredient;
 
-        if(itemStackOptional.isPresent()){
-            resultIngredient = itemStackOptional.get();
+
+            resultIngredient = itemStackOptional;
 
             ItemStack singleIngredient;
             HashMap<Character,ItemStack> itemStackHashMap = new HashMap<>();
             switch (craftingType) {
                 case "ShapelessCrafting":
                     ConfigurationNode shaplessIngredient =  value.getNode("recipe");
+                    ItemStack Recipice=getItemStack(shaplessIngredient);
+                    singleIngredient = Recipice;
+                    return new CraftingRecipeRegister(id, singleIngredient,resultIngredient);
 
-                    Optional<ItemStack> RecipiceOptional=getItemStack(shaplessIngredient);
-                    if(RecipiceOptional.isPresent()){
-                        singleIngredient = RecipiceOptional.get();
-                        return new CraftingRecipeRegister(id, singleIngredient,resultIngredient);
-                    }
-                    break;
                 case "Smelting":
                     ConfigurationNode configurationNode =  value.getNode("recipe");
-
-                    Optional<ItemStack> smeltingIngrediant=getItemStack(configurationNode);
-                    if(smeltingIngrediant.isPresent()){
-                        singleIngredient = smeltingIngrediant.get();
-                        return new SmeltingRecipeRegister(id, singleIngredient,resultIngredient);
-                    }
-                    break;
+                    ItemStack smeltingIngrediant=getItemStack(configurationNode);
+                    singleIngredient = smeltingIngrediant;
+                    return new SmeltingRecipeRegister(id, singleIngredient,resultIngredient);
                 case "ShapedCrafting":
                     String[] shape = Arrays.copyOf(value.getNode("pattern").getList(TypeToken.of(String.class)).toArray(),
                             value.getNode("pattern").getList(TypeToken.of(String.class)).toArray().length, String[].class);
@@ -68,18 +57,15 @@ public class CraftingSerializer implements TypeSerializer<ICraftRecipes> {
                         String key = (String) prekey;
                         Itemizer.getLogger().info("key : " + key);
                         Itemizer.getLogger().info(value.getNode("ingredients", key).getString());
-                        ingredients.put(key.charAt(0),Ingredient.of(getItemStack(value.getNode("ingredients",key)).get()));
+                        ingredients.put(key.charAt(0),Ingredient.of(getItemStack(value.getNode("ingredients",key))));
                     }
-
                     return new ShapedCrafting(id,shape,ingredients,resultIngredient);
-
             }
-        }
 
-        return null;
+       throw new ObjectMappingException();
     }
 
-    public Optional<ItemStack> getItemStack(ConfigurationNode node){
+    public ItemStack getItemStack(ConfigurationNode node) throws ObjectMappingException{
         int ref = node.getNode("ref").getInt();
         if(ref>0) {
             Optional<ItemBean> itemBeanOptional = ItemDAO.getItem(ref);
@@ -87,17 +73,20 @@ public class CraftingSerializer implements TypeSerializer<ICraftRecipes> {
             if (itemBeanOptional.isPresent()) {
                 Optional<ItemStack> itemStackOptional = ItemBuilder.buildItemStack(itemBeanOptional.get());
                 if (itemBeanOptional.isPresent()) {
-                    return itemStackOptional;
+                    return itemStackOptional.get();
                 }
             }
         } else {
             String name = node.getNode("name").getString();
             if(name != null){
-                 return ItemBuilder.buildItemStack(name);
+
+                  if(ItemBuilder.buildItemStack(name).isPresent()){
+                      return ItemBuilder.buildItemStack(name).get();
+                  }
             }
 
         }
-        return Optional.empty();
+        throw new ObjectMappingException();
     }
 
     @Override

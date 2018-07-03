@@ -26,7 +26,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 
-@Plugin(id = "itemizer", name = "Itemizer", version = "0.0.1")
+@Plugin(id = "itemizer", name = "Itemizer", version = "1.0.0")
 public class Itemizer {
 
 	private static Itemizer itemizer;
