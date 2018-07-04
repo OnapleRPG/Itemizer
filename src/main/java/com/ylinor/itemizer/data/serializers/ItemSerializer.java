@@ -1,6 +1,7 @@
 package com.ylinor.itemizer.data.serializers;
 
 import com.google.common.reflect.TypeToken;
+import com.ylinor.itemizer.Itemizer;
 import com.ylinor.itemizer.data.beans.AttributeBean;
 import com.ylinor.itemizer.data.beans.ItemBean;
 import ninja.leaping.configurate.ConfigurationNode;
@@ -42,7 +43,8 @@ public class ItemSerializer implements TypeSerializer<ItemBean> {
         }
 
         List<AttributeBean> attributes = value.getNode("attributes").getList(TypeToken.of(AttributeBean.class));
-        ItemBean item = new ItemBean(id, itemType, name, lore,durability, unbreakable, enchants, miners, new ArrayList<>());
+        ItemBean item = new ItemBean(id, itemType, name, lore,durability, unbreakable, enchants, miners,attributes);
+        Itemizer.getLogger().info(item.toString());
         return item;
     }
 

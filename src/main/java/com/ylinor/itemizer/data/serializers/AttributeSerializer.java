@@ -10,8 +10,8 @@ public class AttributeSerializer implements TypeSerializer<AttributeBean> {
     @Override
     public AttributeBean deserialize(TypeToken<?> type, ConfigurationNode value) throws ObjectMappingException {
         int operation = value.getNode("operation").getInt();
-        Float amount = value.getNode("type").getFloat();
-        String name = value.getNode("type").getString();
+        Float amount = value.getNode("amount").getFloat();
+        String name = value.getNode("name").getString();
         String slot = value.getNode("slot").getString();
 
         return new AttributeBean(name,slot,amount,operation);

@@ -105,5 +105,20 @@ public class ItemBean {
     public void setAttributeList(List<AttributeBean> attributeList) {
         this.attributeList = attributeList;
     }
+
+    @Override
+    public String toString() {
+        return "ItemBean{" +
+                "id=" + id +
+                ", type='" + type + '\'' +
+                ", name='" + name + '\'' +
+                ", lore='" + lore + '\'' +
+                ", durability=" + durability +
+                ", unbreakable=" + unbreakable +
+                ", enchants=" + enchants +
+                ", miners=" + miners +
+                ", attributeList=" + attributeList +
+                '}';
+    }
 }
 

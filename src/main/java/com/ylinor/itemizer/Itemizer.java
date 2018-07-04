@@ -140,26 +140,27 @@ public class Itemizer {
 	}
 
 	public int loadItems() throws Exception {
-		initDefaultConfig("items.conf");
+		initDefaultConfig("/itemizer/items.conf");
 		return ConfigurationHandler.readItemsConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer/items.conf"));
 	}
 
 	public int loadMiners() throws Exception {
-		initDefaultConfig("miners.conf");
+		initDefaultConfig("/itemizer/miners.conf");
 		return ConfigurationHandler.readMinerConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer/miners.conf"));
 	}
 
 	public int loadPools() throws Exception {
-		initDefaultConfig("pools.conf");
+		initDefaultConfig("/itemizer/pools.conf");
 		return ConfigurationHandler.readPoolsConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer/pools.conf"));
 	}
 
 	public int loadCrafts() throws Exception {
-		initDefaultConfig("crafts.conf");
+		initDefaultConfig("/itemizer/crafts.conf");
 		return ConfigurationHandler.readCraftConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer/crafts.conf"));
 	}
 
 	public void initDefaultConfig(String path){
+		this.getLogger().info(Paths.get(configDir + path).toString());
 		if (Files.notExists(Paths.get(configDir + path))){
 			Optional<Asset> itemsDefaultConfigFile = getInstance().getAsset(path);
 			getLogger().info("No config file set for " + path + " default config will be loaded");
