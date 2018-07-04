@@ -84,6 +84,7 @@ public class Itemizer {
 			loadCrafts();
 		} catch (ObjectMappingException e) {
 			Itemizer.getLogger().error("Error while reading configuration 'crafts' : " + e.getMessage());
+			e.printStackTrace();
 		}
 		catch (Exception e){
 			Itemizer.getLogger().error(e.getMessage());
@@ -160,7 +161,7 @@ public class Itemizer {
 	}
 
 	public void initDefaultConfig(String path){
-		this.getLogger().info(Paths.get(configDir + path).toString());
+
 		if (Files.notExists(Paths.get(configDir + path))){
 			Optional<Asset> itemsDefaultConfigFile = getInstance().getAsset(path);
 			getLogger().info("No config file set for " + path + " default config will be loaded");

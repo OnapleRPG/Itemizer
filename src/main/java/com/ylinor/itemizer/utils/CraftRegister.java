@@ -20,7 +20,7 @@ public class CraftRegister {
          for (ICraftRecipes recipeRegister: craftRecipesList) {
 
         Recipe r= recipeRegister.register();
-        Itemizer.getLogger().info(r.toString());
+
 
         if(r instanceof ShapelessCraftingRecipe){
             Sponge.getGame().getRegistry().getCraftingRecipeRegistry().register((ShapelessCraftingRecipe)r);

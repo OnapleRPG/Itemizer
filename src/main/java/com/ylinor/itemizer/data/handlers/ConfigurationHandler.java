@@ -23,22 +23,22 @@ import java.util.List;
 public class ConfigurationHandler {
     private ConfigurationHandler() {}
 
-    private static List<MinerBean> minerList;
+    private static List<MinerBean> minerList = new ArrayList<>();
     public static List<MinerBean> getMinerList(){
         return minerList;
     }
 
-    private static List<ItemBean> itemList;
+    private static List<ItemBean> itemList= new ArrayList<>();
     public static List<ItemBean> getItemList(){
         return itemList;
     }
 
-    private static List<PoolBean> poolList;
+    private static List<PoolBean> poolList= new ArrayList<>();
     public static List<PoolBean> getPoolList(){
         return poolList;
     }
 
-    private static List<ICraftRecipes> craftList;
+    private static List<ICraftRecipes> craftList= new ArrayList<>();
     public static List<ICraftRecipes> getCraftList(){
         return craftList;
     }

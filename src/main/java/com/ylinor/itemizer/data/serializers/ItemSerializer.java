@@ -44,7 +44,7 @@ public class ItemSerializer implements TypeSerializer<ItemBean> {
 
         List<AttributeBean> attributes = value.getNode("attributes").getList(TypeToken.of(AttributeBean.class));
         ItemBean item = new ItemBean(id, itemType, name, lore,durability, unbreakable, enchants, miners,attributes);
-        Itemizer.getLogger().info(item.toString());
+
         return item;
     }
 

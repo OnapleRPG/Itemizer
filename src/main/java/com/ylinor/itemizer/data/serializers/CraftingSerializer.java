@@ -55,8 +55,7 @@ public class CraftingSerializer implements TypeSerializer<ICraftRecipes> {
                    Map<Object,? extends ConfigurationNode> b = value.getNode("ingredients").getChildrenMap();
                     for(Object prekey: b.keySet()){
                         String key = (String) prekey;
-                        Itemizer.getLogger().info("key : " + key);
-                        Itemizer.getLogger().info(value.getNode("ingredients", key).getString());
+
                         ingredients.put(key.charAt(0),Ingredient.of(getItemStack(value.getNode("ingredients",key))));
                     }
                     return new ShapedCrafting(id,shape,ingredients,resultIngredient);
@@ -65,7 +64,7 @@ public class CraftingSerializer implements TypeSerializer<ICraftRecipes> {
        throw new ObjectMappingException();
     }
 
-    public ItemStack getItemStack(ConfigurationNode node) throws ObjectMappingException{
+    public ItemStack getItemStack(ConfigurationNode node) throws ObjectMappingException {
         int ref = node.getNode("ref").getInt();
         if(ref>0) {
             Optional<ItemBean> itemBeanOptional = ItemDAO.getItem(ref);
@@ -82,6 +81,9 @@ public class CraftingSerializer implements TypeSerializer<ICraftRecipes> {
 
                   if(ItemBuilder.buildItemStack(name).isPresent()){
                       return ItemBuilder.buildItemStack(name).get();
+                  }else{
+                      Itemizer.getLogger().error("item named " + name + "is not registered");
+                      throw new ObjectMappingException("item named " + name + "is not registered");
                   }
             }
 

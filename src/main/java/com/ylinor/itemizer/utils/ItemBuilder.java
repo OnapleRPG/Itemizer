@@ -151,7 +151,7 @@ public class ItemBuilder {
     private static ItemStack setAttribute(ItemStack itemStack, ItemBean itemBean){
 
 
-        itemBean.getAttributeList().forEach(attributeBean -> Itemizer.getLogger().info(attributeBean.getName()));
+
         List<DataContainer> containers = new ArrayList();
 
         for(AttributeBean att : itemBean.getAttributeList()){
