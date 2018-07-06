@@ -22,7 +22,7 @@ public class FetchCommand implements CommandExecutor {
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
         if (src instanceof Player) {
-            String poolId = (args.getOne("id").isPresent()) ? args.<String>getOne("id").get() : "";
+            String poolId = args.<String>getOne("id").orElse("");
             try {
                 int id = Integer.parseInt(poolId);
                 Optional<ItemBean> optionalItem = PoolFetcher.fetchItemFromPool(id);

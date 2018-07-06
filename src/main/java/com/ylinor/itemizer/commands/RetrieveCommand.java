@@ -22,7 +22,7 @@ public class RetrieveCommand implements CommandExecutor {
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
         if (src instanceof Player) {
-            String itemId = (args.getOne("id").isPresent()) ? args.<String>getOne("id").get() : "";
+            String itemId = args.<String>getOne("id").orElse("");
             try {
                 int id = Integer.parseInt(itemId);
                 Optional<ItemBean> optionalItem = ItemDAO.getItem(id);

@@ -55,7 +55,7 @@ public class giveTestObjectCommand implements CommandExecutor{
             ItemBean itemBean = new ItemBean("diamond_sword");
             itemBean.setAttributeList(attributeBeans);
 
-            ((Player) src).setItemInHand(HandTypes.MAIN_HAND, ItemBuilder.buildItemStack(itemBean).get());
+            ((Player) src).setItemInHand(HandTypes.MAIN_HAND, ItemBuilder.buildItemStack(itemBean).orElse(null));
             return CommandResult.success();
         }
         return CommandResult.empty();

@@ -30,12 +30,11 @@ public class ItemBuilder {
         Optional<ItemType> optionalType = Sponge.getRegistry().getType(ItemType.class, itemBean.getType());
         if (optionalType.isPresent()) {
             ItemStack itemStack = ItemStack.builder().itemType(optionalType.get()).build();
-
-           itemStack = ItemBuilder.defineItemStack(itemStack, itemBean);
-            itemStack = ItemBuilder.enchantItemStack(itemStack, itemBean);
-            itemStack = ItemBuilder.grantMining(itemStack, itemBean);
-            itemStack = ItemBuilder.setAttribute(itemStack,itemBean);
-            return Optional.ofNullable(itemStack);
+            ItemStack definedItemStack = ItemBuilder.defineItemStack(itemStack, itemBean);
+            ItemStack enchantedItemStack = ItemBuilder.enchantItemStack(definedItemStack, itemBean);
+            ItemStack miningItemStack = ItemBuilder.grantMining(enchantedItemStack, itemBean);
+            ItemStack attributedItemStack = ItemBuilder.setAttribute(miningItemStack,itemBean);
+            return Optional.ofNullable(attributedItemStack);
         } else {
             Itemizer.getLogger().warn("Unknown item type : " + itemBean.getType());
         }

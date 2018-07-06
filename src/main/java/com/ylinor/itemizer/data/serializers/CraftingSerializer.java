@@ -71,16 +71,16 @@ public class CraftingSerializer implements TypeSerializer<ICraftRecipes> {
             ItemStack result;
             if (itemBeanOptional.isPresent()) {
                 Optional<ItemStack> itemStackOptional = ItemBuilder.buildItemStack(itemBeanOptional.get());
-                if (itemBeanOptional.isPresent()) {
+                if (itemStackOptional.isPresent()) {
                     return itemStackOptional.get();
                 }
             }
         } else {
             String name = node.getNode("name").getString();
             if(name != null){
-
-                  if(ItemBuilder.buildItemStack(name).isPresent()){
-                      return ItemBuilder.buildItemStack(name).get();
+                Optional<ItemStack> itemStackOptional = ItemBuilder.buildItemStack(name);
+                  if(itemStackOptional.isPresent()){
+                      return itemStackOptional.get();
                   }else{
                       Itemizer.getLogger().error("item named " + name + "is not registered");
                       throw new ObjectMappingException("item named " + name + "is not registered");

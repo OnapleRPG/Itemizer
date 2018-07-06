@@ -84,7 +84,6 @@ public class Itemizer {
 			loadCrafts();
 		} catch (ObjectMappingException e) {
 			Itemizer.getLogger().error("Error while reading configuration 'crafts' : " + e.getMessage());
-			e.printStackTrace();
 		}
 		catch (Exception e){
 			Itemizer.getLogger().error(e.getMessage());
@@ -136,8 +135,8 @@ public class Itemizer {
 		logger.info("ITEMIZER initialized.");
 
 	}
-	public static PluginContainer getInstance(){
-		return  Sponge.getPluginManager().getPlugin("itemizer").get();
+	public static PluginContainer getInstance() {
+		return Sponge.getPluginManager().getPlugin("itemizer").orElse(null);
 	}
 
 	public int loadItems() throws Exception {
@@ -161,19 +160,21 @@ public class Itemizer {
 	}
 
 	public void initDefaultConfig(String path){
-
-		if (Files.notExists(Paths.get(configDir + path))){
-			Optional<Asset> itemsDefaultConfigFile = getInstance().getAsset(path);
-			getLogger().info("No config file set for " + path + " default config will be loaded");
-			if (itemsDefaultConfigFile.isPresent()) {
-				try {
-					itemsDefaultConfigFile.get().copyToDirectory(Paths.get(configDir+"/itemizer/"));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			} else {
-				logger.warn("Item default config not found");
-			}
+		if (Files.notExists(Paths.get(configDir + path))) {
+		    PluginContainer pluginInstance = getInstance();
+		    if (pluginInstance!= null) {
+                Optional<Asset> itemsDefaultConfigFile = pluginInstance.getAsset(path);
+                getLogger().info("No config file set for " + path + " default config will be loaded");
+                if (itemsDefaultConfigFile.isPresent()) {
+                    try {
+                        itemsDefaultConfigFile.get().copyToDirectory(Paths.get(configDir+"/itemizer/"));
+                    } catch (IOException e) {
+                        Itemizer.getLogger().error("Error while setting default configuration : " + e.getMessage());
+                    }
+                } else {
+                    logger.warn("Item default config not found");
+                }
+            }
 		}
 	}
 
