@@ -140,41 +140,41 @@ public class Itemizer {
 	}
 
 	public int loadItems() throws Exception {
-		initDefaultConfig("/itemizer/items.conf");
+		initDefaultConfig("items.conf");
 		return ConfigurationHandler.readItemsConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer/items.conf"));
 	}
 
 	public int loadMiners() throws Exception {
-		initDefaultConfig("/itemizer/miners.conf");
+		initDefaultConfig("miners.conf");
 		return ConfigurationHandler.readMinerConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer/miners.conf"));
 	}
 
 	public int loadPools() throws Exception {
-		initDefaultConfig("/itemizer/pools.conf");
+		initDefaultConfig("pools.conf");
 		return ConfigurationHandler.readPoolsConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer/pools.conf"));
 	}
 
 	public int loadCrafts() throws Exception {
-		initDefaultConfig("/itemizer/crafts.conf");
+		initDefaultConfig("crafts.conf");
 		return ConfigurationHandler.readCraftConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer/crafts.conf"));
 	}
 
 	public void initDefaultConfig(String path){
-		if (Files.notExists(Paths.get(configDir + path))) {
-		    PluginContainer pluginInstance = getInstance();
-		    if (pluginInstance!= null) {
-                Optional<Asset> itemsDefaultConfigFile = pluginInstance.getAsset(path);
-                getLogger().info("No config file set for " + path + " default config will be loaded");
-                if (itemsDefaultConfigFile.isPresent()) {
-                    try {
-                        itemsDefaultConfigFile.get().copyToDirectory(Paths.get(configDir+"/itemizer/"));
-                    } catch (IOException e) {
-                        Itemizer.getLogger().error("Error while setting default configuration : " + e.getMessage());
-                    }
-                } else {
-                    logger.warn("Item default config not found");
-                }
-            }
+		if (Files.notExists(Paths.get(configDir+ "/itemizer/" + path))) {
+			PluginContainer pluginInstance = getInstance();
+			if (pluginInstance!= null) {
+				Optional<Asset> itemsDefaultConfigFile = pluginInstance.getAsset(path);
+				getLogger().info("No config file set for " + path + " default config will be loaded");
+				if (itemsDefaultConfigFile.isPresent()) {
+					try {
+						itemsDefaultConfigFile.get().copyToDirectory(Paths.get(configDir+"/itemizer/"));
+					} catch (IOException e) {
+						Itemizer.getLogger().error("Error while setting default configuration : " + e.getMessage());
+					}
+				} else {
+					logger.warn("Item default config not found");
+				}
+			}
 		}
 	}
 
