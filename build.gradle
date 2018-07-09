@@ -6,16 +6,18 @@ plugins {
 apply plugin: 'java'
 apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.plugin'
-
+version = "0.1.1"
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
+
+
 
 publishing {
     publications {
         maven(MavenPublication) {
             groupId 'com.ylinor'
             artifactId 'itemizer'
-            version '0.0.1'
+            version '0.1.0'
 
             from components.java
         }

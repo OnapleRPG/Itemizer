@@ -9,7 +9,7 @@ import com.onaple.itemizer.data.beans.MinerBean;
 import com.onaple.itemizer.data.beans.PoolBean;
 import com.onaple.itemizer.data.serializers.*;
 import com.onaple.itemizer.utils.MinerUtil;
-import com.ylinor.itemizer.data.serializers.*;
+
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
