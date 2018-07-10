@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/OnapleRPG/Itemizer.svg?branch=master)](https://travis-ci.org/OnapleRPG/Itemizer)
+![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=Itemizer&metric=alert_status)
 # Itemizer
 
 Itemizer is a Sponge Minecraft plugin that allow custom item creation as described in configuration files, as well as random item generation.
