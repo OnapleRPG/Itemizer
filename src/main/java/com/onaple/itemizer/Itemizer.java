@@ -103,12 +103,14 @@ public class Itemizer {
 	public void onServerStart(GameStartedServerEvent event) throws Exception {
 
 		CommandSpec retrieve = CommandSpec.builder()
+				.permission("itemizer.get")
 				.description(Text.of("Retrieve an item from a configuration file with its id."))
 				.arguments(GenericArguments.onlyOne(GenericArguments.string(Text.of("id"))))
 				.executor(new RetrieveCommand()).build();
 		Sponge.getCommandManager().register(this, retrieve, "retrieve");
 
 		CommandSpec fetch = CommandSpec.builder()
+				.permission("itemizer.get")
 				.description(Text.of("Try to retrieve an item from a pool describes in a configuration file with its id."))
 				.arguments(GenericArguments.onlyOne(GenericArguments.string(Text.of("id"))))
 				.executor(new FetchCommand()).build();
@@ -123,13 +125,9 @@ public class Itemizer {
 
 
 		CommandSpec analyse = CommandSpec.builder()
+				.permission("itemizer.debug")
 				.executor(new GetUnsafeDataCommand()).build();
 		Sponge.getCommandManager().register(this,analyse,"analysedata");
-
-		CommandSpec giveItem = CommandSpec.builder()
-				.executor(new giveTestObjectCommand()).build();
-		Sponge.getCommandManager().register(this,giveItem,"give-test");
-
 
 
 		logger.info("ITEMIZER initialized.");
