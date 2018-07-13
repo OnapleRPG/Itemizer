@@ -105,14 +105,17 @@ public class Itemizer {
 		CommandSpec retrieve = CommandSpec.builder()
 				.permission("itemizer.get")
 				.description(Text.of("Retrieve an item from a configuration file with its id."))
-				.arguments(GenericArguments.onlyOne(GenericArguments.string(Text.of("id"))))
+				.arguments(GenericArguments.onlyOne(GenericArguments.string(Text.of("id"))),
+						GenericArguments.optional(GenericArguments.player(Text.of("player")))
+				)
 				.executor(new RetrieveCommand()).build();
 		Sponge.getCommandManager().register(this, retrieve, "retrieve");
 
 		CommandSpec fetch = CommandSpec.builder()
 				.permission("itemizer.get")
 				.description(Text.of("Try to retrieve an item from a pool describes in a configuration file with its id."))
-				.arguments(GenericArguments.onlyOne(GenericArguments.string(Text.of("id"))))
+				.arguments(GenericArguments.onlyOne(GenericArguments.string(Text.of("id"))),
+		GenericArguments.optional(GenericArguments.player(Text.of("player"))))
 				.executor(new FetchCommand()).build();
 		Sponge.getCommandManager().register(this, fetch, "fetch");
 

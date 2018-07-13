@@ -23,13 +23,25 @@ public class FetchCommand implements CommandExecutor {
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
         if (src instanceof Player) {
             String poolId = args.<String>getOne("id").orElse("");
+            Optional<Player> targetOptional = args.getOne("player");
+            Player target ;
+            if (targetOptional.isPresent()){
+                target = targetOptional.get();
+            } else {
+                if(src instanceof Player){
+                    target = (Player) src;
+                } else{
+                    src.sendMessage(Text.of("Target must be a player."));
+                    return CommandResult.empty();
+                }
+            }
             try {
                 int id = Integer.parseInt(poolId);
                 Optional<ItemBean> optionalItem = PoolFetcher.fetchItemFromPool(id);
                 if (optionalItem.isPresent()) {
                     Optional<ItemStack> optionalItemStack = ItemBuilder.buildItemStack(optionalItem.get());
                     if (optionalItemStack.isPresent()) {
-                        ((Player) src).getInventory().offer(optionalItemStack.get());
+                        target.getInventory().offer(optionalItemStack.get());
                     } else {
                         ((Player) src).sendMessage(Text.of("Item from pool " + id + " not valid."));
                     }
