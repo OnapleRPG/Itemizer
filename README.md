@@ -1,11 +1,26 @@
-[![Build Status](https://travis-ci.org/OnapleRPG/Itemizer.svg?branch=master)](https://travis-ci.org/OnapleRPG/Itemizer)
-![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=Itemizer&metric=alert_status)
-# Itemizer
+# Itemizer  [![Build Status](https://travis-ci.org/OnapleRPG/Itemizer.svg?branch=master)](https://travis-ci.org/OnapleRPG/Itemizer) ![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=Itemizer&metric=alert_status)   [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
 
 Itemizer is a Sponge Minecraft plugin that allow custom item creation as described in configuration files, as well as random item generation.
+you can edit most of item's informations like :
 
-The plugin implements the command "__/retrieve *\<id\>*__", which gives a configured item to the player.  
-It also implements "__/fetch *\<id\>*__", which gets a random item from a given item pool.
+* Item name
+* Item lore
+* Enchantements
+* Durability
+* *can mine* property
+* Attribute modifiers
+    * *maxHealth*
+    * *followRange*
+    * *knockbackResistance*
+    * *movementSpeed*
+    * *attackDamage*
+    * *armor*
+    * *armorToughness*
+    * *attackSpeed*
+    * *luck*  
+If you wnat more details about *AttributeModifiers* check the Minecraft [wiki](https://minecraft.gamepedia.com/Attribute)
+
 
 ## Installation
 To install this plugin you must have a sponge server 1.12. Download the [latest release](https://github.com/OnapleRPG/Itemizer/releases) and drag and drop it into your server's `mods/` folder. Then restart your server.
@@ -28,6 +43,10 @@ Permission : *itemizer.command.reload*
 
 All configuration files use HOCON format. When you first install the plugin a default configuration with example is loaded in your `config/itemizer/` folder.
 
+## Minecraft Commands
+The plugin implements minecraft commands to interact with.
+* `/retrieve <id>` gives a configured item to the player.  
+* `/fetch <id>`, which gets a random item from a given item pool.
 ### Item creation
 
 A file named __*itemizer_items.conf*__ stores the items that can be retrieved from the plugin.
