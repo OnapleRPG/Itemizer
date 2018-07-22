@@ -105,36 +105,26 @@ public class Itemizer {
 		CommandSpec retrieve = CommandSpec.builder()
 				.description(Text.of("Retrieve an item from a configuration file with its id."))
 				.arguments(GenericArguments.onlyOne(GenericArguments.string(Text.of("id"))))
+				.permission("itemizer.command.retrieve")
 				.executor(new RetrieveCommand()).build();
 		Sponge.getCommandManager().register(this, retrieve, "retrieve");
 
 		CommandSpec fetch = CommandSpec.builder()
 				.description(Text.of("Try to retrieve an item from a pool describes in a configuration file with its id."))
 				.arguments(GenericArguments.onlyOne(GenericArguments.string(Text.of("id"))))
+				.permission("itemizer.command.fetch")
 				.executor(new FetchCommand()).build();
 		Sponge.getCommandManager().register(this, fetch, "fetch");
 
-
 		CommandSpec reload = CommandSpec.builder()
 				.description(Text.of("Reaload Itemizer configuration from files."))
-				.permission("itemizer.admin")
+				.permission("itemizer.command.reload")
 				.executor(new ReloadCommand()).build();
 		Sponge.getCommandManager().register(this, reload, "reload-itemizer");
 
-
-		CommandSpec analyse = CommandSpec.builder()
-				.executor(new GetUnsafeDataCommand()).build();
-		Sponge.getCommandManager().register(this,analyse,"analysedata");
-
-		CommandSpec giveItem = CommandSpec.builder()
-				.executor(new giveTestObjectCommand()).build();
-		Sponge.getCommandManager().register(this,giveItem,"give-test");
-
-
-
 		logger.info("ITEMIZER initialized.");
-
 	}
+
 	public static PluginContainer getInstance() {
 		return Sponge.getPluginManager().getPlugin("itemizer").orElse(null);
 	}
@@ -159,7 +149,7 @@ public class Itemizer {
 		return ConfigurationHandler.readCraftConfiguration(ConfigurationHandler.loadConfiguration(configDir+"/itemizer/crafts.conf"));
 	}
 
-	public void initDefaultConfig(String path){
+	private void initDefaultConfig(String path){
 		if (Files.notExists(Paths.get(configDir+ "/itemizer/" + path))) {
 			PluginContainer pluginInstance = getInstance();
 			if (pluginInstance!= null) {
@@ -177,9 +167,4 @@ public class Itemizer {
 			}
 		}
 	}
-
-
-
-
-
 }
