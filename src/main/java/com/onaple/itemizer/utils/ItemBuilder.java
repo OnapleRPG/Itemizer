@@ -49,7 +49,7 @@ public class ItemBuilder {
         Optional<ItemType> optionalType = Sponge.getRegistry().getType(ItemType.class,name);
         if (optionalType.isPresent()) {
             ItemStack itemStack = ItemStack.builder().itemType(optionalType.get()).build();
-            return Optional.ofNullable(itemStack);
+            return Optional.of(itemStack);
         } else {
             Itemizer.getLogger().warn("Unknown item type : " + name);
         }
@@ -133,9 +133,30 @@ public class ItemBuilder {
         return itemStack;
     }
 
-    private static DataContainer createAttributeModifier(AttributeBean attribute){
+    /**
+     * Set attributes to an item
+     * @param itemStack Item to set attribute
+     * @param itemBean Data of the item
+     * @return Item with attributes set
+     */
+    private static ItemStack setAttribute(ItemStack itemStack, ItemBean itemBean){
+        List<DataContainer> containers = new ArrayList();
+        for(AttributeBean att : itemBean.getAttributeList()){
+            DataContainer dc = createAttributeModifier(att);
+            containers.add(dc);
+        }
+        DataContainer container = itemStack.toContainer();
+        container.set(DataQuery.of("UnsafeData","AttributeModifiers"),containers);
+        return ItemStack.builder().fromContainer(container).build();
+    }
 
-        UUID uuid = UUID.randomUUID();// UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A33DB5CF");
+    /**
+     * Create the datacontainer for an attribute's data
+     * @param attribute Data of the attribute
+     * @return DataContainer from which the item will be recreated
+     */
+    private static DataContainer createAttributeModifier(AttributeBean attribute){
+        UUID uuid = UUID.randomUUID();
         DataContainer dataContainer = DataContainer.createNew();
         dataContainer.set(DataQuery.of("AttributeName"),attribute.getName());
         dataContainer.set(DataQuery.of("Name"),attribute.getName());
@@ -145,26 +166,6 @@ public class ItemBuilder {
         dataContainer.set(DataQuery.of("UUIDMost"),uuid.getMostSignificantBits());
         dataContainer.set(DataQuery.of("UUIDLeast"),uuid.getLeastSignificantBits());
         return dataContainer;
-    }
-
-    private static ItemStack setAttribute(ItemStack itemStack, ItemBean itemBean){
-
-
-
-        List<DataContainer> containers = new ArrayList();
-
-        for(AttributeBean att : itemBean.getAttributeList()){
-            DataContainer dc = createAttributeModifier(att);
-            containers.add(dc);
-        }
-
-        DataContainer c = itemStack.toContainer();
-        c.set(DataQuery.of("UnsafeData","AttributeModifiers"),containers);
-
-        ItemStack modifiedItem = ItemStack.builder().fromContainer(c).build();
-
-        return  modifiedItem;
-
     }
 
 
