@@ -15,7 +15,7 @@ public class PoolFetcher {
      * @param poolId Id of the pool
      * @return Random item, or nothing
      */
-    public static Optional<ItemBean> fetchItemFromPool(int poolId) {
+    public static Optional<ItemBean> fetchItemFromPool(String poolId) {
         Optional<ItemBean> item = Optional.empty();
         Optional<PoolBean> optionalPool = PoolDAO.getPool(poolId);
         if (optionalPool.isPresent()) {

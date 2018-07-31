@@ -8,7 +8,7 @@ import org.spongepowered.api.item.recipe.crafting.ShapelessCraftingRecipe;
 
 public class CraftingRecipeRegister implements ICraftRecipes {
     /** index **/
-    private int id;
+    private String id;
     /** content **/
     private ItemStack content;
     /** result **/
@@ -25,7 +25,7 @@ public class CraftingRecipeRegister implements ICraftRecipes {
         this.result = result;
     }
 
-    public CraftingRecipeRegister(int id ,ItemStack content, ItemStack result) {
+    public CraftingRecipeRegister(String id ,ItemStack content, ItemStack result) {
         this.id = id;
         this.content = content;
         this.result = result;

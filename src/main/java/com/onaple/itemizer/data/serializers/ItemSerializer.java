@@ -17,7 +17,7 @@ public class ItemSerializer implements TypeSerializer<ItemBean> {
     @Override
     public ItemBean deserialize(TypeToken<?> type, ConfigurationNode value) throws ObjectMappingException {
         // Item characteristics
-        int id = value.getNode("id").getInt();
+        String id = value.getNode("id").getString();
         String itemType = value.getNode("type").getString();
         String name = value.getNode("name").getString();
         String lore = value.getNode("lore").getString();
@@ -32,11 +32,11 @@ public class ItemSerializer implements TypeSerializer<ItemBean> {
             }
         }
         // IDs of the miners abilities
-        List<Integer> miners = new ArrayList<>();
+        List<String> miners = new ArrayList<>();
         List<? extends ConfigurationNode> minerList = value.getNode("miners").getChildrenList();
         for (ConfigurationNode minerNode : minerList) {
-            int miner = minerNode.getInt();
-            if (miner > 0) {
+            String miner = minerNode.getString();
+            if (!miner.equals("")) {
                 miners.add(miner);
             }
         }

@@ -4,22 +4,22 @@ import java.util.List;
 
 public class MinerBean {
     /** ID of the miner **/
-    private int id;
+    private String id;
     /** Types that can be mined **/
     private List<String> mineTypes;
     /** Miners id that are inherited from **/
-    private List<Integer> inheritances;
+    private List<String> inheritances;
 
-    public MinerBean(int id, List<String> mineTypes, List<Integer> inheritances) {
+    public MinerBean(String id, List<String> mineTypes, List<String> inheritances) {
         this.id = id;
         this.mineTypes = mineTypes;
         this.inheritances = inheritances;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -30,10 +30,10 @@ public class MinerBean {
         this.mineTypes = mineTypes;
     }
 
-    public List<Integer> getInheritances() {
+    public List<String> getInheritances() {
         return inheritances;
     }
-    public void setInheritances(List<Integer> inheritances) {
+    public void setInheritances(List<String> inheritances) {
         this.inheritances = inheritances;
     }
 }

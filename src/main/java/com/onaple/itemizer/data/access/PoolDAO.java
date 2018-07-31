@@ -12,10 +12,10 @@ public class PoolDAO {
      * @param id ID of the pool
      * @return Optional of the pool data
      */
-    public static Optional<PoolBean> getPool(int id) {
+    public static Optional<PoolBean> getPool(String id) {
         List<PoolBean> pools = ConfigurationHandler.getPoolList();
         for(PoolBean pool: pools) {
-            if (pool.getId() == id) {
+            if (pool.getId().equals(id)) {
                 return Optional.of(pool);
             }
         }

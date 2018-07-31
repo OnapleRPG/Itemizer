@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class ItemBean {
     /** ID of the item in config **/
-    private int id = 0;
+    private String id = "";
     /** Type of the item **/
     private String type;
     /** Name of the item **/
@@ -23,7 +23,7 @@ public class ItemBean {
     /** Map of enchants and their levels **/
     private Map<String, Integer> enchants = new HashMap<>();
     /** IDs of the miner abilities associated **/
-    private List<Integer> miners = new ArrayList<>();
+    private List<String> miners = new ArrayList<>();
     /** List of custom attribute of the item */
     private List<AttributeBean> attributeList ;
 
@@ -31,7 +31,7 @@ public class ItemBean {
         this.type = type;
         this.attributeList = new ArrayList<>();
     }
-    public ItemBean(int id, String type, String name, String lore, int durability, boolean unbreakable, Map<String, Integer> enchants, List<Integer> miners, List<AttributeBean> attributeList) {
+    public ItemBean(String id, String type, String name, String lore, int durability, boolean unbreakable, Map<String, Integer> enchants, List<String> miners, List<AttributeBean> attributeList) {
         this.id = id;
         this.type = type;
         this.name = name;
@@ -57,10 +57,10 @@ public class ItemBean {
         this.maxDurability = maxDurability;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -99,10 +99,10 @@ public class ItemBean {
         this.enchants = enchants;
     }
 
-    public List<Integer> getMiners() {
+    public List<String> getMiners() {
         return miners;
     }
-    public void setMiners(List<Integer> miners) {
+    public void setMiners(List<String> miners) {
         this.miners = miners;
     }
 

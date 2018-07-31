@@ -5,7 +5,7 @@ import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.item.recipe.Recipe;
 
 public class SmeltingRecipeRegister implements ICraftRecipes {
-    private int id;
+    private String id;
     private ItemStack ingredient;
     private ItemStack result;
 
@@ -26,7 +26,7 @@ public class SmeltingRecipeRegister implements ICraftRecipes {
         this.result = result;
     }
 
-    public SmeltingRecipeRegister(int id, ItemStack ingredient, ItemStack result) {
+    public SmeltingRecipeRegister(String id, ItemStack ingredient, ItemStack result) {
         this.id = id;
         this.ingredient = ingredient;
         this.result = result;

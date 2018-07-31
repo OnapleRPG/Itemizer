@@ -36,9 +36,7 @@ public class ReloadCommand implements CommandExecutor {
                     .append(Text.builder("Items configuration reload failed. ").color(TextColors.DARK_RED).build())
                     .append(Text.builder(e.getMessage()).color(TextColors.RED).build())
                     .build());
-
-        }
-        catch (Exception e){
+        } catch (Exception e){
             src.sendMessage(Text.builder()
                     .append(Text.builder("Items configuration reload failed. ").color(TextColors.DARK_RED).build())
                     .append(Text.builder(e.getMessage()).color(TextColors.RED).build())
@@ -57,8 +55,7 @@ public class ReloadCommand implements CommandExecutor {
                     .append(Text.builder("Miners configuration reload failed. ").color(TextColors.DARK_RED).build())
                     .append(Text.builder(e.getMessage()).color(TextColors.RED).build())
                     .build());
-        }
-        catch (Exception e){
+        } catch (Exception e){
             src.sendMessage(Text.builder()
                     .append(Text.builder("Miners configuration reload failed. ").color(TextColors.DARK_RED).build())
                     .append(Text.builder(e.getMessage()).color(TextColors.RED).build())
@@ -77,14 +74,12 @@ public class ReloadCommand implements CommandExecutor {
                     .append(Text.builder("Pools configuration reload failed. ").color(TextColors.DARK_RED).build())
                     .append(Text.builder(e.getMessage()).color(TextColors.RED).build())
                     .build());
-        }
-        catch (Exception e){
+        } catch (Exception e){
             src.sendMessage(Text.builder()
                     .append(Text.builder("Pools configuration reload failed. ").color(TextColors.DARK_RED).build())
                     .append(Text.builder(e.getMessage()).color(TextColors.RED).build())
                     .build());
         }
-
 
         try {
             int craftCount = Itemizer.getItemizer().loadCrafts();
@@ -100,8 +95,7 @@ public class ReloadCommand implements CommandExecutor {
                     .append(Text.builder("Crafts configuration reload failed. ").color(TextColors.DARK_RED).build())
                     .append(Text.builder(e.getMessage()).color(TextColors.RED).build())
                     .build());
-        }
-        catch (Exception e){
+        } catch (Exception e){
             src.sendMessage(Text.builder()
                     .append(Text.builder("crafts configuration reload failed. ").color(TextColors.DARK_RED).build())
                     .append(Text.builder(e.getMessage()).color(TextColors.RED).build())

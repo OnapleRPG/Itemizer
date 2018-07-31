@@ -5,6 +5,6 @@ import org.spongepowered.api.item.inventory.ItemStack;
 import java.util.Optional;
 
 public interface IItemService {
-    Optional<ItemStack> fetch(int id);
-    Optional<ItemStack> retrieve(int id);
+    Optional<ItemStack> fetch(String id);
+    Optional<ItemStack> retrieve(String id);
 }

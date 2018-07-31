@@ -12,10 +12,10 @@ public class ItemDAO {
      * @param id ID of the item
      * @return Optional of the item data
      */
-    public static Optional<ItemBean> getItem(int id) {
+    public static Optional<ItemBean> getItem(String id) {
         List<ItemBean> items = ConfigurationHandler.getItemList();
         for(ItemBean item: items) {
-            if (item.getId() == id) {
+            if (item.getId().equals(id)) {
                 return Optional.of(item);
             }
         }

@@ -13,7 +13,7 @@ public class MinerSerializer implements TypeSerializer<MinerBean> {
 
     @Override
     public MinerBean deserialize(TypeToken<?> type, ConfigurationNode value) throws ObjectMappingException {
-        int id = value.getNode("id").getInt();
+        String id = value.getNode("id").getString();
         //  Types of blocks that can be mined
         List<String> mineTypes = new ArrayList<>();
         List<? extends ConfigurationNode> minerNodeList = value.getNode("mine_types").getChildrenList();
@@ -24,11 +24,11 @@ public class MinerSerializer implements TypeSerializer<MinerBean> {
             }
         }
         // IDs of the other miners inherited from
-        List<Integer> inheritances = new ArrayList<>();
+        List<String> inheritances = new ArrayList<>();
         List<? extends ConfigurationNode> inheritanceList = value.getNode("inherit").getChildrenList();
         for (ConfigurationNode inheritanceNode : inheritanceList) {
-            int inheritance = inheritanceNode.getInt();
-            if (inheritance > 0) {
+            String inheritance = inheritanceNode.getString();
+            if (!inheritance.equals("")) {
                 inheritances.add(inheritance);
             }
         }

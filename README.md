@@ -36,8 +36,8 @@ Permission : *itemizer.command.reload*
 
 ## Services
 * **IItemService** : Give access to the object getters functions to a plugin.
-    * *Optional<ItemStack* **retrieve(*int id*)** : Try to retrieve a configured item.
-    * *Optional<ItemStack>* **fetch(*int id*)** : Try to fetch an item from a configured item pool.
+    * *Optional<ItemStack* **retrieve(*String id*)** : Try to retrieve a configured item.
+    * *Optional<ItemStack>* **fetch(*String id*)** : Try to fetch an item from a configured item pool.
 
 ## Configuration files
 

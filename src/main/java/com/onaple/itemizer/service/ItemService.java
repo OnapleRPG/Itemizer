@@ -11,11 +11,10 @@ import java.util.Optional;
 public class ItemService implements IItemService {
 
     @Override
-    public Optional<ItemStack> fetch(int id) {
+    public Optional<ItemStack> fetch(String id) {
         Optional<ItemBean> optionalItem = PoolFetcher.fetchItemFromPool(id);
         if (optionalItem.isPresent()) {
-            Optional<ItemStack> optionalItemStack = ItemBuilder.buildItemStack(optionalItem.get());
-            return optionalItemStack;
+            return ItemBuilder.buildItemStack(optionalItem.get());
         }
         return Optional.empty();
 
@@ -23,11 +22,10 @@ public class ItemService implements IItemService {
 
     }
     @Override
-    public Optional<ItemStack> retrieve(int id) {
+    public Optional<ItemStack> retrieve(String id) {
         Optional<ItemBean> optionalItem = ItemDAO.getItem(id);
         if (optionalItem.isPresent()) {
-            Optional<ItemStack> optionalItemStack = ItemBuilder.buildItemStack(optionalItem.get());
-            return optionalItemStack;
+            return ItemBuilder.buildItemStack(optionalItem.get());
         }
         return Optional.empty();
 

@@ -6,9 +6,9 @@ import java.util.*;
 
 public class MinerUtil {
     /** Map of miners **/
-    private Map<Integer, MinerBean> miners = new HashMap<>();
+    private Map<String, MinerBean> miners = new HashMap<>();
     /** List of miners keys already processed **/
-    private List<Integer> keysProcessed = new ArrayList<>();
+    private List<String> keysProcessed = new ArrayList<>();
 
     /**
      * Utility to resolve miners inheritance
@@ -25,7 +25,7 @@ public class MinerUtil {
      * @return List of exhaustive miners
      */
     public List<MinerBean> getExpandedMiners() {
-        for (Map.Entry<Integer, MinerBean> miner : miners.entrySet()) {
+        for (Map.Entry<String, MinerBean> miner : miners.entrySet()) {
             resolveDependencies(miner.getKey());
         }
         return new ArrayList<>(miners.values());
@@ -35,10 +35,10 @@ public class MinerUtil {
      * Resolve dependencies of a miner, recursively
      * @param minerKey Key of the miner to expand
      */
-    private void resolveDependencies(int minerKey) {
+    private void resolveDependencies(String minerKey) {
         keysProcessed.add(minerKey);
         MinerBean miner = miners.get(minerKey);
-        for (int inheritKey : miner.getInheritances()) {
+        for (String inheritKey : miner.getInheritances()) {
             if (!keysProcessed.contains(inheritKey)) {
                 resolveDependencies(inheritKey);
             }

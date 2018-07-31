@@ -53,12 +53,9 @@ public class ConfigurationHandler {
         itemList = new ArrayList<>();
         TypeSerializers.getDefaultSerializers().registerType(TypeToken.of(ItemBean.class), new ItemSerializer());
         TypeSerializers.getDefaultSerializers().registerType(TypeToken.of(AttributeBean.class), new AttributeSerializer());
-       // try {
-            itemList = configurationNode.getNode("items").getList(TypeToken.of(ItemBean.class));
-            Itemizer.getLogger().info(itemList.size() + " items loaded from configuration.");
-            return itemList.size();
-       // } catch (ObjectMappingException e) {
-      //  }
+        itemList = configurationNode.getNode("items").getList(TypeToken.of(ItemBean.class));
+        Itemizer.getLogger().info(itemList.size() + " items loaded from configuration.");
+        return itemList.size();
     }
 
     /**
@@ -68,17 +65,11 @@ public class ConfigurationHandler {
     public static int readMinerConfiguration(CommentedConfigurationNode configurationNode) throws ObjectMappingException {
         minerList = new ArrayList<>();
         TypeSerializers.getDefaultSerializers().registerType(TypeToken.of(MinerBean.class), new MinerSerializer());
-
-            minerList = configurationNode.getNode("miners").getList(TypeToken.of(MinerBean.class));
-            MinerUtil minerUtil = new MinerUtil(minerList);
-            minerList = minerUtil.getExpandedMiners();
-            for (MinerBean miner: minerList) {
-                Itemizer.getLogger().debug("Miner from config : " + miner.getId() + " - " + miner.getMineTypes().size() + " blocks, " + miner.getInheritances().size() + " inheritances");
-            }
-            Itemizer.getLogger().info(minerList.size() + " miners loaded from configuration.");
-
-            return minerList.size();
-
+        minerList = configurationNode.getNode("miners").getList(TypeToken.of(MinerBean.class));
+        MinerUtil minerUtil = new MinerUtil(minerList);
+        minerList = minerUtil.getExpandedMiners();
+        Itemizer.getLogger().info(minerList.size() + " miners loaded from configuration.");
+        return minerList.size();
     }
 
     /**
@@ -86,12 +77,11 @@ public class ConfigurationHandler {
      * @param configurationNode ConfigurationNode to read from
      */
     public static int readCraftConfiguration(CommentedConfigurationNode configurationNode) throws ObjectMappingException {
-
+        craftList = new ArrayList<>();
         TypeSerializers.getDefaultSerializers().registerType(TypeToken.of(ICraftRecipes.class), new CraftingSerializer());
-
-            craftList = configurationNode.getNode("crafts").getList(TypeToken.of(ICraftRecipes.class));
-            Itemizer.getLogger().info( craftList.size() + " craft(s) loaded from configuration.");
-            return  craftList.size();
+        craftList = configurationNode.getNode("crafts").getList(TypeToken.of(ICraftRecipes.class));
+        Itemizer.getLogger().info( craftList.size() + " craft(s) loaded from configuration.");
+        return craftList.size();
     }
 
     /**
@@ -101,10 +91,9 @@ public class ConfigurationHandler {
     public static int readPoolsConfiguration(CommentedConfigurationNode configurationNode) throws ObjectMappingException {
         poolList = new ArrayList<>();
         TypeSerializers.getDefaultSerializers().registerType(TypeToken.of(PoolBean.class), new PoolSerializer());
-
-            poolList = configurationNode.getNode("pools").getList(TypeToken.of(PoolBean.class));
-            Itemizer.getLogger().info(poolList.size() + " pools loaded from configuration.");
-      return poolList.size();
+        poolList = configurationNode.getNode("pools").getList(TypeToken.of(PoolBean.class));
+        Itemizer.getLogger().info(poolList.size() + " pools loaded from configuration.");
+        return poolList.size();
     }
 
     /**
@@ -115,7 +104,7 @@ public class ConfigurationHandler {
     public static CommentedConfigurationNode loadConfiguration(String configName) throws Exception {
         ConfigurationLoader<CommentedConfigurationNode> configLoader = HoconConfigurationLoader.builder().setPath(Paths.get(configName)).build();
         CommentedConfigurationNode configNode = null;
-       try {
+        try {
             configNode = configLoader.load();
         } catch (IOException e) {
             throw new Exception("Error while loading configuration '" + configName + "' : " + e.getMessage());

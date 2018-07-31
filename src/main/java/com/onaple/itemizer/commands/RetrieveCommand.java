@@ -38,21 +38,16 @@ public class RetrieveCommand implements CommandExecutor {
                     return CommandResult.empty();
                 }
             }
-            try {
-                int id = Integer.parseInt(itemId);
-                Optional<ItemBean> optionalItem = ItemDAO.getItem(id);
-                if (optionalItem.isPresent()) {
-                    Optional<ItemStack> optionalItemStack = ItemBuilder.buildItemStack(optionalItem.get());
-                    if (optionalItemStack.isPresent()) {
-                        target.getInventory().offer(optionalItemStack.get());
-                    } else {
-                        src.sendMessage(Text.of("Item " + id + " not valid."));
-                    }
+            Optional<ItemBean> optionalItem = ItemDAO.getItem(itemId);
+            if (optionalItem.isPresent()) {
+                Optional<ItemStack> optionalItemStack = ItemBuilder.buildItemStack(optionalItem.get());
+                if (optionalItemStack.isPresent()) {
+                    target.getInventory().offer(optionalItemStack.get());
                 } else {
-                    src.sendMessage(Text.of("Item " + id + " not found."));
+                    src.sendMessage(Text.of("Item " + itemId + " not valid."));
                 }
-            } catch (NumberFormatException e) {
-                src.sendMessage(Text.of("Item id must be numeric."));
+            } else {
+                src.sendMessage(Text.of("Item " + itemId + " not found."));
             }
 
         return CommandResult.empty();

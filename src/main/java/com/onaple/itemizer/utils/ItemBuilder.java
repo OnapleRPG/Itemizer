@@ -117,9 +117,9 @@ public class ItemBuilder {
     private static ItemStack grantMining(ItemStack itemStack, ItemBean itemBean) {
         BreakableData breakableData = itemStack.getOrCreate(BreakableData.class).get();
         List<MinerBean> minerList = ConfigurationHandler.getMinerList();
-        for (int minerId : itemBean.getMiners()) {
+        for (String minerId : itemBean.getMiners()) {
             for (MinerBean minerBean : minerList) {
-                if (minerBean.getId() == minerId) {
+                if (minerBean.getId().equals(minerId)) {
                     for (String blockType : minerBean.getMineTypes()) {
                         Optional<BlockType> optionalBlockType = Sponge.getRegistry().getType(BlockType.class, blockType);
                         if (optionalBlockType.isPresent()) {

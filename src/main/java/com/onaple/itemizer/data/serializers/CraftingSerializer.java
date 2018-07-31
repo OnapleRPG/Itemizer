@@ -21,7 +21,7 @@ public class CraftingSerializer implements TypeSerializer<ICraftRecipes> {
     @Override
     public ICraftRecipes deserialize(TypeToken<?> type, ConfigurationNode value) throws ObjectMappingException {
 
-        int id = value.getNode("id").getInt();
+        String id = value.getNode("id").getString();
 
         String craftingType = value.getNode("type").getString();
 
@@ -65,8 +65,8 @@ public class CraftingSerializer implements TypeSerializer<ICraftRecipes> {
     }
 
     public ItemStack getItemStack(ConfigurationNode node) throws ObjectMappingException {
-        int ref = node.getNode("ref").getInt();
-        if(ref>0) {
+        String ref = node.getNode("ref").getString();
+        if(ref != null && !ref.equals("")) {
             Optional<ItemBean> itemBeanOptional = ItemDAO.getItem(ref);
             ItemStack result;
             if (itemBeanOptional.isPresent()) {

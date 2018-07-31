@@ -1,6 +1,7 @@
 package com.onaple.itemizer.data.serializers;
 
 import com.google.common.reflect.TypeToken;
+import com.onaple.itemizer.Itemizer;
 import com.onaple.itemizer.data.access.ItemDAO;
 import com.onaple.itemizer.data.beans.ItemBean;
 import com.onaple.itemizer.data.beans.PoolBean;
@@ -14,16 +15,16 @@ public class PoolSerializer implements TypeSerializer<PoolBean> {
 
     @Override
     public PoolBean deserialize(TypeToken<?> type, ConfigurationNode value) throws ObjectMappingException {
-        int id = value.getNode("id").getInt();
+        String id = value.getNode("id").getString();
         // Pool items
         Map<Double, ItemBean> items = new HashMap<>();
         List<? extends ConfigurationNode> itemList = value.getNode("items").getChildrenList();
         for (ConfigurationNode itemNode : itemList) {
             double probability = itemNode.getNode("probability").getDouble();
-            int reference = itemNode.getNode("ref").getInt();
+            String reference = itemNode.getNode("ref").getString();
             String itemType = itemNode.getNode("type").getString();
             Optional<ItemBean> item = Optional.empty();
-            if (reference > 0) {
+            if (reference != null && !reference.equals("")) {
                 item = ItemDAO.getItem(reference);
             }
             if (!item.isPresent() && itemType != null){

@@ -35,21 +35,16 @@ public class FetchCommand implements CommandExecutor {
                     return CommandResult.empty();
                 }
             }
-            try {
-                int id = Integer.parseInt(poolId);
-                Optional<ItemBean> optionalItem = PoolFetcher.fetchItemFromPool(id);
-                if (optionalItem.isPresent()) {
-                    Optional<ItemStack> optionalItemStack = ItemBuilder.buildItemStack(optionalItem.get());
-                    if (optionalItemStack.isPresent()) {
-                        target.getInventory().offer(optionalItemStack.get());
-                    } else {
-                        ((Player) src).sendMessage(Text.of("Item from pool " + id + " not valid."));
-                    }
+            Optional<ItemBean> optionalItem = PoolFetcher.fetchItemFromPool(poolId);
+            if (optionalItem.isPresent()) {
+                Optional<ItemStack> optionalItemStack = ItemBuilder.buildItemStack(optionalItem.get());
+                if (optionalItemStack.isPresent()) {
+                    target.getInventory().offer(optionalItemStack.get());
                 } else {
-                    ((Player) src).sendMessage(Text.of("Pool " + id + " returned nothing."));
+                    ((Player) src).sendMessage(Text.of("Item from pool " + poolId + " not valid."));
                 }
-            } catch (NumberFormatException e) {
-                ((Player) src).sendMessage(Text.of("Pool id must be numeric."));
+            } else {
+                ((Player) src).sendMessage(Text.of("Pool " + poolId + " returned nothing."));
             }
         } else {
             Itemizer.getLogger().warn("Fetch command can only be executed by a player.");

@@ -4,19 +4,19 @@ import java.util.Map;
 
 public class PoolBean {
     /** ID of the pool in config **/
-    private int id;
+    private String id;
     /** Map of items with linked probability **/
     private Map<Double, ItemBean> items;
 
-    public PoolBean(int id, Map<Double, ItemBean> items) {
+    public PoolBean(String id, Map<Double, ItemBean> items) {
         this.id = id;
         this.items = items;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

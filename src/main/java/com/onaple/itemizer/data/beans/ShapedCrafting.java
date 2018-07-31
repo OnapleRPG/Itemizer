@@ -13,7 +13,7 @@ import static org.spongepowered.api.item.recipe.crafting.CraftingRecipe.shapedBu
 
 public class ShapedCrafting implements ICraftRecipes {
     /** ID **/
-    private int id;
+    private String id;
     /** Schema **/
     private String[] schema;
     /** content **/
@@ -28,12 +28,11 @@ public class ShapedCrafting implements ICraftRecipes {
         return content;
     }
 
-    public int getId() {
-
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -53,7 +52,7 @@ public class ShapedCrafting implements ICraftRecipes {
         this.result = result;
     }
 
-    public ShapedCrafting(int id, String[] schema, Map<Character, Ingredient> content, ItemStack result) {
+    public ShapedCrafting(String id, String[] schema, Map<Character, Ingredient> content, ItemStack result) {
         this.id = id;
         this.schema = schema;
         this.content = content;
