@@ -49,7 +49,7 @@ The plugin implements minecraft commands to interact with.
 * `/fetch <id>`, which gets a random item from a given item pool.
 ### Item creation
 
-A file named __*itemizer_items.conf*__ stores the items that can be retrieved from the plugin.
+A file named __*items.conf*__ stores the items that can be retrieved from the plugin.
 
 The root element has to be __items__. 
 For each item configured, the following data can be provided :
@@ -90,7 +90,7 @@ items = [
 
 ### Harvesting capabilities
 
-A file named __*itemizer_miners.conf*__ defines profiles to allow block destruction when given items are in hand.
+A file named __*miners.conf*__ defines profiles to allow block destruction when given items are in hand.
 
 The root element must be __miners__.
 For each profile, you can define the following elements :
@@ -122,7 +122,7 @@ _An item referencing miner 1 will be able to break coal and iron ore, whereas re
 
 ### Items pool
 
-A file named __*itemizer_pools.conf*__ defines pools to select item randomly from.
+A file named __*pools.conf*__ defines pools to select item randomly from.
 
 The root element must be __pools__.
 * An __id__ is used to enable a pool to be referenced.
@@ -149,3 +149,48 @@ pools = [
 ]
 ```
 _The first pool of item has a 50% chance of getting a porkchop, 20% chance of getting the configured item with id 1, and 30% chance of getting nothing._
+
+### Craft configuration
+
+A file named __*crafts.conf*__ defines new crafts to be implemented in game.
+
+The root element must be __crafts__.
+* An __id__ must be defined.
+* The __type__ can be of three types : *ShapelessCrafting*, *Smelting* or *ShapedCrafting*.
+* The result must be an object containing one of the following fields :
+    * Using __name__ followed by a string can be used to reference a minecraft item.
+    * Using __ref__ with a number or a string can be used to retrieve an item from Itemizer's items.
+* The __recipe__ is used for ShapelessCrafting and Smelting to define the item needed for the recipe. It must contain an object containing the following element :
+    * __name__ associated with a string to match a minecraft item
+* The __pattern__ is used for ShapedCrafting to define the pattern which will be used to craft an item *(An example is available below)*
+* The __ingredients__ are used to match the characters used in the pattern for a ShapedCrafting.
+    * Each different character used in the pattern must be used as a key with the following object :
+        * An object with "name" as a key and the item name as a value
+
+```
+crafts = [
+  {
+    id : 1
+    type : "ShapelessCrafting"
+    result : {ref : 1},
+    recipe : {name : "stone_axe"}
+  },
+  {
+    id : 2
+    type : "Smelting"
+    result : {name : "coal"},
+    recipe : {name : "cooked_porkchop"}
+  },
+  {
+    id : 3
+    type : "ShapedCrafting"
+    result : {ref : 2},
+    pattern : [" a "," a "," a "],
+    ingredients : {
+      a : {name: "stick"},
+    }
+  }
+]
+```
+_The first craft requires a stone axe to craft the item referenced "1", the second craft enable us to cook a cooked_porkchop into a coal, 
+and the third one is used to craft the item referenced "2" with three sticks aligned in a vertical centered line (notice the whitespaces before and after the "a")_
