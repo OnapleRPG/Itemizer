@@ -16,6 +16,8 @@ public class ItemBean {
     private String lore = "";
     /** number of use of the item**/
     private int durability;
+    /** Max number of use of the item **/
+    private int maxDurability;
     /** Unbreakable attribute **/
     private boolean unbreakable = false;
     /** Map of enchants and their levels **/
@@ -44,9 +46,15 @@ public class ItemBean {
     public int getDurability() {
         return durability;
     }
-
     public void setDurability(int durability) {
         this.durability = durability;
+    }
+
+    public int getMaxDurability() {
+        return maxDurability;
+    }
+    public void setMaxDurability(int maxDurability) {
+        this.maxDurability = maxDurability;
     }
 
     public int getId() {
@@ -114,6 +122,7 @@ public class ItemBean {
                 ", name='" + name + '\'' +
                 ", lore='" + lore + '\'' +
                 ", durability=" + durability +
+                ", maxDurability=" + maxDurability +
                 ", unbreakable=" + unbreakable +
                 ", enchants=" + enchants +
                 ", miners=" + miners +

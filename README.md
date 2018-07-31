@@ -58,6 +58,7 @@ For each item configured, the following data can be provided :
 * __name__ can override default item name
 * __lore__ can be set to provide an item description
 * __unbreakable__ is a boolean to prevent tool consumption, defaulting to false
+* __durability__ is the amount of uses a tool can be used before breaking
 * __enchants__ is a list of enchants that will be added to the item
 * __miners__ are references to harvesting profiles, that enable to break blocks when the item is held (_see next section_)
   
@@ -78,6 +79,7 @@ items = [
     {
         id: 2,
         type: "wooden_sword",
+        durability: 5,
         name: "Training stick",
         miners: [
             1

@@ -77,8 +77,8 @@ public class ItemBuilder {
         }
         // Item attributes
         itemStack.offer(Keys.UNBREAKABLE, itemBean.isUnbreakable());
-        if(itemBean.getDurability()>0){
-            itemStack.offer(Keys.ITEM_DURABILITY,itemBean.getDurability());
+        if(itemBean.getDurability() > 0){
+            itemStack.offer(Keys.ITEM_DURABILITY, itemBean.getDurability());
         }
         return itemStack;
     }
