@@ -57,7 +57,10 @@ public class ItemizerTest extends BaseTest {
         Assert.assertTrue(itemsReloadedBool.get() && minersReloadedBool.get() && poolsReloadedBool.get() && craftsReloadedBool.get());
     }
 
-    /*@Test
+    /**
+     * Trying to retrieve a configured item
+     */
+    @Test
     public void testRetrieveItem() throws Throwable {
         this.testUtils.getClient().sendMessage("/retrieve 1");
         this.testUtils.waitForInventoryPropagation();
@@ -65,8 +68,8 @@ public class ItemizerTest extends BaseTest {
             Optional<IItemService> optionalItemService = Sponge.getServiceManager().provide(IItemService.class);
             Assert.assertTrue(optionalItemService.isPresent());
             Optional<ItemStack> item = optionalItemService.get().retrieve("1");
-
+            Assert.assertTrue(item.isPresent());
+            Assert.assertTrue(this.testUtils.getThePlayer().getInventory().contains(item.get()));
         });
-    }*/
-
+    }
 }

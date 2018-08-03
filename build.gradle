@@ -57,10 +57,8 @@ publishing {
 
 repositories {
     mavenCentral()
-    maven {
-        name = 'jitpack'
-        url = 'https://jitpack.io'
-    }
+    maven { url 'https://jitpack.io' }
+    maven { url 'https://oss.sonatype.org/service/local/staging/deploy/maven2' }
 }
 
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
