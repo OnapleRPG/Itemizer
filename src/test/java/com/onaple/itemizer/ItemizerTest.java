@@ -60,7 +60,7 @@ public class ItemizerTest extends BaseTest {
     /**
      * Trying to retrieve a configured item
      */
-    @Test
+    /*@Test
     public void testRetrieveItem() throws Throwable {
         this.testUtils.getClient().sendMessage("/retrieve 1");
         this.testUtils.waitForInventoryPropagation();
@@ -71,5 +71,5 @@ public class ItemizerTest extends BaseTest {
             Assert.assertTrue(item.isPresent());
             Assert.assertTrue(this.testUtils.getThePlayer().getInventory().contains(item.get()));
         });
-    }
+    }*/
 }
