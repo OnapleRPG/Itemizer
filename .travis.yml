@@ -7,10 +7,8 @@ addons:
   sonarcloud:
     organization: ylinor-github
   ssh_known_hosts: onaple.fr
-before_script:
-  - _JAVA_OPTIONS=
 script:
-  - ./gradlew sonarqube
+  - ./gradlew sonarqube --stacktrace --info
 before_deploy:
 - openssl aes-256-cbc -K $encrypted_0d7303d7684b_key -iv $encrypted_0d7303d7684b_iv
   -in deploy_rsa.enc -out /tmp/deploy_rsa -d
