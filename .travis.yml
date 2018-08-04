@@ -9,6 +9,7 @@ before_install:
   - gradle wrapper
   - chmod +x scripts/run-xvfb
   - scripts/run-xvfb
+install: true
 
 addons:
   sonarcloud:
