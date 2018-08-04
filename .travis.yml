@@ -7,6 +7,8 @@ addons:
   sonarcloud:
     organization: ylinor-github
   ssh_known_hosts: onaple.fr
+before_script:
+  - _JAVA_OPTIONS=
 script:
   - ./gradlew sonarqube
 before_deploy:

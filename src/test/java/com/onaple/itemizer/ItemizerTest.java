@@ -31,7 +31,8 @@ public class ItemizerTest extends BaseTest {
     /**
      * Command /reload-itemizer should returns confirmation messages
      */
-    public void testReloadHarvester() throws Throwable {
+    @Test
+    public void testReloadItemizer() throws Throwable {
         String itemsReloadedString = "Items configuration successfully reloaded";
         String minersReloadedString = "Miners configuration successfully reloaded";
         String poolsReloadedString = "Pools configuration successfully reloaded";
@@ -59,6 +60,7 @@ public class ItemizerTest extends BaseTest {
     /**
      * Trying to retrieve a configured item
      */
+    @Test
     public void testRetrieveItem() throws Throwable {
         this.testUtils.getClient().sendMessage("/retrieve 1");
         this.testUtils.waitForInventoryPropagation();
