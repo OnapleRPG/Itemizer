@@ -9,7 +9,6 @@ import org.junit.runner.RunWith;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.message.MessageChannelEvent;
 import org.spongepowered.api.item.inventory.ItemStack;
-import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.mctester.api.junit.MinecraftRunner;
 import org.spongepowered.mctester.internal.BaseTest;
 import org.spongepowered.mctester.internal.event.StandaloneEventListener;
@@ -18,7 +17,7 @@ import org.spongepowered.mctester.junit.TestUtils;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-//@RunWith(MinecraftRunner.class)
+@RunWith(MinecraftRunner.class)
 public class ItemizerTest extends BaseTest {
 
     @Rule
@@ -31,7 +30,7 @@ public class ItemizerTest extends BaseTest {
     /**
      * Command /reload-itemizer should returns confirmation messages
      */
-    /*@Test
+    @Test
     public void testReloadItemizer() throws Throwable {
         String itemsReloadedString = "Items configuration successfully reloaded";
         String minersReloadedString = "Miners configuration successfully reloaded";
@@ -55,12 +54,12 @@ public class ItemizerTest extends BaseTest {
             }
         }));
         Assert.assertTrue(itemsReloadedBool.get() && minersReloadedBool.get() && poolsReloadedBool.get() && craftsReloadedBool.get());
-    }*/
+    }
 
     /**
      * Trying to retrieve a configured item
      */
-    /*@Test
+    @Test
     public void testRetrieveItem() throws Throwable {
         this.testUtils.getClient().sendMessage("/retrieve 1");
         this.testUtils.waitForInventoryPropagation();
@@ -71,5 +70,5 @@ public class ItemizerTest extends BaseTest {
             Assert.assertTrue(item.isPresent());
             Assert.assertTrue(this.testUtils.getThePlayer().getInventory().contains(item.get()));
         });
-    }*/
+    }
 }

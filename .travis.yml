@@ -1,20 +1,38 @@
 language: java
 jdk:
   - oraclejdk8
+
+services:
+  - docker
+
 before_install:
-  gradle wrapper
+  - gradle wrapper
+  - chmod +x scripts/run-xvfb
+  - scripts/run-xvfb
+
 addons:
   sonarcloud:
     organization: ylinor-github
   ssh_known_hosts: onaple.fr
+
 script:
-  - ./gradlew sonarqube --stacktrace --debug
+  - DISPLAY=:99 ./gradlew sonarqube --stacktrace
+
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+
 before_deploy:
 - openssl aes-256-cbc -K $encrypted_0d7303d7684b_key -iv $encrypted_0d7303d7684b_iv
   -in deploy_rsa.enc -out /tmp/deploy_rsa -d
 - eval "$(ssh-agent -s)"
 - chmod 600 /tmp/deploy_rsa
 - ssh-add /tmp/deploy_rsa
+
 deploy:
 - provider: script
   skip_cleanup: true
