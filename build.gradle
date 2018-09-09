@@ -20,7 +20,9 @@ buildscript {
         classpath 'gradle.plugin.org.spongepowered:spongegradle:0.8.1'
         classpath 'org.spongepowered:mixingradle:0.4-SNAPSHOT'
         classpath 'org.spongepowered:mctester:0.9.0-SNAPSHOT'
+        classpath 'eu.davidea:grabver:1.0.0'
     }
+
 }
 
 plugins {
@@ -40,9 +42,20 @@ minecraft {
     mappings = "snapshot_20171007"
 }
 
+apply plugin: 'eu.davidea.grabver'
+
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
+versioning {
+    // required (number)
+    major = 1
+    minor = 1
+    patch = 0
+
+}
+
+version= versioning.name+'-'+versioning.build
 publishing {
     publications {
         maven(MavenPublication) {
