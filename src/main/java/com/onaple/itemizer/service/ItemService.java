@@ -1,5 +1,6 @@
 package com.onaple.itemizer.service;
 
+import com.onaple.itemizer.Itemizer;
 import com.onaple.itemizer.data.access.ItemDAO;
 import com.onaple.itemizer.data.beans.ItemBean;
 import com.onaple.itemizer.utils.ItemBuilder;
@@ -14,7 +15,7 @@ public class ItemService implements IItemService {
     public Optional<ItemStack> fetch(String id) {
         Optional<ItemBean> optionalItem = PoolFetcher.fetchItemFromPool(id);
         if (optionalItem.isPresent()) {
-            return ItemBuilder.buildItemStack(optionalItem.get());
+            return new ItemBuilder().buildItemStack(optionalItem.get());
         }
         return Optional.empty();
 
@@ -25,7 +26,7 @@ public class ItemService implements IItemService {
     public Optional<ItemStack> retrieve(String id) {
         Optional<ItemBean> optionalItem = ItemDAO.getItem(id);
         if (optionalItem.isPresent()) {
-            return ItemBuilder.buildItemStack(optionalItem.get());
+            return new ItemBuilder().buildItemStack(optionalItem.get());
         }
         return Optional.empty();
 

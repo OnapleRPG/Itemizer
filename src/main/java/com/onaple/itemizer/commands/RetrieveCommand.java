@@ -40,7 +40,7 @@ public class RetrieveCommand implements CommandExecutor {
             }
             Optional<ItemBean> optionalItem = ItemDAO.getItem(itemId);
             if (optionalItem.isPresent()) {
-                Optional<ItemStack> optionalItemStack = ItemBuilder.buildItemStack(optionalItem.get());
+                Optional<ItemStack> optionalItemStack = new ItemBuilder().buildItemStack(optionalItem.get());
                 if (optionalItemStack.isPresent()) {
                     target.getInventory().offer(optionalItemStack.get());
                 } else {

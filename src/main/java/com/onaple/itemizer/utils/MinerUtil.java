@@ -42,9 +42,9 @@ public class MinerUtil {
             if (!keysProcessed.contains(inheritKey)) {
                 resolveDependencies(inheritKey);
             }
-            Set<String> inheritValues = new HashSet<>(miner.getMineTypes());
-            inheritValues.addAll(miners.get(inheritKey).getMineTypes());
-            miner.setMineTypes(new ArrayList<>(inheritValues));
+            Map<String,String> inheritValues = new HashMap<>();
+            inheritValues.putAll(miners.get(inheritKey).getMineTypes());
+            miner.setMineTypes(inheritValues);
         }
         miners.put(minerKey, miner);
     }

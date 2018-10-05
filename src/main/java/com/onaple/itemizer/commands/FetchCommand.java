@@ -37,7 +37,7 @@ public class FetchCommand implements CommandExecutor {
             }
             Optional<ItemBean> optionalItem = PoolFetcher.fetchItemFromPool(poolId);
             if (optionalItem.isPresent()) {
-                Optional<ItemStack> optionalItemStack = ItemBuilder.buildItemStack(optionalItem.get());
+                Optional<ItemStack> optionalItemStack = new ItemBuilder().buildItemStack(optionalItem.get());
                 if (optionalItemStack.isPresent()) {
                     target.getInventory().offer(optionalItemStack.get());
                 } else {

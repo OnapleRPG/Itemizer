@@ -1,13 +1,16 @@
 package com.onaple.itemizer.data.serializers;
 
 import com.google.common.reflect.TypeToken;
+import com.onaple.itemizer.Itemizer;
 import com.onaple.itemizer.data.beans.MinerBean;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import ninja.leaping.configurate.objectmapping.serialize.TypeSerializer;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MinerSerializer implements TypeSerializer<MinerBean> {
 
@@ -15,12 +18,15 @@ public class MinerSerializer implements TypeSerializer<MinerBean> {
     public MinerBean deserialize(TypeToken<?> type, ConfigurationNode value) throws ObjectMappingException {
         String id = value.getNode("id").getString();
         //  Types of blocks that can be mined
-        List<String> mineTypes = new ArrayList<>();
-        List<? extends ConfigurationNode> minerNodeList = value.getNode("mine_types").getChildrenList();
-        for (ConfigurationNode minerNode : minerNodeList) {
-            String minerType = minerNode.getString();
-            if (!minerType.isEmpty()) {
-                mineTypes.add(minerType);
+        Map<String,String> mineTypes = new HashMap<>();
+
+        Map<Object, ?> minersTypeNode = value.getNode("mine_types").getChildrenMap();
+        for (Map.Entry<Object, ?> entry : minersTypeNode.entrySet()) {
+           // if (entry.getKey() instanceof String && entry.getValue() instanceof String) {
+
+            if(entry.getValue() instanceof ConfigurationNode){
+                ConfigurationNode configurationNode = (ConfigurationNode) entry.getValue();
+                mineTypes.put((String)configurationNode.getKey(), configurationNode.getString((String)entry.getKey()));
             }
         }
         // IDs of the other miners inherited from

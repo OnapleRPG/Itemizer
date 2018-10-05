@@ -41,9 +41,13 @@ public class ItemSerializer implements TypeSerializer<ItemBean> {
             }
         }
 
+        // tool
+        String toolType = value.getNode("toolType").getString();
+        int toolLevel = value.getNode("toolLevel").getInt();
         List<AttributeBean> attributes = value.getNode("attributes").getList(TypeToken.of(AttributeBean.class));
         ItemBean item = new ItemBean(id, itemType, name, lore, durability, unbreakable, enchants, miners, attributes);
-
+        item.setToolType(toolType);
+        item.setToolLevel(toolLevel);
         return item;
     }
 

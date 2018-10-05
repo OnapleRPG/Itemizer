@@ -27,6 +27,26 @@ public class ItemBean {
     /** List of custom attribute of the item */
     private List<AttributeBean> attributeList ;
 
+    private String toolType;
+
+    private int toolLevel;
+
+    public String getToolType() {
+        return toolType;
+    }
+
+    public void setToolType(String toolType) {
+        this.toolType = toolType;
+    }
+
+    public int getToolLevel() {
+        return toolLevel;
+    }
+
+    public void setToolLevel(int toolLevel) {
+        this.toolLevel = toolLevel;
+    }
+
     public ItemBean(String type) {
         this.type = type;
         this.attributeList = new ArrayList<>();

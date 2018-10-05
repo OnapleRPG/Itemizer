@@ -5,6 +5,7 @@ import com.onaple.itemizer.data.handlers.ConfigurationHandler;
 import com.onaple.itemizer.service.ItemService;
 import com.onaple.itemizer.service.IItemService;
 import com.onaple.itemizer.utils.CraftRegister;
+import com.onaple.itemizer.utils.ItemBuilder;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
@@ -48,6 +49,8 @@ public class Itemizer {
 
 	@Inject
 	private CraftRegister craftRegister;
+
+
 
 
 
@@ -126,6 +129,12 @@ public class Itemizer {
 				.permission("itemizer.command.reload")
 				.executor(new ReloadCommand()).build();
 		Sponge.getCommandManager().register(this, reload, "reload-itemizer");
+
+		CommandSpec getInfo = CommandSpec.builder()
+				.description(Text.of("get information about item in main hand"))
+				.permission("itemizer.command.analyse")
+				.executor(new GetItemInfos()).build();
+		Sponge.getCommandManager().register(this, getInfo, "analyse");
 
 		logger.info("ITEMIZER initialized.");
 	}

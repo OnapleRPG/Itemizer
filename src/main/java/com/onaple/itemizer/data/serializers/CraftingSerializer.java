@@ -70,7 +70,7 @@ public class CraftingSerializer implements TypeSerializer<ICraftRecipes> {
             Optional<ItemBean> itemBeanOptional = ItemDAO.getItem(ref);
             ItemStack result;
             if (itemBeanOptional.isPresent()) {
-                Optional<ItemStack> itemStackOptional = ItemBuilder.buildItemStack(itemBeanOptional.get());
+                Optional<ItemStack> itemStackOptional = new ItemBuilder().buildItemStack(itemBeanOptional.get());
                 if (itemStackOptional.isPresent()) {
                     return itemStackOptional.get();
                 }
@@ -78,7 +78,7 @@ public class CraftingSerializer implements TypeSerializer<ICraftRecipes> {
         } else {
             String name = node.getNode("name").getString();
             if(name != null){
-                Optional<ItemStack> itemStackOptional = ItemBuilder.buildItemStack(name);
+                Optional<ItemStack> itemStackOptional = new ItemBuilder().buildItemStack(name);
                   if(itemStackOptional.isPresent()){
                       return itemStackOptional.get();
                   }else{
