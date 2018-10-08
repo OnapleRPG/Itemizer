@@ -5,7 +5,7 @@ import com.onaple.itemizer.data.handlers.ConfigurationHandler;
 import com.onaple.itemizer.service.ItemService;
 import com.onaple.itemizer.service.IItemService;
 import com.onaple.itemizer.utils.CraftRegister;
-import com.onaple.itemizer.utils.ItemBuilder;
+
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
@@ -19,7 +19,6 @@ import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.text.Text;
-import sun.rmi.runtime.Log;
 
 import javax.inject.Inject;
 import java.io.IOException;
@@ -28,7 +27,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 
-@Plugin(id = "itemizer", name = "Itemizer", version = "1.0.0")
+@Plugin(id = "itemizer", name = "Itemizer - Custom Items", version = "1.5.0",
+		description = "Plugin to manage custom items and crafts",
+		url = "http://onaple.fr",
+		authors = {"Zessirb", "Selki"})
 public class Itemizer {
 
 	private static Itemizer itemizer;
@@ -54,7 +56,8 @@ public class Itemizer {
 		return logger;
 	}
 
-	private static CraftRegister craftRegister;
+	@Inject
+	private CraftRegister craftRegister;
 
 	private static ConfigurationHandler configurationHandler;
 	@Inject
@@ -67,6 +70,7 @@ public class Itemizer {
 
 	@Listener
 	public void preInit(GamePreInitializationEvent event) {
+		logger.info("Initalisation");
 		loadGlobalConfig();
 		try {
 			loadItems();
@@ -104,11 +108,6 @@ public class Itemizer {
 		}
 		craftRegister.register(configurationHandler.getCraftList());
 
-	}
-
-	@Listener
-	public void onGamePreInitialization(GamePreInitializationEvent event) {
-		logger.info("Initalisation");
 		itemizer = this;
 		Sponge.getServiceManager().setProvider(getInstance(), IItemService.class,new ItemService());
 	}
@@ -117,7 +116,6 @@ public class Itemizer {
 	public void onServerStart(GameStartedServerEvent event) throws Exception {
 
 		CommandSpec retrieve = CommandSpec.builder()
-				.permission("itemizer.get")
 				.description(Text.of("Retrieve an item from a configuration file with its id."))
 				.arguments(GenericArguments.onlyOne(GenericArguments.string(Text.of("id"))),
 						GenericArguments.optional(GenericArguments.player(Text.of("player")))

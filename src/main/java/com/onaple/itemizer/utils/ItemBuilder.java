@@ -159,12 +159,12 @@ public class ItemBuilder {
         BreakableData breakableData = item.getOrCreate(BreakableData.class).get();
         List<MinerBean> minerList = Itemizer.getConfigurationHandler().getMinerList();
         List<String> minerNames = new ArrayList<>();
-        Text.Builder miningText = Text.builder("Can mine : ").color(TextColors.DARK_BLUE).style(TextStyles.UNDERLINE);
+        Text.Builder miningText = Text.builder("Can mine :").color(TextColors.BLUE).style(TextStyles.UNDERLINE);
         for (String minerId : itemBean.getMiners()) {
             for (MinerBean minerBean : minerList) {
                 if (minerBean.getId().equals(minerId)) {
                      minerBean.getMineTypes().forEach((blockName, blockType) -> {
-                         miningText.append(Text.builder(blockName).color(TextColors.BLUE).style(TextStyles.RESET).build());
+                         miningText.append(Text.builder(" " + blockName + " ").color(TextColors.BLUE).style(TextStyles.RESET).build());
                          Optional<BlockType> optionalBlockType = Sponge.getRegistry().getType(BlockType.class, blockType);
                          optionalBlockType.ifPresent(blockType1 -> breakableData.set(breakableData.breakable().add(blockType1)));
                      });

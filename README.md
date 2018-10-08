@@ -27,14 +27,14 @@ To install this plugin you must have a sponge server 1.12. Download the [latest 
 
 ## Commands
 
-* **/retrieve *itemId*** : Obtain an item specified in the configuration file for the given id.  
+* `/retrieve <itemId> [player]` : Obtain an item specified in the configuration file for the given id.  
 Permission : *itemizer.command.rerieve*
-* **/fetch *poolId*** : Try to obtain an item from a configured pool in the configuration file with its *id*.  
+* `fetch <poolId> [player]` : Try to obtain an item from a configured pool in the configuration file with its *id*.  
 Permission : *itemizer.command.fetch*
-* **/reload-itemizer** : Reload each configuration file.  
+* ``reload-itemizer`` : Reload each configuration file.  
 Permission : *itemizer.command.reload*
-* **/analyse** : give information about data stored in the item hold in main 
-Permission : 
+* ``/analyse`` : give information about data stored in the item hold in main 
+Permission : *itemizer.command.analyse*
 
 ## Services
 * **IItemService** : Give access to the object getters functions to a plugin.
