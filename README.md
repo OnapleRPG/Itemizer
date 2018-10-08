@@ -19,7 +19,7 @@ you can edit most of item's informations like :
     * *armorToughness*
     * *attackSpeed*
     * *luck*  
-If you wnat more details about *AttributeModifiers* check the Minecraft [wiki](https://minecraft.gamepedia.com/Attribute)
+If you want more details about *AttributeModifiers* check the Minecraft [wiki](https://minecraft.gamepedia.com/Attribute)
 
 
 ## Installation
@@ -33,11 +33,13 @@ Permission : *itemizer.command.rerieve*
 Permission : *itemizer.command.fetch*
 * **/reload-itemizer** : Reload each configuration file.  
 Permission : *itemizer.command.reload*
+* **/analyse** : give information about data stored in the item hold in main 
+Permission : 
 
 ## Services
 * **IItemService** : Give access to the object getters functions to a plugin.
-    * *Optional<ItemStack* **retrieve(*String id*)** : Try to retrieve a configured item.
-    * *Optional<ItemStack>* **fetch(*String id*)** : Try to fetch an item from a configured item pool.
+    * ```Optional<ItemStack retrieve(String id)``` : Try to retrieve a configured item.
+    * ```Optional<ItemStack> fetch(String id)``` : Try to fetch an item from a configured item pool.
 
 ## Configuration files
 
@@ -61,7 +63,15 @@ For each item configured, the following data can be provided :
 * __durability__ is the amount of uses a tool can be used before breaking
 * __enchants__ is a list of enchants that will be added to the item
 * __miners__ are references to harvesting profiles, that enable to break blocks when the item is held (_see next section_)
-  
+* __attributes__ is a list of modification, an attribute is defined by :
+    * The __name__ of modifier (example : `generic.attackDamage`) you can get the
+    complete list [here](https://minecraft.gamepedia.com/Attribute).
+    * The __amount__ of the attribute.
+    * The __operation__ is how the amount is applied. 0 for an addition,
+    1 for a additive percent,and 2 for a multiplicative percent.
+    * The __slot__ is where the item must be for applying the attribute. It can be `head` ,`mainhand`
+    `offhand`, `chest`, `legs` or `feet`. 
+### example
 ```
 items = [
     {
@@ -81,8 +91,13 @@ items = [
         type: "wooden_sword",
         durability: 5,
         name: "Training stick",
-        miners: [
-            1
+        attributes : [
+            {
+            name: "generic.attackDamage"
+            amount : 5
+            operation : 0
+            slot : "mainhand"
+            }
         ]
     }
 ]
@@ -102,16 +117,16 @@ For each profile, you can define the following elements :
 miners = [
     {
         id: 1,
-        mine_types: [
-            "minecraft:coal_ore",
-            "minecraft:iron_ore"
-        ]
+        mine_types: {
+           "coal" : "minecraft:coal_ore",
+           "iron" : "minecraft:iron_ore"
+        }
     },
     {
         id: 2,
-        mine_types: [
-            "minecraft:gold_ore"
-        ],
+        mine_types: {
+            "gold" :"minecraft:gold_ore"
+        },
         inherit: [
             1
         ]
