@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 @Singleton
 public class ConfigurationHandler {
-    private ConfigurationHandler() {}
+    public ConfigurationHandler() {}
 
     private  List<MinerBean> minerList = new ArrayList<>();
     public  List<MinerBean> getMinerList(){
