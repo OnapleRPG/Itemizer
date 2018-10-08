@@ -159,7 +159,6 @@ public class Itemizer {
 					configurationHandler.loadConfiguration(configDir+"/itemizer/global.conf"));
 		} catch (Exception e) {
 			logger.error(e.toString());
-			e.printStackTrace();
 		}
 	}
 
