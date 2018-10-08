@@ -55,7 +55,7 @@ public class Itemizer {
 
 	private static CraftRegister craftRegister;
 
-	private ConfigurationHandler configurationHandler;
+	private static ConfigurationHandler configurationHandler;
 	@Inject
 	public void setConfigurationHandler(ConfigurationHandler configurationHandler) {
 		this.configurationHandler = configurationHandler;

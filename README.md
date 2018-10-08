@@ -45,6 +45,11 @@ Permission :
 
 All configuration files use HOCON format. When you first install the plugin a default configuration with example is loaded in your `config/itemizer/` folder.
 
+### Global  configuration
+In the global configuration file you can change plugin settings :
+* __DescriptionRewrite__ set the mode of the item's description, if it set to ``false`` it's the Minecraft's default flags.
+But if it's ``true`` flags are rewritten in the item lore and hidden.
+
 ## Minecraft Commands
 The plugin implements minecraft commands to interact with.
 * `/retrieve <id>` gives a configured item to the player.  
@@ -71,7 +76,7 @@ For each item configured, the following data can be provided :
     1 for a additive percent,and 2 for a multiplicative percent.
     * The __slot__ is where the item must be for applying the attribute. It can be `head` ,`mainhand`
     `offhand`, `chest`, `legs` or `feet`. 
-### example
+#### example
 ```
 items = [
     {
