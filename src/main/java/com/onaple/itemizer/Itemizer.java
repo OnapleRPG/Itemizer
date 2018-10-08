@@ -19,6 +19,7 @@ import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.text.Text;
+import sun.rmi.runtime.Log;
 
 import javax.inject.Inject;
 import java.io.IOException;
@@ -159,6 +160,7 @@ public class Itemizer {
 			this.globalConfig = configurationHandler.readGlobalConfiguration(
 					configurationHandler.loadConfiguration(configDir+"/itemizer/global.conf"));
 		} catch (Exception e) {
+			logger.error(e.toString());
 			e.printStackTrace();
 		}
 	}
