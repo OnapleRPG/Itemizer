@@ -28,10 +28,10 @@ public class GetItemInfos implements CommandExecutor {
             } else {
                 ItemStack objectToAnalyse = objectInHandOpt.get();
                 DataContainer itemData = objectToAnalyse .toContainer();
-                Map<String,Object> datamap = (Map<String, Object>) itemData.getMap(DataQuery.of("UnsafeData")).get();
-                datamap.forEach((s, o) -> ((Player) src).sendMessage(Text.builder(s + " : ").color(TextColors.GREEN).append(
+                Optional<Map<?,?>> datamap = (Optional<Map<?, ?>>) itemData.getMap(DataQuery.of("UnsafeData"));
+                datamap.ifPresent(stringObjectMap -> stringObjectMap.forEach((s, o) -> ((Player) src).sendMessage(Text.builder(s + " : ").color(TextColors.GREEN).append(
                         Text.builder(o.toString()).color(TextColors.GOLD).build()
-                ).build()));
+                ).build())));
                return CommandResult.success();
             }
         }

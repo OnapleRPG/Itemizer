@@ -1,5 +1,6 @@
 package com.onaple.itemizer.data.access;
 
+import com.onaple.itemizer.Itemizer;
 import com.onaple.itemizer.data.beans.ItemBean;
 import com.onaple.itemizer.data.handlers.ConfigurationHandler;
 
@@ -13,7 +14,7 @@ public class ItemDAO {
      * @return Optional of the item data
      */
     public static Optional<ItemBean> getItem(String id) {
-        List<ItemBean> items = ConfigurationHandler.getItemList();
+        List<ItemBean> items = Itemizer.getConfigurationHandler().getItemList();
         for(ItemBean item: items) {
             if (item.getId().equals(id)) {
                 return Optional.of(item);

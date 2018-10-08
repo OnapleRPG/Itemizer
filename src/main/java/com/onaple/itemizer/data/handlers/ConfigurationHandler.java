@@ -1,6 +1,7 @@
 package com.onaple.itemizer.data.handlers;
 
 import com.google.common.reflect.TypeToken;
+import com.onaple.itemizer.GlobalConfig;
 import com.onaple.itemizer.ICraftRecipes;
 import com.onaple.itemizer.Itemizer;
 import com.onaple.itemizer.data.beans.AttributeBean;
@@ -16,40 +17,42 @@ import ninja.leaping.configurate.loader.ConfigurationLoader;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import ninja.leaping.configurate.objectmapping.serialize.TypeSerializers;
 
+import javax.inject.Singleton;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-
+@Singleton
 public class ConfigurationHandler {
     private ConfigurationHandler() {}
 
-    private static List<MinerBean> minerList = new ArrayList<>();
-    public static List<MinerBean> getMinerList(){
+    private  List<MinerBean> minerList = new ArrayList<>();
+    public  List<MinerBean> getMinerList(){
         return minerList;
     }
 
-    private static List<ItemBean> itemList= new ArrayList<>();
-    public static List<ItemBean> getItemList(){
+    private  List<ItemBean> itemList= new ArrayList<>();
+    public  List<ItemBean> getItemList(){
         return itemList;
     }
 
-    private static List<PoolBean> poolList= new ArrayList<>();
-    public static List<PoolBean> getPoolList(){
+    private  List<PoolBean> poolList= new ArrayList<>();
+    public  List<PoolBean> getPoolList(){
         return poolList;
     }
 
-    private static List<ICraftRecipes> craftList= new ArrayList<>();
-    public static List<ICraftRecipes> getCraftList(){
+    private  List<ICraftRecipes> craftList= new ArrayList<>();
+    public  List<ICraftRecipes> getCraftList(){
         return craftList;
     }
+
 
 
     /**
      * Read items configuration and interpret it
      * @param configurationNode ConfigurationNode to read from
      */
-    public static int readItemsConfiguration(CommentedConfigurationNode configurationNode) throws ObjectMappingException {
+    public int readItemsConfiguration(CommentedConfigurationNode configurationNode) throws ObjectMappingException {
         itemList = new ArrayList<>();
         TypeSerializers.getDefaultSerializers().registerType(TypeToken.of(ItemBean.class), new ItemSerializer());
         TypeSerializers.getDefaultSerializers().registerType(TypeToken.of(AttributeBean.class), new AttributeSerializer());
@@ -62,7 +65,7 @@ public class ConfigurationHandler {
      * Read miners configuration and interpret it
      * @param configurationNode ConfigurationNode to read from
      */
-    public static int readMinerConfiguration(CommentedConfigurationNode configurationNode) throws ObjectMappingException {
+    public int readMinerConfiguration(CommentedConfigurationNode configurationNode) throws ObjectMappingException {
         minerList = new ArrayList<>();
         TypeSerializers.getDefaultSerializers().registerType(TypeToken.of(MinerBean.class), new MinerSerializer());
         minerList = configurationNode.getNode("miners").getList(TypeToken.of(MinerBean.class));
@@ -76,7 +79,7 @@ public class ConfigurationHandler {
      * Read Craft configuration and interpret it
      * @param configurationNode ConfigurationNode to read from
      */
-    public static int readCraftConfiguration(CommentedConfigurationNode configurationNode) throws ObjectMappingException {
+    public int readCraftConfiguration(CommentedConfigurationNode configurationNode) throws ObjectMappingException {
         craftList = new ArrayList<>();
         TypeSerializers.getDefaultSerializers().registerType(TypeToken.of(ICraftRecipes.class), new CraftingSerializer());
         craftList = configurationNode.getNode("crafts").getList(TypeToken.of(ICraftRecipes.class));
@@ -88,7 +91,7 @@ public class ConfigurationHandler {
      * Read pools configuration and interpret it. Must be the last config file read.
      * @param configurationNode ConfigurationNode to read from
      */
-    public static int readPoolsConfiguration(CommentedConfigurationNode configurationNode) throws ObjectMappingException {
+    public int readPoolsConfiguration(CommentedConfigurationNode configurationNode) throws ObjectMappingException {
         poolList = new ArrayList<>();
         TypeSerializers.getDefaultSerializers().registerType(TypeToken.of(PoolBean.class), new PoolSerializer());
         poolList = configurationNode.getNode("pools").getList(TypeToken.of(PoolBean.class));
@@ -101,7 +104,7 @@ public class ConfigurationHandler {
      * @param configName Name of the configuration in the configuration folder
      * @return Configuration ready to be used
      */
-    public static CommentedConfigurationNode loadConfiguration(String configName) throws Exception {
+    public CommentedConfigurationNode loadConfiguration(String configName) throws Exception {
         ConfigurationLoader<CommentedConfigurationNode> configLoader = HoconConfigurationLoader.builder().setPath(Paths.get(configName)).build();
         CommentedConfigurationNode configNode = null;
         try {
@@ -110,5 +113,10 @@ public class ConfigurationHandler {
             throw new Exception("Error while loading configuration '" + configName + "' : " + e.getMessage());
         }
         return configNode;
+    }
+
+    public GlobalConfig readGlobalConfiguration(CommentedConfigurationNode configurationNode) {
+        boolean DescriptionRewrite = configurationNode.getNode("DescriptionRewrite").getBoolean();
+        return new GlobalConfig(DescriptionRewrite);
     }
 }

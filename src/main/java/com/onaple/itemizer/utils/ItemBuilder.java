@@ -23,12 +23,10 @@ import org.spongepowered.api.item.enchantment.EnchantmentType;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.*;
-import sun.awt.X11.ColorData;
-
 import javax.inject.Singleton;
 import java.util.*;
 
-
+@Singleton
 public class ItemBuilder {
 
     private ItemStack item;
@@ -51,10 +49,21 @@ public class ItemBuilder {
                enchantItemStack(itemBean);
                grantMining(itemBean);
                setAttribute(itemBean);
-            this.item = ItemStack.builder()
-                    .fromContainer(item.toContainer().set(DataQuery.of("UnsafeData","HideFlags"),31))
-                    .build();
-            addLore();
+            if(Itemizer.getItemizer().getGlobalConfig().isDescriptionRewrite()) {
+                this.item = ItemStack.builder()
+                        .fromContainer(item.toContainer().set(DataQuery.of("UnsafeData","HideFlags"),31))
+                        .build();
+                addLore();
+            } else{
+                if (itemBean.getLore() != null) {
+                    List<Text> loreData = new ArrayList<>();
+                    for (String loreLine : itemBean.getLore().split("\n")) {
+                        loreData.add(Text.builder(loreLine).color(TextColors.GRAY).build());
+                    }
+                    item.offer(Keys.ITEM_LORE,loreData);
+                }
+
+            }
             return Optional.ofNullable(this.item);
         } else {
             Itemizer.getLogger().warn("Unknown item type : " + itemBean.getType());
@@ -148,7 +157,7 @@ public class ItemBuilder {
      */
     private void grantMining(ItemBean itemBean) {
         BreakableData breakableData = item.getOrCreate(BreakableData.class).get();
-        List<MinerBean> minerList = ConfigurationHandler.getMinerList();
+        List<MinerBean> minerList = Itemizer.getConfigurationHandler().getMinerList();
         List<String> minerNames = new ArrayList<>();
         Text.Builder miningText = Text.builder("Can mine : ").color(TextColors.DARK_BLUE).style(TextStyles.UNDERLINE);
         for (String minerId : itemBean.getMiners()) {
