@@ -25,7 +25,7 @@ If you want more details about *AttributeModifiers* check the Minecraft [wiki](h
 ## Installation
 To install this plugin you must have a sponge server 1.12. Download the [latest release](https://github.com/OnapleRPG/Itemizer/releases) and drag and drop it into your server's `mods/` folder. Then restart your server.
 
-## Commands
+##Minecraft Commands
 
 * `/retrieve <itemId> [player]` : Obtain an item specified in the configuration file for the given id.  
 Permission : *itemizer.command.rerieve*
@@ -36,11 +36,6 @@ Permission : *itemizer.command.reload*
 * ``/analyse`` : give information about data stored in the item hold in main 
 Permission : *itemizer.command.analyse*
 
-## Services
-* **IItemService** : Give access to the object getters functions to a plugin.
-    * ```Optional<ItemStack retrieve(String id)``` : Try to retrieve a configured item.
-    * ```Optional<ItemStack> fetch(String id)``` : Try to fetch an item from a configured item pool.
-
 ## Configuration files
 
 All configuration files use HOCON format. When you first install the plugin a default configuration with example is loaded in your `config/itemizer/` folder.
@@ -50,10 +45,7 @@ In the global configuration file you can change plugin settings :
 * __DescriptionRewrite__ set the mode of the item's description, if it set to ``false`` it's the Minecraft's default flags.
 But if it's ``true`` flags are rewritten in the item lore and hidden.
 
-## Minecraft Commands
-The plugin implements minecraft commands to interact with.
-* `/retrieve <id>` gives a configured item to the player.  
-* `/fetch <id>`, which gets a random item from a given item pool.
+
 ### Item creation
 
 A file named __*items.conf*__ stores the items that can be retrieved from the plugin.
@@ -214,3 +206,39 @@ crafts = [
 ```
 _The first craft requires a stone axe to craft the item referenced "1", the second craft enable us to cook a cooked_porkchop into a coal, 
 and the third one is used to craft the item referenced "2" with three sticks aligned in a vertical centered line (notice the whitespaces before and after the "a")_
+
+## For developer
+ if you are want to use **Itemizer** in you development, we provide services to ease interactions 
+ 
+### Services
+* **IItemService** : Give access to the object getters functions to a plugin.
+    * ```Optional<ItemStack retrieve(String id)``` : Try to retrieve a configured item.
+    * ```Optional<ItemStack> fetch(String id)``` : Try to fetch an item from a configured item pool.
+ ### Instalation with Gradle
+ 
+ * Add [Jitpack](https://jitpack.io/) in your repositories
+ ```
+   repositories {
+     mavenCentral()
+     maven {
+         name = 'jitpack'
+         url = 'https://jitpack.io'
+     }
+ }  
+ ```
+ * and add **Itemizer** to your dependencies
+ ```
+ dependencies {
+      compile 'org.spongepowered:spongeapi:7.0.0'
+      implementation 'com.github.OnapleRPG:Itemizer:V1.1.0'
+  }
+ ```
+ * use Services 
+ ```java
+Optional<IItemService> optionalIItemService = Sponge.getServiceManager().provide(IItemService.class);
+            if (optionalIItemService.isPresent()) {
+                IItemService iItemService = optionalIItemService.get();
+                optionalItem = iItemService.retrieve(itemId);
+            }
+```
+ 

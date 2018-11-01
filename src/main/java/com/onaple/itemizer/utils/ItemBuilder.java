@@ -159,20 +159,23 @@ public class ItemBuilder {
         BreakableData breakableData = item.getOrCreate(BreakableData.class).get();
         List<MinerBean> minerList = Itemizer.getConfigurationHandler().getMinerList();
         List<String> minerNames = new ArrayList<>();
-        Text.Builder miningText = Text.builder("Can mine :").color(TextColors.BLUE).style(TextStyles.UNDERLINE);
-        for (String minerId : itemBean.getMiners()) {
-            for (MinerBean minerBean : minerList) {
-                if (minerBean.getId().equals(minerId)) {
-                     minerBean.getMineTypes().forEach((blockName, blockType) -> {
-                         miningText.append(Text.builder(" " + blockName + " ").color(TextColors.BLUE).style(TextStyles.RESET).build());
-                         Optional<BlockType> optionalBlockType = Sponge.getRegistry().getType(BlockType.class, blockType);
-                         optionalBlockType.ifPresent(blockType1 -> breakableData.set(breakableData.breakable().add(blockType1)));
-                     });
+        if(!itemBean.getMiners().isEmpty()) {
+            Text.Builder miningText = Text.builder("Can mine :").color(TextColors.BLUE).style(TextStyles.UNDERLINE);
+            for (String minerId : itemBean.getMiners()) {
+                for (MinerBean minerBean : minerList) {
+                    if (minerBean.getId().equals(minerId)) {
+                        minerBean.getMineTypes().forEach((blockName, blockType) -> {
+                            miningText.append(Text.builder(" " + blockName + " ").color(TextColors.BLUE).style(TextStyles.RESET).build());
+                            Optional<BlockType> optionalBlockType = Sponge.getRegistry().getType(BlockType.class, blockType);
+                            optionalBlockType.ifPresent(blockType1 -> breakableData.set(breakableData.breakable().add(blockType1)));
+                        });
 
                     }
                 }
+            }
+
+            lore.add(miningText.build());
         }
-        lore.add(miningText.build());
         item.offer(breakableData);
     }
 
@@ -187,22 +190,26 @@ public class ItemBuilder {
         for(AttributeBean att : itemBean.getAttributeList()){
             DataContainer dc = createAttributeModifier(att);
             containers.add(dc);
-
+            Text.Builder attributText;
             if(att.getOperation()==0){
-                attributeTextbuilder.append(Text.builder("+ " +Float.toString(att.getAmount())).color(TextColors.GOLD).build());
+                attributText = Text.builder(String.format("%.1f", att.getAmount()));
+
             } else if(att.getOperation()==1) {
 
-                attributeTextbuilder.append(Text.builder("+ " + Float.toString(att.getAmount()*100)+ "%").color(TextColors.GOLD).build());
+                attributText =Text.builder( String.format("%.1f", att.getAmount()*100)+ "%");
             } else {
-
-                attributeTextbuilder.append(Text
-                        .builder("x "+Float.toString(att.getAmount()*100)+ "%")
-                        .color(TextColors.GOLD)
-                        .build());
+                attributText =Text.builder(String.format("%.1f", att.getAmount()*100)+ "%");
             }
-            attributeTextbuilder.append(Text.builder(displayAtribute(att.getName())).color(TextColors.GOLD).build());
+
+            attributText.append(Text.builder(displayAtribute(att.getName())).build());
+            if(att.getAmount()>0){
+                attributText.color(TextColors.GREEN);
+            } else {
+                attributText.color(TextColors.RED);
+            }
+            lore.add(attributText.build());
         }
-        lore.add(attributeTextbuilder.build());
+
         DataContainer container = this.item.toContainer();
         container.set(DataQuery.of("UnsafeData","AttributeModifiers"),containers);
     }

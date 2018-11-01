@@ -27,7 +27,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 
-@Plugin(id = "itemizer", name = "Itemizer - Custom Items", version = "1.5.0",
+@Plugin(id = "itemizer", name = "Itemizer - Custom Items", version = "1.2.1",
 		description = "Plugin to manage custom items and crafts",
 		url = "http://onaple.fr",
 		authors = {"Zessirb", "Selki"})
@@ -147,6 +147,7 @@ public class Itemizer {
 
 		logger.info("ITEMIZER initialized.");
 	}
+
 
 	public static PluginContainer getInstance() {
 		return Sponge.getPluginManager().getPlugin("itemizer").orElse(null);
