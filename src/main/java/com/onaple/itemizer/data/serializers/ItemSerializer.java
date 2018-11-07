@@ -53,6 +53,15 @@ public class ItemSerializer implements TypeSerializer<ItemBean> {
 
     @Override
     public void serialize(TypeToken<?> type, ItemBean obj, ConfigurationNode value) throws ObjectMappingException {
+       value.getNode("id").setValue(obj.getId());
+       value.getNode("type").setValue(obj.getType());
+       value.getNode("name").setValue(obj.getName());
+       value.getNode("lore").setValue(obj.getLore());
+       value.getNode("durability").setValue(obj.getDurability());
+       value.getNode("unbreakable").setValue(obj.isUnbreakable());
 
+        value.getNode("toolType").setValue(obj.getToolLevel());
+        value.getNode("toolLevel").getInt(obj.getToolLevel());
+        value.getNode("attributes").setValue(obj.getAttributeList());
     }
 }

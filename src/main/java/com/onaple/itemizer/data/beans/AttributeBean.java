@@ -25,6 +25,9 @@ public class AttributeBean {
         this.operation = operation;
     }
 
+    public AttributeBean() {
+    }
+
     public String getName() {
         return name;
     }

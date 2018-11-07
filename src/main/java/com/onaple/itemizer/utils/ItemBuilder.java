@@ -25,6 +25,7 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.*;
 import javax.inject.Singleton;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Singleton
 public class ItemBuilder {
@@ -92,6 +93,11 @@ public class ItemBuilder {
      * @return ItemStack edited
      */
     private void defineItemStack(ItemBean itemBean) {
+        //item Id
+        if (itemBean.getId() != null && !itemBean.getId().isEmpty()) {
+            setCustomData("id",itemBean.getId());
+        }
+
         // Item name
         if (itemBean.getName() != null && !itemBean.getName().isEmpty()) {
             item.offer(Keys.DISPLAY_NAME, Text.builder(itemBean.getName()).style(TextStyles.BOLD).build());
@@ -250,5 +256,22 @@ public class ItemBuilder {
             default:
                 return genericName;
         }
+    }
+    private void setCustomData(String queryPath,Object value){
+        List<String> queryList ;
+        if(queryPath.contains(".")) {
+            String[] queries = queryPath.split(".");
+            Itemizer.getLogger().info(("length" + queries.length));
+            queryList = Arrays.stream(queries).collect(Collectors.toList());
+        }
+        else {
+            queryList = new ArrayList<>();
+            queryList.add(queryPath);
+        }
+        queryList.add(0,"UnsafeData");
+        DataQuery dt = DataQuery.of(queryList);
+        this.item = ItemStack.builder()
+                .fromContainer(item.toContainer().set(dt,value))
+                .build();
     }
 }

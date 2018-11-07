@@ -29,6 +29,9 @@ public class ItemBean {
 
     private String toolType;
 
+    public ItemBean() {
+    }
+
     private int toolLevel;
 
     public String getToolType() {

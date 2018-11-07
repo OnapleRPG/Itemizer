@@ -14,6 +14,7 @@ import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.entity.DamageEntityEvent;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.plugin.Plugin;
@@ -27,7 +28,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 
-@Plugin(id = "itemizer", name = "Itemizer - Custom Items", version = "1.2.1",
+@Plugin(id = "itemizer", name = "Itemizer improuved items", version = "1.2.1",
 		description = "Plugin to manage custom items and crafts",
 		url = "http://onaple.fr",
 		authors = {"Zessirb", "Selki"})
@@ -145,15 +146,25 @@ public class Itemizer {
 				.executor(new GetItemInfos()).build();
 		Sponge.getCommandManager().register(this, getInfo, "analyse");
 
+		CommandSpec register = CommandSpec.builder()
+				.description(Text.of("Register an new itemizer item from main hand."))
+				.permission("itemizer.command.register")
+				.executor(new RegisterCommand()).build();
+		Sponge.getCommandManager().register(this, register, "register");
+
 		logger.info("ITEMIZER initialized.");
 	}
 
+	@Listener
+	public void onDamageEntityEvent(DamageEntityEvent event){
+
+	}
 
 	public static PluginContainer getInstance() {
 		return Sponge.getPluginManager().getPlugin("itemizer").orElse(null);
 	}
 
-	public void loadGlobalConfig(){
+	private void loadGlobalConfig(){
 		initDefaultConfig("global.conf");
 		try {
 			this.globalConfig = configurationHandler.readGlobalConfiguration(
