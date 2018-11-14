@@ -50,8 +50,8 @@ targetCompatibility = 1.8
 versioning {
     // required (number)
     major = 1
-    minor = 1
-    patch = 0
+    minor = 2
+    patch = 1
 
 }
 
@@ -61,7 +61,7 @@ publishing {
         maven(MavenPublication) {
             groupId 'com.ylinor'
             artifactId 'itemizer'
-            version '0.1.0'
+            version '1.2.1'
 
             from components.java
         }

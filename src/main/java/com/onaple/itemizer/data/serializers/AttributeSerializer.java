@@ -19,6 +19,9 @@ public class AttributeSerializer implements TypeSerializer<AttributeBean> {
 
     @Override
     public void serialize(TypeToken<?> type, AttributeBean obj, ConfigurationNode value) throws ObjectMappingException {
-
+         value.getNode("operation").setValue(obj.getOperation());
+         value.getNode("amount").setValue(obj.getAmount());
+         value.getNode("name").setValue(obj.getName());
+         value.getNode("slot").setValue(obj.getSlot());
     }
 }

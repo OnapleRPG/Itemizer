@@ -23,12 +23,11 @@ import org.spongepowered.api.item.enchantment.EnchantmentType;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.*;
-import sun.awt.X11.ColorData;
-
 import javax.inject.Singleton;
 import java.util.*;
+import java.util.stream.Collectors;
 
-
+@Singleton
 public class ItemBuilder {
 
     private ItemStack item;
@@ -51,10 +50,21 @@ public class ItemBuilder {
                enchantItemStack(itemBean);
                grantMining(itemBean);
                setAttribute(itemBean);
-            this.item = ItemStack.builder()
-                    .fromContainer(item.toContainer().set(DataQuery.of("UnsafeData","HideFlags"),31))
-                    .build();
-            addLore();
+            if(Itemizer.getItemizer().getGlobalConfig().isDescriptionRewrite()) {
+                this.item = ItemStack.builder()
+                        .fromContainer(item.toContainer().set(DataQuery.of("UnsafeData","HideFlags"),31))
+                        .build();
+                addLore();
+            } else{
+                if (itemBean.getLore() != null) {
+                    List<Text> loreData = new ArrayList<>();
+                    for (String loreLine : itemBean.getLore().split("\n")) {
+                        loreData.add(Text.builder(loreLine).color(TextColors.GRAY).build());
+                    }
+                    item.offer(Keys.ITEM_LORE,loreData);
+                }
+
+            }
             return Optional.ofNullable(this.item);
         } else {
             Itemizer.getLogger().warn("Unknown item type : " + itemBean.getType());
@@ -83,6 +93,11 @@ public class ItemBuilder {
      * @return ItemStack edited
      */
     private void defineItemStack(ItemBean itemBean) {
+        //item Id
+        if (itemBean.getId() != null && !itemBean.getId().isEmpty()) {
+            setCustomData("id",itemBean.getId());
+        }
+
         // Item name
         if (itemBean.getName() != null && !itemBean.getName().isEmpty()) {
             item.offer(Keys.DISPLAY_NAME, Text.builder(itemBean.getName()).style(TextStyles.BOLD).build());
@@ -148,22 +163,25 @@ public class ItemBuilder {
      */
     private void grantMining(ItemBean itemBean) {
         BreakableData breakableData = item.getOrCreate(BreakableData.class).get();
-        List<MinerBean> minerList = ConfigurationHandler.getMinerList();
+        List<MinerBean> minerList = Itemizer.getConfigurationHandler().getMinerList();
         List<String> minerNames = new ArrayList<>();
-        Text.Builder miningText = Text.builder("Can mine : ").color(TextColors.DARK_BLUE).style(TextStyles.UNDERLINE);
-        for (String minerId : itemBean.getMiners()) {
-            for (MinerBean minerBean : minerList) {
-                if (minerBean.getId().equals(minerId)) {
-                     minerBean.getMineTypes().forEach((blockName, blockType) -> {
-                         miningText.append(Text.builder(blockName).color(TextColors.BLUE).style(TextStyles.RESET).build());
-                         Optional<BlockType> optionalBlockType = Sponge.getRegistry().getType(BlockType.class, blockType);
-                         optionalBlockType.ifPresent(blockType1 -> breakableData.set(breakableData.breakable().add(blockType1)));
-                     });
+        if(!itemBean.getMiners().isEmpty()) {
+            Text.Builder miningText = Text.builder("Can mine :").color(TextColors.BLUE).style(TextStyles.UNDERLINE);
+            for (String minerId : itemBean.getMiners()) {
+                for (MinerBean minerBean : minerList) {
+                    if (minerBean.getId().equals(minerId)) {
+                        minerBean.getMineTypes().forEach((blockName, blockType) -> {
+                            miningText.append(Text.builder(" " + blockName + " ").color(TextColors.BLUE).style(TextStyles.RESET).build());
+                            Optional<BlockType> optionalBlockType = Sponge.getRegistry().getType(BlockType.class, blockType);
+                            optionalBlockType.ifPresent(blockType1 -> breakableData.set(breakableData.breakable().add(blockType1)));
+                        });
 
                     }
                 }
+            }
+
+            lore.add(miningText.build());
         }
-        lore.add(miningText.build());
         item.offer(breakableData);
     }
 
@@ -175,25 +193,30 @@ public class ItemBuilder {
     private void setAttribute(ItemBean itemBean){
         List<DataContainer> containers = new ArrayList();
         Text.Builder attributeTextbuilder = Text.builder();
+
         for(AttributeBean att : itemBean.getAttributeList()){
             DataContainer dc = createAttributeModifier(att);
             containers.add(dc);
-
+            Text.Builder attributText;
             if(att.getOperation()==0){
-                attributeTextbuilder.append(Text.builder("+ " +Float.toString(att.getAmount())).color(TextColors.GOLD).build());
+                attributText = Text.builder(String.format("%.1f", att.getAmount()));
+
             } else if(att.getOperation()==1) {
 
-                attributeTextbuilder.append(Text.builder("+ " + Float.toString(att.getAmount()*100)+ "%").color(TextColors.GOLD).build());
+                attributText =Text.builder( String.format("%.1f", att.getAmount()*100)+ "%");
             } else {
-
-                attributeTextbuilder.append(Text
-                        .builder("x "+Float.toString(att.getAmount()*100)+ "%")
-                        .color(TextColors.GOLD)
-                        .build());
+                attributText =Text.builder(String.format("%.1f", att.getAmount()*100)+ "%");
             }
-            attributeTextbuilder.append(Text.builder(displayAtribute(att.getName())).color(TextColors.GOLD).build());
+
+            attributText.append(Text.builder(displayAtribute(att.getName())).build());
+            if(att.getAmount()>0){
+                attributText.color(TextColors.GREEN);
+            } else {
+                attributText.color(TextColors.RED);
+            }
+            lore.add(attributText.build());
         }
-        lore.add(attributeTextbuilder.build());
+
         DataContainer container = this.item.toContainer();
         container.set(DataQuery.of("UnsafeData","AttributeModifiers"),containers);
     }
@@ -234,5 +257,22 @@ public class ItemBuilder {
             default:
                 return genericName;
         }
+    }
+    private void setCustomData(String queryPath,Object value){
+        List<String> queryList ;
+        if(queryPath.contains(".")) {
+            String[] queries = queryPath.split(".");
+            Itemizer.getLogger().info(("length" + queries.length));
+            queryList = Arrays.stream(queries).collect(Collectors.toList());
+        }
+        else {
+            queryList = new ArrayList<>();
+            queryList.add(queryPath);
+        }
+        queryList.add(0,"UnsafeData");
+        DataQuery dt = DataQuery.of(queryList);
+        this.item = ItemStack.builder()
+                .fromContainer(item.toContainer().set(dt,value))
+                .build();
     }
 }

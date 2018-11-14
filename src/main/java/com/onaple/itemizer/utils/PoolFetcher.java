@@ -15,11 +15,11 @@ public class PoolFetcher {
      * @param poolId Id of the pool
      * @return Random item, or nothing
      */
+    private static Random random = new Random();
     public static Optional<ItemBean> fetchItemFromPool(String poolId) {
         Optional<ItemBean> item = Optional.empty();
         Optional<PoolBean> optionalPool = PoolDAO.getPool(poolId);
         if (optionalPool.isPresent()) {
-            Random random = new Random();
             double randomValue = random.nextDouble();
             Map<Double, ItemBean> poolItems = optionalPool.get().getItems();
             Iterator iterator = poolItems.entrySet().iterator();

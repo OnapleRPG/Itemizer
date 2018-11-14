@@ -1,5 +1,6 @@
 package com.onaple.itemizer.data.access;
 
+import com.onaple.itemizer.Itemizer;
 import com.onaple.itemizer.data.beans.PoolBean;
 import com.onaple.itemizer.data.handlers.ConfigurationHandler;
 
@@ -13,7 +14,7 @@ public class PoolDAO {
      * @return Optional of the pool data
      */
     public static Optional<PoolBean> getPool(String id) {
-        List<PoolBean> pools = ConfigurationHandler.getPoolList();
+        List<PoolBean> pools = Itemizer.getConfigurationHandler().getPoolList();
         for(PoolBean pool: pools) {
             if (pool.getId().equals(id)) {
                 return Optional.of(pool);

@@ -19,34 +19,33 @@ you can edit most of item's informations like :
     * *armorToughness*
     * *attackSpeed*
     * *luck*  
-If you wnat more details about *AttributeModifiers* check the Minecraft [wiki](https://minecraft.gamepedia.com/Attribute)
+If you want more details about *AttributeModifiers* check the Minecraft [wiki](https://minecraft.gamepedia.com/Attribute)
 
 
 ## Installation
 To install this plugin you must have a sponge server 1.12. Download the [latest release](https://github.com/OnapleRPG/Itemizer/releases) and drag and drop it into your server's `mods/` folder. Then restart your server.
 
-## Commands
+##Minecraft Commands
 
-* **/retrieve *itemId*** : Obtain an item specified in the configuration file for the given id.  
+* `/retrieve <itemId> [player]` : Obtain an item specified in the configuration file for the given id.  
 Permission : *itemizer.command.rerieve*
-* **/fetch *poolId*** : Try to obtain an item from a configured pool in the configuration file with its *id*.  
+* `fetch <poolId> [player]` : Try to obtain an item from a configured pool in the configuration file with its *id*.  
 Permission : *itemizer.command.fetch*
-* **/reload-itemizer** : Reload each configuration file.  
+* ``reload-itemizer`` : Reload each configuration file.  
 Permission : *itemizer.command.reload*
-
-## Services
-* **IItemService** : Give access to the object getters functions to a plugin.
-    * *Optional<ItemStack* **retrieve(*String id*)** : Try to retrieve a configured item.
-    * *Optional<ItemStack>* **fetch(*String id*)** : Try to fetch an item from a configured item pool.
+* ``/analyse`` : give information about data stored in the item hold in main 
+Permission : *itemizer.command.analyse*
 
 ## Configuration files
 
 All configuration files use HOCON format. When you first install the plugin a default configuration with example is loaded in your `config/itemizer/` folder.
 
-## Minecraft Commands
-The plugin implements minecraft commands to interact with.
-* `/retrieve <id>` gives a configured item to the player.  
-* `/fetch <id>`, which gets a random item from a given item pool.
+### Global  configuration
+In the global configuration file you can change plugin settings :
+* __DescriptionRewrite__ set the mode of the item's description, if it set to ``false`` it's the Minecraft's default flags.
+But if it's ``true`` flags are rewritten in the item lore and hidden.
+
+
 ### Item creation
 
 A file named __*items.conf*__ stores the items that can be retrieved from the plugin.
@@ -61,7 +60,15 @@ For each item configured, the following data can be provided :
 * __durability__ is the amount of uses a tool can be used before breaking
 * __enchants__ is a list of enchants that will be added to the item
 * __miners__ are references to harvesting profiles, that enable to break blocks when the item is held (_see next section_)
-  
+* __attributes__ is a list of modification, an attribute is defined by :
+    * The __name__ of modifier (example : `generic.attackDamage`) you can get the
+    complete list [here](https://minecraft.gamepedia.com/Attribute).
+    * The __amount__ of the attribute.
+    * The __operation__ is how the amount is applied. 0 for an addition,
+    1 for a additive percent,and 2 for a multiplicative percent.
+    * The __slot__ is where the item must be for applying the attribute. It can be `head` ,`mainhand`
+    `offhand`, `chest`, `legs` or `feet`. 
+#### example
 ```
 items = [
     {
@@ -81,8 +88,13 @@ items = [
         type: "wooden_sword",
         durability: 5,
         name: "Training stick",
-        miners: [
-            1
+        attributes : [
+            {
+            name: "generic.attackDamage"
+            amount : 5
+            operation : 0
+            slot : "mainhand"
+            }
         ]
     }
 ]
@@ -102,16 +114,16 @@ For each profile, you can define the following elements :
 miners = [
     {
         id: 1,
-        mine_types: [
-            "minecraft:coal_ore",
-            "minecraft:iron_ore"
-        ]
+        mine_types: {
+           "coal" : "minecraft:coal_ore",
+           "iron" : "minecraft:iron_ore"
+        }
     },
     {
         id: 2,
-        mine_types: [
-            "minecraft:gold_ore"
-        ],
+        mine_types: {
+            "gold" :"minecraft:gold_ore"
+        },
         inherit: [
             1
         ]
@@ -194,3 +206,39 @@ crafts = [
 ```
 _The first craft requires a stone axe to craft the item referenced "1", the second craft enable us to cook a cooked_porkchop into a coal, 
 and the third one is used to craft the item referenced "2" with three sticks aligned in a vertical centered line (notice the whitespaces before and after the "a")_
+
+## For developer
+ if you are want to use **Itemizer** in you development, we provide services to ease interactions 
+ 
+### Services
+* **IItemService** : Give access to the object getters functions to a plugin.
+    * ```Optional<ItemStack retrieve(String id)``` : Try to retrieve a configured item.
+    * ```Optional<ItemStack> fetch(String id)``` : Try to fetch an item from a configured item pool.
+ ### Instalation with Gradle
+ 
+ * Add [Jitpack](https://jitpack.io/) in your repositories
+ ```
+   repositories {
+     mavenCentral()
+     maven {
+         name = 'jitpack'
+         url = 'https://jitpack.io'
+     }
+ }  
+ ```
+ * and add **Itemizer** to your dependencies
+ ```
+ dependencies {
+      compile 'org.spongepowered:spongeapi:7.0.0'
+      implementation 'com.github.OnapleRPG:Itemizer:V1.1.0'
+  }
+ ```
+ * use Services 
+ ```java
+Optional<IItemService> optionalIItemService = Sponge.getServiceManager().provide(IItemService.class);
+            if (optionalIItemService.isPresent()) {
+                IItemService iItemService = optionalIItemService.get();
+                optionalItem = iItemService.retrieve(itemId);
+            }
+```
+ 

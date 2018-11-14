@@ -1,7 +1,10 @@
 .gradle
 .idea
+.mixin.out
 build
 gradle
+logs
+scripts
 *.iml
 gradlew
 gradlew.bat
