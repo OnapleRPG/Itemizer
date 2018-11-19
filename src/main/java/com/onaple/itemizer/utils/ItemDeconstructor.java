@@ -13,6 +13,7 @@ import org.spongepowered.api.data.MemoryDataContainer;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.text.Text;
+import scala.Int;
 
 import javax.inject.Singleton;
 import java.util.*;
@@ -73,7 +74,8 @@ public class ItemDeconstructor {
                                 .ifPresent(o1 ->{ if(o1 instanceof String){ attributeBean.setName((String) o1);}
                         });
                         container.get(DataQuery.of("Amount"))
-                                .ifPresent(o1 ->{ if(o1 instanceof Float){ attributeBean.setAmount((Float) o1);}
+                                .ifPresent(o1 ->{ if(o1 instanceof Float ){ attributeBean.setAmount((float) o1);}
+                                else if(o1 instanceof Integer){ attributeBean.setAmount(((Integer) o1).floatValue());}
                                 });
                         container.get(DataQuery.of("Operation"))
                                 .ifPresent(o1 ->{ if(o1 instanceof Integer){ attributeBean.setOperation((Integer) o1);}
