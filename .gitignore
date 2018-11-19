@@ -4,6 +4,7 @@
 build
 gradle
 logs
+logs/latest.log
 scripts
 *.iml
 gradlew
