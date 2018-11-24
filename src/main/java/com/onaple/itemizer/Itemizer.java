@@ -148,6 +148,7 @@ public class Itemizer {
 
 		CommandSpec register = CommandSpec.builder()
 				.description(Text.of("Register an new itemizer item from main hand."))
+				.arguments(GenericArguments.onlyOne(GenericArguments.string(Text.of("id"))))
 				.permission("itemizer.command.register")
 				.executor(new RegisterCommand()).build();
 		Sponge.getCommandManager().register(this, register, "register");

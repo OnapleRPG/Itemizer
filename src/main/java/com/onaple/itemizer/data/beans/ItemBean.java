@@ -25,7 +25,7 @@ public class ItemBean {
     /** IDs of the miner abilities associated **/
     private List<String> miners = new ArrayList<>();
     /** List of custom attribute of the item */
-    private List<AttributeBean> attributeList ;
+    private List<AttributeBean> attributeList = new ArrayList<>();
 
     private String toolType;
 

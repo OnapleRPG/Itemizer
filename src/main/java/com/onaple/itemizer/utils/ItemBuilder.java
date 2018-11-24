@@ -193,6 +193,7 @@ public class ItemBuilder {
     private void setAttribute(ItemBean itemBean){
         List<DataContainer> containers = new ArrayList();
         Text.Builder attributeTextbuilder = Text.builder();
+
         for(AttributeBean att : itemBean.getAttributeList()){
             DataContainer dc = createAttributeModifier(att);
             containers.add(dc);

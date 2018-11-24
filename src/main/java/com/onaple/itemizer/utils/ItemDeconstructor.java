@@ -20,45 +20,44 @@ import java.util.stream.Collectors;
 
 public class ItemDeconstructor {
 
+    private ItemBean itemRegistred;
+    private ItemStack itemToRegister;
+    public ItemDeconstructor(ItemStack itemStack) {
+         this.itemToRegister = itemStack;
+         this.itemRegistred = new ItemBean();
 
-    public ItemDeconstructor() {
+
     }
 
-    public ItemBean register(ItemStack itemStack) {
-        ItemBean itemRegistred = new ItemBean();
+    public ItemBean register(String itemId) {
+        this.itemRegistred.setId(itemId);
         //item type
-        itemRegistred.setType(itemStack.getType().getName());
-        //item  id
-        getCustomData(itemStack, "id").ifPresent(o -> {
-            if (o instanceof String) {
-                itemRegistred.setId((String) o);
-            }
-        });
+        itemRegistred.setType(itemToRegister.getType().getName());
         //item name
-        itemStack.get(Keys.DISPLAY_NAME).ifPresent(text -> itemRegistred.setName(text.toPlain()));
+        itemToRegister.get(Keys.DISPLAY_NAME).ifPresent(text -> itemRegistred.setName(text.toPlain()));
         //item lore
         List<Text> lore = new ArrayList<>();
-        itemStack.get(Keys.ITEM_LORE).ifPresent(lore::addAll);
+        itemToRegister.get(Keys.ITEM_LORE).ifPresent(lore::addAll);
         if (!lore.isEmpty()) {
             List<String> loreString = lore.stream().map(Text::toPlain).collect(Collectors.toList());
             itemRegistred.setLore(String.join("\n", loreString));
         }
         //item unbrekable
-        itemStack.get(Keys.UNBREAKABLE).ifPresent(itemRegistred::setUnbreakable);
+        itemToRegister.get(Keys.UNBREAKABLE).ifPresent(itemRegistred::setUnbreakable);
         //item durability
-        itemStack.get(Keys.ITEM_DURABILITY).ifPresent(itemRegistred::setMaxDurability);
+        itemToRegister.get(Keys.ITEM_DURABILITY).ifPresent(itemRegistred::setMaxDurability);
         //item enchants
         Map<String, Integer> enchants = new HashMap<>();
-        itemStack.get(Keys.ITEM_ENCHANTMENTS).ifPresent(enchantments -> enchantments
+        itemToRegister.get(Keys.ITEM_ENCHANTMENTS).ifPresent(enchantments -> enchantments
                 .forEach(enchantment -> enchants.put(enchantment.getType().getId(), enchantment.getLevel())));
         itemRegistred.setEnchants(enchants);
-        getAttribute(itemStack,itemRegistred);
+        getAttribute();
         return itemRegistred;
     }
 
-    private void getAttribute(ItemStack item,ItemBean itemRegistred) {
+    private void getAttribute() {
         List atributelist = new ArrayList<>();
-        Optional<Object> atributeOptional = getCustomData(item, "AttributeModifiers");
+        Optional<Object> atributeOptional = getCustomData(itemToRegister, "AttributeModifiers");
         if (atributeOptional.isPresent()) {
             Object atributes = atributeOptional.get();
             if (atributes instanceof List) {
@@ -92,7 +91,7 @@ public class ItemDeconstructor {
 
                 }
                 itemRegistred.setAttributeList(attributeBeanList);
-            }else {
+            } else {
                 Itemizer.getLogger().info(atributes.getClass().getName() + "is not instance of List");
             }
         }

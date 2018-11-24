@@ -74,6 +74,8 @@ public class CraftingSerializer implements TypeSerializer<ICraftRecipes> {
                 if (itemStackOptional.isPresent()) {
                     return itemStackOptional.get();
                 }
+            } else {
+                throw new ObjectMappingException("Item reference not found");
             }
         } else {
             String name = node.getNode("name").getString();
@@ -88,7 +90,7 @@ public class CraftingSerializer implements TypeSerializer<ICraftRecipes> {
             }
 
         }
-        throw new ObjectMappingException();
+        throw new ObjectMappingException("unknown error");
     }
 
     @Override
