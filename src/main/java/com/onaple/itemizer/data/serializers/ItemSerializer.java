@@ -66,7 +66,9 @@ public class ItemSerializer implements TypeSerializer<ItemBean> {
        value.getNode("durability").setValue(obj.getDurability());
        value.getNode("unbreakable").setValue(obj.isUnbreakable());
         value.getNode("toolType").setValue(obj.getToolLevel());
-        value.getNode("toolLevel").getInt(obj.getToolLevel());
-        value.getNode("attributes").setValue(obj.getAttributeList());
+        value.getNode("toolLevel").setValue(obj.getToolLevel());
+        final TypeToken<List<AttributeBean>> token = new TypeToken<List<AttributeBean>>() {};
+
+        value.getNode("attributes").setValue(token,obj.getAttributeList());
     }
 }

@@ -17,6 +17,7 @@ import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.entity.DamageEntityEvent;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
+import org.spongepowered.api.event.game.state.GameStoppedServerEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.text.Text;
@@ -156,6 +157,10 @@ public class Itemizer {
 		logger.info("ITEMIZER initialized.");
 	}
 
+	@Listener
+	public void onServerStop(GameStoppedServerEvent event){
+		Itemizer.getConfigurationHandler().saveItemConfig(configDir+"/itemizer/items.conf");
+	}
 	@Listener
 	public void onDamageEntityEvent(DamageEntityEvent event){
 

@@ -106,7 +106,7 @@ public class ConfigurationHandler {
      * @return Configuration ready to be used
      */
     public CommentedConfigurationNode loadConfiguration(String configName) throws Exception {
-        ConfigurationLoader<CommentedConfigurationNode> configLoader = HoconConfigurationLoader.builder().setPath(Paths.get(configName)).build();
+        ConfigurationLoader<CommentedConfigurationNode> configLoader = getConfigurationLoader(configName);
         CommentedConfigurationNode configNode = null;
         try {
             configNode = configLoader.load();
@@ -116,9 +116,26 @@ public class ConfigurationHandler {
         return configNode;
     }
 
+    private ConfigurationLoader<CommentedConfigurationNode> getConfigurationLoader(String filename){
+       return HoconConfigurationLoader.builder().setPath(Paths.get(filename)).build();
+    }
+
     public GlobalConfig readGlobalConfiguration(CommentedConfigurationNode configurationNode) {
         boolean DescriptionRewrite = configurationNode.getNode("DescriptionRewrite").getBoolean();
         return new GlobalConfig(DescriptionRewrite);
+    }
+
+    public void saveItemConfig(String filename){
+        ConfigurationLoader<CommentedConfigurationNode> configLoader = getConfigurationLoader(filename);
+        final TypeToken<List<ItemBean>> token = new TypeToken<List<ItemBean>>() {};
+        try {
+            CommentedConfigurationNode root =  configLoader.load();
+            Itemizer.getLogger().info(itemList.size()+ " items");
+                    root.getNode("items").setValue(token, itemList);
+            configLoader.save(root);
+        } catch (IOException | ObjectMappingException e) {
+            Itemizer.getLogger().error(e.toString());
+        }
     }
 
 
