@@ -4,25 +4,22 @@ import com.onaple.itemizer.Itemizer;
 import com.onaple.itemizer.data.beans.AttributeBean;
 import com.onaple.itemizer.data.beans.ItemBean;
 import com.onaple.itemizer.data.beans.MinerBean;
-import com.onaple.itemizer.data.handlers.ConfigurationHandler;
-import com.sun.jmx.remote.internal.ArrayQueue;
+
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.data.DataContainer;
 import org.spongepowered.api.data.DataQuery;
-import org.spongepowered.api.data.DataTransactionResult;
-import org.spongepowered.api.data.Transaction;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.manipulator.mutable.item.BreakableData;
 import org.spongepowered.api.data.manipulator.mutable.item.EnchantmentData;
-import org.spongepowered.api.data.manipulator.mutable.item.LoreData;
-import org.spongepowered.api.data.value.mutable.MutableBoundedValue;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.enchantment.Enchantment;
 import org.spongepowered.api.item.enchantment.EnchantmentType;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.*;
+import scala.collection.concurrent.KVNode;
+
 import javax.inject.Singleton;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -50,6 +47,7 @@ public class ItemBuilder {
                enchantItemStack(itemBean);
                grantMining(itemBean);
                setAttribute(itemBean);
+               setNbt(itemBean);
             if(Itemizer.getItemizer().getGlobalConfig().isDescriptionRewrite()) {
                 this.item = ItemStack.builder()
                         .fromContainer(item.toContainer().set(DataQuery.of("UnsafeData","HideFlags"),31))
@@ -256,6 +254,12 @@ public class ItemBuilder {
                 return " Attack speed";
             default:
                 return genericName;
+        }
+    }
+    private void setNbt(ItemBean itemBean){
+        for (Map.Entry<String,Object> nbt: itemBean.getNbtList().entrySet()
+             ) {
+            setCustomData(nbt.getKey(),nbt.getValue());
         }
     }
     private void setCustomData(String queryPath,Object value){

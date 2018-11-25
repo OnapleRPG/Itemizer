@@ -31,6 +31,12 @@ public class ItemSerializer implements TypeSerializer<ItemBean> {
                 enchants.put((String)entry.getKey(), ((ConfigurationNode) entry.getValue()).getNode("level").getInt());
             }
         }
+        Map<String,Object> nbtList = new HashMap<>();
+        for (Map.Entry<Object,?> entry :value.getNode("nbt").getChildrenMap().entrySet()) {
+            if (entry.getKey() instanceof String && entry.getValue() instanceof ConfigurationNode) {
+                nbtList.put((String)entry.getKey(),((ConfigurationNode) entry.getValue()).getValue());
+            }
+        }
         // IDs of the miners abilities
         List<String> miners = new ArrayList<>();
         List<? extends ConfigurationNode> minerList = value.getNode("miners").getChildrenList();
@@ -45,7 +51,7 @@ public class ItemSerializer implements TypeSerializer<ItemBean> {
         String toolType = value.getNode("toolType").getString();
         int toolLevel = value.getNode("toolLevel").getInt();
         List<AttributeBean> attributes = value.getNode("attributes").getList(TypeToken.of(AttributeBean.class));
-        ItemBean item = new ItemBean(id, itemType, name, lore, durability, unbreakable, enchants, miners, attributes);
+        ItemBean item = new ItemBean(id, itemType, name, lore, durability, unbreakable, enchants, miners, attributes,nbtList);
         item.setToolType(toolType);
         item.setToolLevel(toolLevel);
         return item;
@@ -59,7 +65,6 @@ public class ItemSerializer implements TypeSerializer<ItemBean> {
        value.getNode("lore").setValue(obj.getLore());
        value.getNode("durability").setValue(obj.getDurability());
        value.getNode("unbreakable").setValue(obj.isUnbreakable());
-
         value.getNode("toolType").setValue(obj.getToolLevel());
         value.getNode("toolLevel").getInt(obj.getToolLevel());
         value.getNode("attributes").setValue(obj.getAttributeList());

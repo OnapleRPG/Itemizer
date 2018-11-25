@@ -89,3 +89,10 @@ sonarqube {
         property "sonar.host.url", "https://sonarcloud.io/"
     }
 }
+allprojects {
+    gradle.projectsEvaluated {
+        tasks.withType(JavaCompile) {
+            options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+        }
+    }
+}

@@ -14,6 +14,7 @@ import com.onaple.itemizer.utils.MinerUtil;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
+import ninja.leaping.configurate.objectmapping.ObjectMapper;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import ninja.leaping.configurate.objectmapping.serialize.TypeSerializers;
 
@@ -119,4 +120,6 @@ public class ConfigurationHandler {
         boolean DescriptionRewrite = configurationNode.getNode("DescriptionRewrite").getBoolean();
         return new GlobalConfig(DescriptionRewrite);
     }
+
+
 }

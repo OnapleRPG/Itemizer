@@ -1,32 +1,23 @@
 package com.onaple.itemizer.utils;
 
-import com.google.common.base.Functions;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import com.onaple.itemizer.Itemizer;
 import com.onaple.itemizer.data.beans.AttributeBean;
 import com.onaple.itemizer.data.beans.ItemBean;
-import com.onaple.itemizer.data.handlers.ConfigurationHandler;
 import org.spongepowered.api.data.DataContainer;
 import org.spongepowered.api.data.DataQuery;
-import org.spongepowered.api.data.MemoryDataContainer;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.text.Text;
 
-import javax.inject.Singleton;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class ItemDeconstructor {
-
+public class ItemDeconstruct {
     private ItemBean itemRegistred;
     private ItemStack itemToRegister;
-    public ItemDeconstructor(ItemStack itemStack) {
-         this.itemToRegister = itemStack;
-         this.itemRegistred = new ItemBean();
-
-
+    public ItemDeconstruct(ItemStack itemStack) {
+        this.itemToRegister = itemStack;
+        this.itemRegistred = new ItemBean();
     }
 
     public ItemBean register(String itemId) {
@@ -54,7 +45,6 @@ public class ItemDeconstructor {
         getAttribute();
         return itemRegistred;
     }
-
     private void getAttribute() {
         List atributelist = new ArrayList<>();
         Optional<Object> atributeOptional = getCustomData(itemToRegister, "AttributeModifiers");
@@ -71,9 +61,10 @@ public class ItemDeconstructor {
                         AttributeBean attributeBean = new AttributeBean();
                         container.get(DataQuery.of("AttributeName"))
                                 .ifPresent(o1 ->{ if(o1 instanceof String){ attributeBean.setName((String) o1);}
-                        });
+                                });
                         container.get(DataQuery.of("Amount"))
-                                .ifPresent(o1 ->{ if(o1 instanceof Float){ attributeBean.setAmount((Float) o1);}
+                                .ifPresent(o1 ->{ if(o1 instanceof Float ){ attributeBean.setAmount((float) o1);}
+                                else if(o1 instanceof Integer){ attributeBean.setAmount(((Integer) o1).floatValue());}
                                 });
                         container.get(DataQuery.of("Operation"))
                                 .ifPresent(o1 ->{ if(o1 instanceof Integer){ attributeBean.setOperation((Integer) o1);}
@@ -84,7 +75,7 @@ public class ItemDeconstructor {
                         attributeBeanList.add(attributeBean);
                     }
 
-                     else {
+                    else {
                         Itemizer.getLogger().info(o.getClass().getName() + "is not instance of DataContainer");
 
                     }
@@ -98,6 +89,7 @@ public class ItemDeconstructor {
     }
     private Optional<Object> getCustomData(ItemStack target, String queryPath) {
         List<String> queryList ;
+
         if(queryPath.contains(".")) {
             String[] queries = queryPath.split(".");
             Itemizer.getLogger().info(("length" + queries.length));
@@ -112,6 +104,3 @@ public class ItemDeconstructor {
         return target.toContainer().get(dt);
     }
 }
-
-
-

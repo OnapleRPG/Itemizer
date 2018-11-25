@@ -3,7 +3,7 @@ package com.onaple.itemizer.commands;
 
 import com.onaple.itemizer.Itemizer;
 import com.onaple.itemizer.data.beans.ItemBean;
-import com.onaple.itemizer.utils.ItemDeconstructor;
+import com.onaple.itemizer.utils.ItemDeconstruct;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
@@ -31,7 +31,7 @@ public class RegisterCommand implements CommandExecutor {
             Optional<ItemStack> itemStackOptional = ((Player) src).getItemInHand(HandTypes.MAIN_HAND);
             if(itemStackOptional.isPresent()){
                 ItemStack itemToRegister = itemStackOptional.get();
-                ItemBean itemRegistred = new ItemDeconstructor(itemToRegister).register(itemId);
+                ItemBean itemRegistred = new ItemDeconstruct(itemToRegister).register(itemId);
                 Itemizer.getConfigurationHandler().getItemList().add(itemRegistred);
 
                 ((Player) src).sendMessage(Text.of( "Object succesfully added to the database with the index "

@@ -27,6 +27,17 @@ public class ItemBean {
     /** List of custom attribute of the item */
     private List<AttributeBean> attributeList = new ArrayList<>();
 
+    /** Map of all NBT*/
+    private Map<String,Object> nbtList = new HashMap<>();
+
+    public Map<String, Object> getNbtList() {
+        return nbtList;
+    }
+
+    public void setNbtList(Map<String, Object> nbtList) {
+        this.nbtList = nbtList;
+    }
+
     private String toolType;
 
     public ItemBean() {
@@ -54,7 +65,16 @@ public class ItemBean {
         this.type = type;
         this.attributeList = new ArrayList<>();
     }
-    public ItemBean(String id, String type, String name, String lore, int durability, boolean unbreakable, Map<String, Integer> enchants, List<String> miners, List<AttributeBean> attributeList) {
+    public ItemBean(String id,
+                    String type,
+                    String name,
+                    String lore,
+                    int durability,
+                    boolean unbreakable,
+                    Map<String, Integer> enchants,
+                    List<String> miners,
+                    List<AttributeBean> attributeList,
+                    Map<String,Object> nbtList) {
         this.id = id;
         this.type = type;
         this.name = name;
@@ -64,6 +84,7 @@ public class ItemBean {
         this.enchants = enchants;
         this.miners = miners;
         this.attributeList = attributeList;
+        this.nbtList = nbtList;
     }
 
     public int getDurability() {
