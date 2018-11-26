@@ -6,12 +6,16 @@ import com.onaple.itemizer.data.beans.ItemBean;
 import com.onaple.itemizer.data.beans.MinerBean;
 
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.block.BlockType;
+import org.spongepowered.api.block.BlockTypes;
+import org.spongepowered.api.block.trait.BlockTrait;
 import org.spongepowered.api.data.DataContainer;
 import org.spongepowered.api.data.DataQuery;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.manipulator.mutable.item.BreakableData;
 import org.spongepowered.api.data.manipulator.mutable.item.EnchantmentData;
+import org.spongepowered.api.data.type.SkullTypes;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.enchantment.Enchantment;
 import org.spongepowered.api.item.enchantment.EnchantmentType;
@@ -42,7 +46,13 @@ public class ItemBuilder {
     public Optional<ItemStack> buildItemStack(ItemBean itemBean) {
         Optional<ItemType> optionalType = Sponge.getRegistry().getType(ItemType.class, itemBean.getType());
         if (optionalType.isPresent()) {
-               this.item = ItemStack.builder().itemType(optionalType.get()).build();
+            Optional<BlockType> potentialBlock = optionalType.get().getBlock();
+            if (potentialBlock.isPresent()) {
+               BlockState blockState = addTraits(potentialBlock.get(),itemBean.getBlockTrait());
+             this.item = ItemStack.builder().fromBlockState(blockState).build();
+            } else {
+                this.item = ItemStack.builder().itemType(optionalType.get()).build();
+            }
                defineItemStack(itemBean);
                enchantItemStack(itemBean);
                grantMining(itemBean);
@@ -108,6 +118,7 @@ public class ItemBuilder {
             }
 
         }
+
         // Item attributes
         item.offer(Keys.UNBREAKABLE, itemBean.isUnbreakable());
         if(itemBean.isUnbreakable()) {
@@ -278,5 +289,24 @@ public class ItemBuilder {
         this.item = ItemStack.builder()
                 .fromContainer(item.toContainer().set(dt,value))
                 .build();
+    }
+    /**
+     * Add block traits to a future block
+     * @param blockType Type of the block
+     * @param traits Map containing all the traits
+     * @return BlockState of the future block
+     */
+    private static BlockState addTraits(BlockType blockType, Map<String, String> traits) {
+        BlockState blockState = blockType.getDefaultState();
+        for (Map.Entry<String, String> trait : traits.entrySet()) {
+            Optional<BlockTrait<?>> optTrait = blockState.getTrait(trait.getKey());
+            if (optTrait.isPresent()) {
+                Optional<BlockState> newBlockState = blockState.withTrait(optTrait.get(), trait.getValue());
+                if (newBlockState.isPresent()) {
+                    blockState = newBlockState.get();
+                }
+            }
+        }
+        return blockState;
     }
 }

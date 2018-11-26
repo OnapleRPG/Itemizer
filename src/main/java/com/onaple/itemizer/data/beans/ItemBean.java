@@ -30,6 +30,18 @@ public class ItemBean {
     /** Map of all NBT*/
     private Map<String,Object> nbtList = new HashMap<>();
 
+    public Map<String, String> getBlockTrait() {
+        return blockTrait;
+    }
+
+    public void setBlockTrait(Map<String, String> blockTrait) {
+        this.blockTrait = blockTrait;
+    }
+
+    /** Map of block traits**/
+    private Map<String,String> blockTrait = new HashMap<>();
+
+
     public Map<String, Object> getNbtList() {
         return nbtList;
     }

@@ -35,6 +35,7 @@ Permission : *itemizer.command.fetch*
 Permission : *itemizer.command.reload*
 * ``/analyse`` : give information about data stored in the item hold in main 
 Permission : *itemizer.command.analyse*
+* ``/register <newId>`` : register item into the config with his *name*,*lore*,*durability*,*enchants* and *attributes*
 
 ## Configuration files
 
@@ -68,6 +69,8 @@ For each item configured, the following data can be provided :
     1 for a additive percent,and 2 for a multiplicative percent.
     * The __slot__ is where the item must be for applying the attribute. It can be `head` ,`mainhand`
     `offhand`, `chest`, `legs` or `feet`. 
+    
+    You can also add any NBT you want to your item. with his path and his value.
 #### example
 ```
 items = [

@@ -61,14 +61,39 @@ public class ItemSerializer implements TypeSerializer<ItemBean> {
     public void serialize(TypeToken<?> type, ItemBean obj, ConfigurationNode value) throws ObjectMappingException {
        value.getNode("id").setValue(obj.getId());
        value.getNode("type").setValue(obj.getType());
-       value.getNode("name").setValue(obj.getName());
-       value.getNode("lore").setValue(obj.getLore());
+       if(obj.getName()!= null && !obj.getName().isEmpty()) {
+           value.getNode("name").setValue(obj.getName());
+       }
+       if(obj.getLore()!= null && !obj.getLore().isEmpty()) {
+           value.getNode("lore").setValue(obj.getLore());
+       }
+
        value.getNode("durability").setValue(obj.getDurability());
        value.getNode("unbreakable").setValue(obj.isUnbreakable());
-        value.getNode("toolType").setValue(obj.getToolLevel());
-        value.getNode("toolLevel").setValue(obj.getToolLevel());
+
+       if(obj.getToolLevel() != 0){
+           value.getNode("toolLevel").setValue(obj.getToolLevel());
+       }
+       if(obj.getToolType() != null) {
+           value.getNode("toolType").setValue(obj.getToolLevel());
+       }
+
+       if(!obj.getEnchants().isEmpty()){
+
+           Map<String,Map<String,Integer>> enchantList = new HashMap<>();
+           for (Map.Entry<String,Integer> entry :obj.getEnchants().entrySet()) {
+
+               Map<String,Integer> level = new HashMap<String,Integer>();
+              level.put("level",entry.getValue());
+                enchantList.put(entry.getKey(),level);
+           }
+           value.getNode("enchants").setValue(enchantList);
+       }
+
         final TypeToken<List<AttributeBean>> token = new TypeToken<List<AttributeBean>>() {};
 
-        value.getNode("attributes").setValue(token,obj.getAttributeList());
+       if(!obj.getAttributeList().isEmpty()) {
+           value.getNode("attributes").setValue(token, obj.getAttributeList());
+       }
     }
 }
