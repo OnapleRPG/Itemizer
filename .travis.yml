@@ -16,8 +16,10 @@ addons:
     organization: ylinor-github
   ssh_known_hosts: onaple.fr
 
+before_script:
+  - export DISPLAY=:99.0
 script:
-  - DISPLAY=:99 ./gradlew sonarqube --info
+  - ./gradlew sonarqube --info
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
