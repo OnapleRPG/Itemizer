@@ -17,7 +17,7 @@ addons:
   ssh_known_hosts: onaple.fr
 
 before_script:
-  - export DISPLAY=:99.0
+  - export DISPLAY=:0
 script:
   - ./gradlew sonarqube --info
 
