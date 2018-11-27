@@ -17,7 +17,8 @@ addons:
   ssh_known_hosts: onaple.fr
 
 script:
-  - ./gradlew sonarqube --debug -x test
+  - ./gradlew build --stacktrace -x test
+  - ./gradlew sonarqube --stacktrace -x test
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
