@@ -2,6 +2,7 @@ package com.onaple.itemizer.data.serializers;
 
 import com.google.common.reflect.TypeToken;
 import com.onaple.itemizer.data.beans.AttributeBean;
+import com.onaple.itemizer.data.beans.IItemBeanConfiguration;
 import com.onaple.itemizer.data.beans.ItemBean;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
@@ -47,11 +48,19 @@ public class ItemSerializer implements TypeSerializer<ItemBean> {
             }
         }
 
+        List<? extends ConfigurationNode> data = value.getNode("data").getChildrenList();
+        List<IItemBeanConfiguration> iItemBeanConfigurations = new ArrayList<>();
+        for (ConfigurationNode node : data) {
+            String key = node.getString("key");
+            ConfigurationNode data1 = node.getNode("data");
+
+            node.getValue("Value");
+        }
         // tool
         String toolType = value.getNode("toolType").getString();
         int toolLevel = value.getNode("toolLevel").getInt();
         List<AttributeBean> attributes = value.getNode("attributes").getList(TypeToken.of(AttributeBean.class));
-        ItemBean item = new ItemBean(id, itemType, name, lore, durability, unbreakable, enchants, miners, attributes,nbtList);
+        ItemBean item = new ItemBean(id, itemType, name, lore, durability, unbreakable, enchants, miners, attributes,nbtList, iItemBeanConfigurations);
         item.setToolType(toolType);
         item.setToolLevel(toolLevel);
         return item;
