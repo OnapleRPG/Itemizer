@@ -76,7 +76,7 @@ public class ItemBean {
                     Map<String, Integer> enchants,
                     List<String> miners,
                     List<AttributeBean> attributeList,
-                    Map<String, Object> nbtList, List<IItemBeanConfiguration> iItemBeanConfigurations) {
+                    Map<String, Object> nbtList, List<IItemBeanConfiguration> thirdpartyConfigs) {
         this.id = id;
         this.type = type;
         this.name = name;
@@ -87,6 +87,7 @@ public class ItemBean {
         this.miners = miners;
         this.attributeList = attributeList;
         this.nbtList = nbtList;
+        this.thirdpartyConfigs = thirdpartyConfigs;
     }
 
     public int getDurability() {
