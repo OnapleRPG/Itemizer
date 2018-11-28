@@ -27,6 +27,8 @@ public class ItemBean {
     /** List of custom attribute of the item */
     private List<AttributeBean> attributeList = new ArrayList<>();
 
+    private List<IItemBeanConfiguration> thirdpartyConfigs = new ArrayList<>();
+
     /** Map of all NBT*/
     private Map<String,Object> nbtList = new HashMap<>();
 
@@ -74,7 +76,7 @@ public class ItemBean {
                     Map<String, Integer> enchants,
                     List<String> miners,
                     List<AttributeBean> attributeList,
-                    Map<String,Object> nbtList) {
+                    Map<String, Object> nbtList, List<IItemBeanConfiguration> iItemBeanConfigurations) {
         this.id = id;
         this.type = type;
         this.name = name;
@@ -156,6 +158,14 @@ public class ItemBean {
 
     public void setAttributeList(List<AttributeBean> attributeList) {
         this.attributeList = attributeList;
+    }
+
+    public List<IItemBeanConfiguration> getThirdpartyConfigs() {
+        return thirdpartyConfigs;
+    }
+
+    public void setThirdpartyConfigs(List<IItemBeanConfiguration> thirdpartyConfigs) {
+        this.thirdpartyConfigs = thirdpartyConfigs;
     }
 
     @Override

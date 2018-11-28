@@ -18,7 +18,6 @@ import org.spongepowered.api.item.enchantment.EnchantmentType;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.*;
-import scala.collection.concurrent.KVNode;
 
 import javax.inject.Singleton;
 import java.util.*;

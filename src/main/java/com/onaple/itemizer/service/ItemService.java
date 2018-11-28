@@ -1,15 +1,24 @@
 package com.onaple.itemizer.service;
 
-import com.onaple.itemizer.Itemizer;
 import com.onaple.itemizer.data.access.ItemDAO;
 import com.onaple.itemizer.data.beans.ItemBean;
 import com.onaple.itemizer.utils.ItemBuilder;
 import com.onaple.itemizer.utils.PoolFetcher;
 import org.spongepowered.api.item.inventory.ItemStack;
 
-import java.util.Optional;
+import java.util.*;
 
 public class ItemService implements IItemService {
+
+    private Map<String, IItemBeanFactory> thirdPartyConfigs = new HashMap<>();
+
+    public void addThirdpartyConfig(IItemBeanFactory factory) {
+        thirdPartyConfigs.put(factory.getKeyId(), factory);
+    }
+
+    public IItemBeanFactory getFactoryByKeyId(String keyId) {
+        return thirdPartyConfigs.get(keyId);
+    }
 
     @Override
     public Optional<ItemStack> fetch(String id) {
