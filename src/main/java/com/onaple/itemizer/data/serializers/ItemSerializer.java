@@ -78,7 +78,7 @@ public class ItemSerializer implements TypeSerializer<ItemBean> {
         for (ConfigurationNode node : data) {
             String key = node.getString("key");
             Optional<IItemBeanFactory> optional = ItemService.INSTANCE.getFactoryByKeyId(key);
-            if (optional.isPresent()) {
+            if (!optional.isPresent()) {
                 throw new IllegalStateException("No plugin registered module having key " + key);
             }
             IItemBeanFactory iItemBeanFactory = optional.get();
