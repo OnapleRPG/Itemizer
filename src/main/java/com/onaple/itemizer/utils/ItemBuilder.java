@@ -1,10 +1,10 @@
 package com.onaple.itemizer.utils;
 
 import com.onaple.itemizer.Itemizer;
-import com.onaple.itemizer.data.beans.AttributeBean;
-import com.onaple.itemizer.data.beans.ItemBean;
-import com.onaple.itemizer.data.beans.MinerBean;
+import com.onaple.itemizer.data.beans.*;
 
+import com.onaple.itemizer.service.IItemService;
+import com.onaple.itemizer.service.ItemService;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.block.BlockType;
@@ -12,6 +12,7 @@ import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.block.trait.BlockTrait;
 import org.spongepowered.api.data.DataContainer;
 import org.spongepowered.api.data.DataQuery;
+import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.manipulator.mutable.item.BreakableData;
 import org.spongepowered.api.data.manipulator.mutable.item.EnchantmentData;
@@ -32,6 +33,8 @@ public class ItemBuilder {
 
     private ItemStack item;
     private List<Text> lore;
+    private Set<Key> usedKeys = new HashSet<>();
+
     public ItemBuilder() {
         lore = new ArrayList<>();
     }
@@ -57,6 +60,7 @@ public class ItemBuilder {
                grantMining(itemBean);
                setAttribute(itemBean);
                setNbt(itemBean);
+               setCustomDatamanipulators(itemBean);
             if(Itemizer.getItemizer().getGlobalConfig().isDescriptionRewrite()) {
                 this.item = ItemStack.builder()
                         .fromContainer(item.toContainer().set(DataQuery.of("UnsafeData","HideFlags"),31))
@@ -68,16 +72,32 @@ public class ItemBuilder {
                     for (String loreLine : itemBean.getLore().split("\n")) {
                         loreData.add(Text.builder(loreLine).color(TextColors.GRAY).build());
                     }
-                    item.offer(Keys.ITEM_LORE,loreData);
+
+                    Set<ItemLoreWriter> itemLoreAppenders = ItemService.INSTANCE.getItemLoreAppenders(usedKeys);
+                    for (ItemLoreWriter itemLoreAppender : itemLoreAppenders) {
+                        itemLoreAppender.apply(item, loreData);
+                    }
+                    item.offer(Keys.ITEM_LORE, loreData);
                 }
 
             }
+
             return Optional.ofNullable(this.item);
         } else {
             Itemizer.getLogger().warn("Unknown item type : " + itemBean.getType());
         }
         return Optional.empty();
     }
+
+    private void setCustomDatamanipulators(ItemBean itemBean) {
+        List<IItemBeanConfiguration> thirdpartyConfigs = itemBean.getThirdpartyConfigs();
+        for (IItemBeanConfiguration cfg : thirdpartyConfigs) {
+            cfg.apply(item);
+            usedKeys.add(cfg.getKey());
+        }
+    }
+
+
     /**
      * Build an itemstack from this name
      * @param name Data of the item to build
