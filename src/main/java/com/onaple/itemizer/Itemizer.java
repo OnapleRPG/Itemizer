@@ -2,6 +2,7 @@ package com.onaple.itemizer;
 import com.onaple.itemizer.commands.*;
 
 import com.onaple.itemizer.data.handlers.ConfigurationHandler;
+import com.onaple.itemizer.events.ItemizerPreLoadEvent;
 import com.onaple.itemizer.service.ItemService;
 import com.onaple.itemizer.service.IItemService;
 import com.onaple.itemizer.utils.CraftRegister;
@@ -74,6 +75,7 @@ public class Itemizer {
 	public void preInit(GamePreInitializationEvent event) {
 		logger.info("Initalisation");
 		loadGlobalConfig();
+		Sponge.getEventManager().post(new ItemizerPreLoadEvent());
 		try {
 			loadItems();
 		}

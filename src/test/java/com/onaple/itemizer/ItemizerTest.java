@@ -71,4 +71,5 @@ public class ItemizerTest extends BaseTest {
             Assert.assertTrue(this.testUtils.getThePlayer().getInventory().contains(item.get()));
         });
     }
+
 }

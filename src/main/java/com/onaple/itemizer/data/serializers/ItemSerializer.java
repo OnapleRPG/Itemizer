@@ -2,15 +2,17 @@ package com.onaple.itemizer.data.serializers;
 
 import com.google.common.reflect.TypeToken;
 import com.onaple.itemizer.data.beans.AttributeBean;
+import com.onaple.itemizer.data.beans.IItemBeanConfiguration;
 import com.onaple.itemizer.data.beans.ItemBean;
+import com.onaple.itemizer.service.IItemBeanFactory;
+import com.onaple.itemizer.service.IItemService;
+import com.onaple.itemizer.service.ItemService;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import ninja.leaping.configurate.objectmapping.serialize.TypeSerializer;
+import org.spongepowered.api.Sponge;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ItemSerializer implements TypeSerializer<ItemBean> {
 
@@ -47,11 +49,48 @@ public class ItemSerializer implements TypeSerializer<ItemBean> {
             }
         }
 
+        /**
+         * items = [
+         *   {
+         *     id: 1,
+         *     type: "minecraft:stone_axe",
+         *     lore: "This axe is not really efficient...\nHowever it is sharp on your finger.",
+         *     unbreakable: true,
+         *     enchants {
+         *       efficiency {level = 3}
+         *     },
+         *     miners: [
+         *       2
+         *     ]
+         *     plugindata: [
+         *         {
+         *            key: factoryId
+         *            data: {
+         *                (data to be handled within the factory implementation)
+         *            }
+         *          }
+         *     ]
+         *   },
+         */
+        List<? extends ConfigurationNode> data = value.getNode("plugin-modules").getChildrenList();
+        List<IItemBeanConfiguration> iItemBeanConfigurations = new ArrayList<>();
+
+        for (ConfigurationNode node : data) {
+            String key = node.getString("key");
+            Optional<IItemBeanFactory> optional = ItemService.INSTANCE.getFactoryByKeyId(key);
+            if (!optional.isPresent()) {
+                throw new IllegalStateException("No plugin registered module having key " + key);
+            }
+            IItemBeanFactory iItemBeanFactory = optional.get();
+            ConfigurationNode data4fct = node.getNode("data");
+            IItemBeanConfiguration build = iItemBeanFactory.build(data4fct);
+            iItemBeanConfigurations.add(build);
+        }
         // tool
         String toolType = value.getNode("toolType").getString();
         int toolLevel = value.getNode("toolLevel").getInt();
         List<AttributeBean> attributes = value.getNode("attributes").getList(TypeToken.of(AttributeBean.class));
-        ItemBean item = new ItemBean(id, itemType, name, lore, durability, unbreakable, enchants, miners, attributes,nbtList);
+        ItemBean item = new ItemBean(id, itemType, name, lore, durability, unbreakable, enchants, miners, attributes,nbtList, iItemBeanConfigurations);
         item.setToolType(toolType);
         item.setToolLevel(toolLevel);
         return item;
