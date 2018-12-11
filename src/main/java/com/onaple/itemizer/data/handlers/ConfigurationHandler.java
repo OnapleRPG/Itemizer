@@ -144,7 +144,8 @@ public class ConfigurationHandler {
             }
         });
 
-        return new GlobalConfig(DescriptionRewrite,hiddenFlags,enchantMap,modifierMap);
+        String unbreakable = configurationNode.getNode("UnbreakableRewrite").getString();
+        return new GlobalConfig(DescriptionRewrite,hiddenFlags,enchantMap,modifierMap,unbreakable);
     }
 
     public void saveItemConfig(String filename){

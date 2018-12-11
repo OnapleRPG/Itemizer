@@ -58,6 +58,7 @@ public class GlobalConfig {
         }
 
         this.unbreakableRewrite = unbreakableRewrite;
+
         this.hiddenFlagsValue = flagsValue;
         this.hiddenFlags = flagToHide;
         this.enchantRewrite = enchantRewrite;
