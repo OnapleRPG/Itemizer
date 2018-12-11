@@ -17,12 +17,14 @@ import ninja.leaping.configurate.loader.ConfigurationLoader;
 import ninja.leaping.configurate.objectmapping.ObjectMapper;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import ninja.leaping.configurate.objectmapping.serialize.TypeSerializers;
+import org.spongepowered.api.Sponge;
+import org.spongepowered.api.item.enchantment.EnchantmentType;
 
 import javax.inject.Singleton;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+
 @Singleton
 public class ConfigurationHandler {
     public ConfigurationHandler() {}
@@ -122,7 +124,27 @@ public class ConfigurationHandler {
 
     public GlobalConfig readGlobalConfiguration(CommentedConfigurationNode configurationNode) {
         boolean DescriptionRewrite = configurationNode.getNode("DescriptionRewrite").getBoolean();
-        return new GlobalConfig(DescriptionRewrite);
+        Map<String,Boolean> hiddenFlags = new HashMap<>();
+        configurationNode.getNode("RewriteParts").getChildrenMap().forEach((o, o2) -> {
+            if(o instanceof String  && o2.getValue() instanceof Boolean){
+                hiddenFlags.put((String) o,(Boolean) o2.getValue());
+            }
+        });
+        Map<EnchantmentType,String> enchantMap = new HashMap<>();
+        configurationNode.getNode("EnchantRewrite").getChildrenMap().forEach((o, o2) -> {
+            if(o instanceof String  && o2.getValue() instanceof String){
+                Optional<EnchantmentType> enchant =  Sponge.getRegistry().getType(EnchantmentType.class,(String) o);
+                enchant.ifPresent(enchantmentType ->   enchantMap.put(enchantmentType,(String) o2.getValue()));
+            }
+        });
+        Map<String,String> modifierMap = new HashMap<>();
+        configurationNode.getNode("ModifierRewrite").getChildrenMap().forEach((o, o2) -> {
+            if(o instanceof String  && o2.getValue() instanceof String){
+                modifierMap.put((String) o,(String) o2.getValue());
+            }
+        });
+
+        return new GlobalConfig(DescriptionRewrite,hiddenFlags,enchantMap,modifierMap);
     }
 
     public void saveItemConfig(String filename){

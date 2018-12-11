@@ -180,6 +180,7 @@ public class Itemizer {
 		} catch (Exception e) {
 			logger.error(e.toString());
 		}
+
 	}
 
 	public int loadItems() throws Exception {

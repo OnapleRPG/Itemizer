@@ -1,5 +1,6 @@
 package com.onaple.itemizer.utils;
 
+import com.onaple.itemizer.GlobalConfig;
 import com.onaple.itemizer.Itemizer;
 import com.onaple.itemizer.data.beans.*;
 
@@ -31,6 +32,7 @@ import java.util.stream.Collectors;
 @Singleton
 public class ItemBuilder {
 
+    private GlobalConfig config = Itemizer.getItemizer().getGlobalConfig();
     private ItemStack item;
     private List<Text> lore;
     private Set<Key> usedKeys = new HashSet<>();
@@ -55,18 +57,18 @@ public class ItemBuilder {
             } else {
                 this.item = ItemStack.builder().itemType(optionalType.get()).build();
             }
-               defineItemStack(itemBean);
-               enchantItemStack(itemBean);
-               grantMining(itemBean);
-               setAttribute(itemBean);
+               defineItemStack(itemBean,config.getHiddenFlags().get("Unbreakable"));
+               enchantItemStack(itemBean,config.getHiddenFlags().get("Enchantments"));
+               grantMining(itemBean,config.getHiddenFlags().get("CanDestroy"));
+               setAttribute(itemBean,config.getHiddenFlags().get("Attributes_modifiers"));
                setNbt(itemBean);
                setCustomDatamanipulators(itemBean);
-            if(Itemizer.getItemizer().getGlobalConfig().isDescriptionRewrite()) {
+            Itemizer.getLogger().info("Hide flag value : "+config.getHiddenFlagsValue());
                 this.item = ItemStack.builder()
-                        .fromContainer(item.toContainer().set(DataQuery.of("UnsafeData","HideFlags"),31))
+                        .fromContainer(item.toContainer().set(DataQuery.of("UnsafeData","HideFlags"),config.getHiddenFlagsValue()))
                         .build();
                 addLore();
-            } else{
+           /* } else{
                 if (itemBean.getLore() != null) {
                     List<Text> loreData = new ArrayList<>();
                     for (String loreLine : itemBean.getLore().split("\n")) {
@@ -80,7 +82,7 @@ public class ItemBuilder {
                     item.offer(Keys.ITEM_LORE, loreData);
                 }
 
-            }
+            }*/
 
             return Optional.ofNullable(this.item);
         } else {
@@ -119,7 +121,7 @@ public class ItemBuilder {
      * @param itemBean Data of the item to define
      * @return ItemStack edited
      */
-    private void defineItemStack(ItemBean itemBean) {
+    private void defineItemStack(ItemBean itemBean,boolean rewrite) {
         //item Id
         if (itemBean.getId() != null && !itemBean.getId().isEmpty()) {
             setCustomData("id",itemBean.getId());
@@ -141,7 +143,10 @@ public class ItemBuilder {
         // Item attributes
         item.offer(Keys.UNBREAKABLE, itemBean.isUnbreakable());
         if(itemBean.isUnbreakable()) {
-            lore.add(Text.builder("Unbreakable").color(TextColors.DARK_GRAY).style(TextStyles.ITALIC).build());
+            if(rewrite && config.getUnbreakableRewrite() != null) {
+
+                lore.add(Text.builder(config.getUnbreakableRewrite()).color(TextColors.DARK_GRAY).style(TextStyles.ITALIC).build());
+            }
         }
         if(itemBean.getDurability() > 0){
             item.offer(Keys.ITEM_DURABILITY, itemBean.getDurability());
@@ -161,7 +166,7 @@ public class ItemBuilder {
      * @param itemBean Data of the item to enchant
      * @return Enchanted (or not) ItemStack
      */
-    private void enchantItemStack(ItemBean itemBean) {
+    private void enchantItemStack(ItemBean itemBean, boolean rewrite) {
         Map<String, Integer> enchants = itemBean.getEnchants();
         if (!enchants.isEmpty()) {
             EnchantmentData enchantmentData = item.getOrCreate(EnchantmentData.class).get();
@@ -171,16 +176,23 @@ public class ItemBuilder {
                     enchantmentData.set(enchantmentData.enchantments().add(Enchantment.builder().
                             type(optionalEnchant.get()).
                             level(enchant.getValue()).build()));
-                    lore.add(Text
-                            .builder(enchant.getKey() + " " + enchant.getValue())
-                            .style(TextStyles.ITALIC)
-                            .color(TextColors.DARK_PURPLE)
-                    .build());
+                    if(rewrite) {
+                        if(config.getEnchantRewrite().size()>0) {
+                            Itemizer.getLogger().info(config.getEnchantRewrite().get( optionalEnchant.get()));
+                            lore.add(Text
+                                    .builder(config.getEnchantRewrite().get( optionalEnchant.get())+ " " + enchant.getValue())
+                                    .style(TextStyles.ITALIC)
+                                    .color(TextColors.DARK_PURPLE)
+                                    .build());
+                        }
+                    }
                 } else {
                     Itemizer.getLogger().warn("Unknown enchant : " + enchant.getKey());
                 }
             }
-            item.offer(enchantmentData);
+
+                item.offer(enchantmentData);
+
         }
     }
 
@@ -189,7 +201,7 @@ public class ItemBuilder {
      * @param itemBean Data of the item
      * @return Item with mining powers
      */
-    private void grantMining(ItemBean itemBean) {
+    private void grantMining(ItemBean itemBean,boolean rewrite) {
         BreakableData breakableData = item.getOrCreate(BreakableData.class).get();
         List<MinerBean> minerList = Itemizer.getConfigurationHandler().getMinerList();
         List<String> minerNames = new ArrayList<>();
@@ -207,8 +219,9 @@ public class ItemBuilder {
                     }
                 }
             }
-
-            lore.add(miningText.build());
+            if(rewrite) {
+                lore.add(miningText.build());
+            }
         }
         item.offer(breakableData);
     }
@@ -218,7 +231,7 @@ public class ItemBuilder {
      * @param itemBean Data of the item
      * @return Item with attributes set
      */
-    private void setAttribute(ItemBean itemBean){
+    private void setAttribute(ItemBean itemBean,Boolean rewrite){
         List<DataContainer> containers = new ArrayList();
         Text.Builder attributeTextbuilder = Text.builder();
 
@@ -227,22 +240,27 @@ public class ItemBuilder {
             containers.add(dc);
             Text.Builder attributText;
             if(att.getOperation()==0){
-                attributText = Text.builder(String.format("%.1f", att.getAmount()));
+                attributText = Text.builder(String.format("%.1f", att.getAmount())+" ");
 
             } else if(att.getOperation()==1) {
 
-                attributText =Text.builder( String.format("%.1f", att.getAmount()*100)+ "%");
+                attributText =Text.builder( String.format("%.1f", att.getAmount()*100)+ "% ");
             } else {
-                attributText =Text.builder(String.format("%.1f", att.getAmount()*100)+ "%");
+                attributText =Text.builder(String.format("%.1f", att.getAmount()*100)+ "% ");
             }
-
-            attributText.append(Text.builder(displayAtribute(att.getName())).build());
+            String name = config.getModifierRewrite().get(att.getName());
+            if(name == null){
+                name = att.getName();
+            }
+            attributText.append(Text.builder(name).build());
             if(att.getAmount()>0){
                 attributText.color(TextColors.GREEN);
             } else {
                 attributText.color(TextColors.RED);
             }
-            lore.add(attributText.build());
+            if(rewrite) {
+                lore.add(attributText.build());
+            }
         }
 
         DataContainer container = this.item.toContainer();
@@ -272,20 +290,6 @@ public class ItemBuilder {
         item.offer(Keys.ITEM_LORE,lore);
     }
 
-    private String displayAtribute(String genericName){
-        switch (genericName){
-            case "generic.attackDamage":
-                return " Damage";
-            case "generic.maxHealth":
-                return " Life";
-            case "generic.movementSpeed":
-                return " Speed";
-            case "generic.attackSpeed":
-                return " Attack speed";
-            default:
-                return genericName;
-        }
-    }
     private void setNbt(ItemBean itemBean){
         for (Map.Entry<String,Object> nbt: itemBean.getNbtList().entrySet()
              ) {
