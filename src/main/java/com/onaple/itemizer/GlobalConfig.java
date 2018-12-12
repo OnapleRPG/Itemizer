@@ -2,6 +2,7 @@ package com.onaple.itemizer;
 
 import org.spongepowered.api.item.enchantment.Enchantment;
 import org.spongepowered.api.item.enchantment.EnchantmentType;
+import org.spongepowered.api.text.format.TextColor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,6 +24,8 @@ public class GlobalConfig {
     private Map<String, String> modifierRewrite;
     private String unbreakableRewrite;
 
+    private String CanMineRewrite;
+
     private final HashMap flagsMap = new HashMap<flags, Integer>() {{
         put(flags.Enchantments, 1);
         put(flags.Attributes_modifiers, 2);
@@ -42,11 +45,15 @@ public class GlobalConfig {
         return modifierRewrite;
     }
 
+    private Map<String ,TextColor> colorMap;
+
     public GlobalConfig(boolean descriptionRewrite,
                         Map<String, Boolean> flagToHide,
                         Map<EnchantmentType, String> enchantRewrite,
                         Map<String, String> modifierRewrite,
-                        String unbreakableRewrite) {
+                        String unbreakableRewrite,
+                        String CanMineRewrite,
+                        Map<String,TextColor> colors ) {
 
         this.descriptionRewrite = descriptionRewrite;
         int flagsValue = 0;
@@ -57,7 +64,9 @@ public class GlobalConfig {
             }
         }
 
+
         this.unbreakableRewrite = unbreakableRewrite;
+        this.CanMineRewrite = CanMineRewrite;
 
         this.hiddenFlagsValue = flagsValue;
         this.hiddenFlags = flagToHide;
@@ -65,6 +74,17 @@ public class GlobalConfig {
         this.modifierRewrite = modifierRewrite;
 
 
+        this.colorMap = colors;
+
+
+    }
+
+    public Map<String, TextColor> getColorMap() {
+        return colorMap;
+    }
+
+    public String getCanMineRewrite() {
+        return CanMineRewrite;
     }
 
     public String getUnbreakableRewrite() {

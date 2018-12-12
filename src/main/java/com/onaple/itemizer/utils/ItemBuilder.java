@@ -135,7 +135,7 @@ public class ItemBuilder {
         if (itemBean.getLore() != null) {
 
             for (String loreLine : itemBean.getLore().split("\n")) {
-                lore.add(Text.builder(loreLine).color(TextColors.GRAY).build());
+                lore.add(Text.builder(loreLine).color(config.getColorMap().get("Lore")).build());
             }
 
         }
@@ -145,7 +145,7 @@ public class ItemBuilder {
         if(itemBean.isUnbreakable()) {
             if(rewrite && config.getUnbreakableRewrite() != null) {
 
-                lore.add(Text.builder(config.getUnbreakableRewrite()).color(TextColors.DARK_GRAY).style(TextStyles.ITALIC).build());
+                lore.add(Text.builder(config.getUnbreakableRewrite()).color(config.getColorMap().get("Unbreakable")).style(TextStyles.ITALIC).build());
             }
         }
         if(itemBean.getDurability() > 0){
@@ -182,7 +182,7 @@ public class ItemBuilder {
                             lore.add(Text
                                     .builder(config.getEnchantRewrite().get( optionalEnchant.get())+ " " + enchant.getValue())
                                     .style(TextStyles.ITALIC)
-                                    .color(TextColors.DARK_PURPLE)
+                                    .color(config.getColorMap().get("Enchantments"))
                                     .build());
                         }
                     }
@@ -206,12 +206,14 @@ public class ItemBuilder {
         List<MinerBean> minerList = Itemizer.getConfigurationHandler().getMinerList();
         List<String> minerNames = new ArrayList<>();
         if(!itemBean.getMiners().isEmpty()) {
-            Text.Builder miningText = Text.builder("Can mine :").color(TextColors.BLUE).style(TextStyles.UNDERLINE);
+            Text.Builder miningText = Text.builder(config.getCanMineRewrite().isEmpty()? "":config.getCanMineRewrite() )
+                    .color(config.getColorMap().get("Can_destroy_mention"))
+                    .style(TextStyles.UNDERLINE);
             for (String minerId : itemBean.getMiners()) {
                 for (MinerBean minerBean : minerList) {
                     if (minerBean.getId().equals(minerId)) {
                         minerBean.getMineTypes().forEach((blockName, blockType) -> {
-                            miningText.append(Text.builder(" " + blockName + " ").color(TextColors.BLUE).style(TextStyles.RESET).build());
+                            miningText.append(Text.builder(" " + blockName + " ").color(config.getColorMap().get("Can_destroy")).style(TextStyles.RESET).build());
                             Optional<BlockType> optionalBlockType = Sponge.getRegistry().getType(BlockType.class, blockType);
                             optionalBlockType.ifPresent(blockType1 -> breakableData.set(breakableData.breakable().add(blockType1)));
                         });
@@ -220,7 +222,10 @@ public class ItemBuilder {
                 }
             }
             if(rewrite) {
-                lore.add(miningText.build());
+                if(! config.getCanMineRewrite().isEmpty() && config.getCanMineRewrite() != null ) {
+                    lore.add(miningText.build());
+                }
+
             }
         }
         item.offer(breakableData);
@@ -254,9 +259,9 @@ public class ItemBuilder {
             }
             attributText.append(Text.builder(name).build());
             if(att.getAmount()>0){
-                attributText.color(TextColors.GREEN);
+                attributText.color(config.getColorMap().get("Attributes_modifiers_positive"));
             } else {
-                attributText.color(TextColors.RED);
+                attributText.color(config.getColorMap().get("Attributes_modifiers_negavite"));
             }
             if(rewrite) {
                 lore.add(attributText.build());

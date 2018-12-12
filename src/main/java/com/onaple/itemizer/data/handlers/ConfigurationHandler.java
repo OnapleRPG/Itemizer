@@ -18,7 +18,10 @@ import ninja.leaping.configurate.objectmapping.ObjectMapper;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import ninja.leaping.configurate.objectmapping.serialize.TypeSerializers;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.entity.Item;
 import org.spongepowered.api.item.enchantment.EnchantmentType;
+import org.spongepowered.api.text.format.TextColor;
+import org.spongepowered.api.text.format.TextColors;
 
 import javax.inject.Singleton;
 import java.io.IOException;
@@ -145,7 +148,25 @@ public class ConfigurationHandler {
         });
 
         String unbreakable = configurationNode.getNode("UnbreakableRewrite").getString();
-        return new GlobalConfig(DescriptionRewrite,hiddenFlags,enchantMap,modifierMap,unbreakable);
+
+        String canMineRewrite = configurationNode.getNode("CanMineRewrite").getString();
+
+        Map<String,TextColor> colors = new HashMap<>();
+
+        configurationNode.getNode("DefaultColor").getChildrenMap().forEach((o, o2) -> {
+            if(o instanceof String  && o2.getValue() instanceof String){
+                Optional<TextColor> colorOptional = Sponge.getRegistry().getType(TextColor.class, o2.getString());
+
+                colorOptional.ifPresent(textColor -> {
+                    Itemizer.getLogger().info(textColor.toString());
+                    colors.put((String)o,textColor);
+                });
+
+            }
+        });
+
+
+        return new GlobalConfig(DescriptionRewrite,hiddenFlags,enchantMap,modifierMap,unbreakable,canMineRewrite,colors);
     }
 
     public void saveItemConfig(String filename){
