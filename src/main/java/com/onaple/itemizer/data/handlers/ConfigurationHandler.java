@@ -126,7 +126,7 @@ public class ConfigurationHandler {
     }
 
     public GlobalConfig readGlobalConfiguration(CommentedConfigurationNode configurationNode) {
-        boolean DescriptionRewrite = configurationNode.getNode("DescriptionRewrite").getBoolean();
+    /*    boolean DescriptionRewrite = configurationNode.getNode("DescriptionRewrite").getBoolean();
         Map<String,Boolean> hiddenFlags = new HashMap<>();
         configurationNode.getNode("RewriteParts").getChildrenMap().forEach((o, o2) -> {
             if(o instanceof String  && o2.getValue() instanceof Boolean){
@@ -163,10 +163,28 @@ public class ConfigurationHandler {
                 });
 
             }
-        });
+        });*/
 
+        TypeSerializers.getDefaultSerializers().registerType(TypeToken.of(GlobalConfig.class), new GlobalConfigurationSerializer());
+        try {
+            return configurationNode.getValue(TypeToken.of(GlobalConfig.class));
+        } catch (ObjectMappingException e) {
+            Itemizer.getLogger().error(e.toString());
+        }
+        return null;
+    }
 
-        return new GlobalConfig(DescriptionRewrite,hiddenFlags,enchantMap,modifierMap,unbreakable,canMineRewrite,colors);
+    public void saveGlobalConfiguration(String filename){
+        ConfigurationLoader<CommentedConfigurationNode> config = getConfigurationLoader(filename);
+        final TypeToken<GlobalConfig> token = new TypeToken<GlobalConfig>() {};
+        try {
+
+                  CommentedConfigurationNode node = config.load();
+                  node.setValue(token,Itemizer.getItemizer().getGlobalConfig());
+                  config.save(node);
+        } catch (Exception e) {
+            Itemizer.getLogger().error(e.toString());
+        }
     }
 
     public void saveItemConfig(String filename){

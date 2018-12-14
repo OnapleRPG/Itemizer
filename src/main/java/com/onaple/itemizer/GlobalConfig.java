@@ -9,6 +9,46 @@ import java.util.Map;
 
 public class GlobalConfig {
 
+    public GlobalConfig() {
+
+    }
+
+    public void setDescriptionRewrite(boolean descriptionRewrite) {
+        this.descriptionRewrite = descriptionRewrite;
+    }
+
+    public void setHiddenFlagsValue(int hiddenFlagsValue) {
+        this.hiddenFlagsValue = hiddenFlagsValue;
+    }
+
+    public Map<String, String> getRewriteChoice() {
+        return rewriteChoice;
+    }
+
+    public void setEnchantRewrite(Map<EnchantmentType, String> enchantRewrite) {
+        this.enchantRewrite = enchantRewrite;
+    }
+
+    public void setModifierRewrite(Map<String, String> modifierRewrite) {
+        this.modifierRewrite = modifierRewrite;
+    }
+
+    public void setUnbreakableRewrite(String unbreakableRewrite) {
+        this.unbreakableRewrite = unbreakableRewrite;
+    }
+
+    public void setCanMineRewrite(String canMineRewrite) {
+        CanMineRewrite = canMineRewrite;
+    }
+
+    public void setHiddenFlags(Map<String, Boolean> hiddenFlags) {
+        this.hiddenFlags = hiddenFlags;
+    }
+
+    public void setColorMap(Map<RewriteFlagColorList, TextColor> colorMap) {
+        this.colorMap = colorMap;
+    }
+
     private enum flags {
         Enchantments,
         Attributes_modifiers,
@@ -17,6 +57,21 @@ public class GlobalConfig {
         CanPlaceOn,
         Others
     }
+    public enum RewriteFlagColorList{
+        attributesModifiersNegavite,
+        attributesModifiersPositive,
+        canDestroy,
+        canPlaceOn,
+        canDestroyMention,
+        enchantments,
+        lore,
+        unbreakable,
+    }
+    private Map<String,String> rewriteChoice = new HashMap<String,String>(){{
+        put("unbreakable","UnbreakableRewrite");
+        put("canMine","CanMineRewrite");
+    }};
+
 
     private boolean descriptionRewrite;
     private int hiddenFlagsValue;
@@ -45,15 +100,14 @@ public class GlobalConfig {
         return modifierRewrite;
     }
 
-    private Map<String ,TextColor> colorMap;
+    private Map<RewriteFlagColorList, TextColor> colorMap;
 
-    public GlobalConfig(boolean descriptionRewrite,
+    public GlobalConfig(  String unbreakableRewrite,
+                          String CanMineRewrite,
                         Map<String, Boolean> flagToHide,
                         Map<EnchantmentType, String> enchantRewrite,
                         Map<String, String> modifierRewrite,
-                        String unbreakableRewrite,
-                        String CanMineRewrite,
-                        Map<String,TextColor> colors ) {
+                        Map<RewriteFlagColorList, TextColor> colors ) {
 
         this.descriptionRewrite = descriptionRewrite;
         int flagsValue = 0;
@@ -79,7 +133,7 @@ public class GlobalConfig {
 
     }
 
-    public Map<String, TextColor> getColorMap() {
+    public Map<RewriteFlagColorList, TextColor> getColorMap() {
         return colorMap;
     }
 
@@ -99,8 +153,5 @@ public class GlobalConfig {
         return hiddenFlags;
     }
 
-    public boolean isDescriptionRewrite() {
-        return descriptionRewrite;
-    }
 
 }
