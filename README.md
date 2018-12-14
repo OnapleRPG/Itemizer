@@ -43,8 +43,16 @@ All configuration files use HOCON format. When you first install the plugin a de
 
 ### Global  configuration
 In the global configuration file you can change plugin settings :
-* __DescriptionRewrite__ set the mode of the item's description, if it set to ``false`` it's the Minecraft's default flags.
-But if it's ``true`` flags are rewritten in the item lore and hidden.
+* __RewriteParts__ instead of using default Minecraft notation for _enchantments_, _modifiers_ , _undreakable_ , _canMine_ .
+You can chose to rewrite them manually. set `False` to let default look or `True` to rewrite It.
+* __DefaulColor__ if you decide to rewrite a part you can chose the color of each elements.
+* __EnchantRewrite__ you can change the name of enchantment. if you let an enchantment blank, it will not appear.
+* __ModifierRewrite__ (AttributeModifier like `generic.attackDamage`) you can rewrite his name.
+* __CanMineRewrite__ and __UnbreakableRewrite__ set the text of your choice for it.
+
+You can chose to edit the config file or use `/configure <Type> <Key> [value]` command. 
+
+__Be careful the command override the file change__
 
 
 ### Item creation
