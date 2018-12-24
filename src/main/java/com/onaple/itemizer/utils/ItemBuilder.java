@@ -2,6 +2,7 @@ package com.onaple.itemizer.utils;
 
 import com.onaple.itemizer.GlobalConfig;
 import com.onaple.itemizer.Itemizer;
+import com.onaple.itemizer.data.OnaKeys;
 import com.onaple.itemizer.data.beans.*;
 
 import com.onaple.itemizer.service.IItemService;
@@ -64,9 +65,11 @@ public class ItemBuilder {
                setNbt(itemBean);
                setCustomDatamanipulators(itemBean);
             Itemizer.getLogger().info("Hide flag value : "+config.getHiddenFlagsValue());
-                this.item = ItemStack.builder()
+            this.item.offer(OnaKeys.HIDDEN_FLAGS,config.getHiddenFlagsValue());
+         //   Itemizer.getLogger().info("flagFrom manipulator : " + this.item.get(OnaKeys.HIDDEN_FLAGS));
+               /* this.item = ItemStack.builder()
                         .fromContainer(item.toContainer().set(DataQuery.of("UnsafeData","HideFlags"),config.getHiddenFlagsValue()))
-                        .build();
+                        .build();*/
                 addLore();
            /* } else{
                 if (itemBean.getLore() != null) {
