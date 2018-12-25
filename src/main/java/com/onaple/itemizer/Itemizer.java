@@ -6,6 +6,8 @@ import com.onaple.itemizer.commands.globalConfiguration.ConfigureColorCommand;
 import com.onaple.itemizer.commands.globalConfiguration.ConfigureEnchantCommand;
 import com.onaple.itemizer.commands.globalConfiguration.ConfigureModifierCommand;
 import com.onaple.itemizer.commands.globalConfiguration.ConfigureRewriteCommand;
+import com.onaple.itemizer.data.access.ItemDAO;
+import com.onaple.itemizer.data.beans.ItemBean;
 import com.onaple.itemizer.data.handlers.ConfigurationHandler;
 import com.onaple.itemizer.events.ItemizerPreLoadEvent;
 import com.onaple.itemizer.service.ItemService;
@@ -73,6 +75,18 @@ public class Itemizer {
     @Inject
     private CraftRegister craftRegister;
 
+
+    private  static  ItemDAO itemDAO;
+    @Inject
+    private void setItemDAO(ItemDAO itemDAO) {
+        this.itemDAO = itemDAO;
+    }
+
+    public static ItemDAO getItemDAO(){
+        return itemDAO;
+    }
+
+
     private static ConfigurationHandler configurationHandler;
 
     @Inject
@@ -129,7 +143,7 @@ public class Itemizer {
 
         CommandSpec retrieve = CommandSpec.builder()
                 .description(Text.of("Retrieve an item from a configuration file with its id."))
-                .arguments(GenericArguments.onlyOne(GenericArguments.string(Text.of("id"))),
+                .arguments(GenericArguments.onlyOne(GenericArguments.choices(Text.of("id"),itemDAO.getMap())),
                         GenericArguments.optional(GenericArguments.player(Text.of("player")))
                 )
                 .permission("itemizer.command.retrieve")
@@ -168,8 +182,8 @@ public class Itemizer {
         CommandSpec rewrite = CommandSpec.builder()
                 .description(Text.of("Update global configuration."))
                 .arguments(
-                        GenericArguments.onlyOne(GenericArguments.choices(Text.of("Key"),
-                                globalConfig.getRewriteChoice()::keySet, globalConfig.getRewriteChoice()::get)),
+                        GenericArguments.onlyOne(GenericArguments.string(Text.of("Key")/*,
+                                globalConfig.getRewriteChoice()::keySet, globalConfig.getRewriteChoice()::get)*/)),
                         GenericArguments.optional(GenericArguments.string(Text.of("Name")))
                 )
                 .permission("itemizer.command.rewrite")

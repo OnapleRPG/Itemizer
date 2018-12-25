@@ -67,7 +67,7 @@ public class CraftingSerializer implements TypeSerializer<ICraftRecipes> {
     public ItemStack getItemStack(ConfigurationNode node) throws ObjectMappingException {
         String ref = node.getNode("ref").getString();
         if(ref != null && !ref.equals("")) {
-            Optional<ItemBean> itemBeanOptional = ItemDAO.getItem(ref);
+            Optional<ItemBean> itemBeanOptional = Itemizer.getItemDAO().getItem(ref);
             ItemStack result;
             if (itemBeanOptional.isPresent()) {
                 Optional<ItemStack> itemStackOptional = new ItemBuilder().buildItemStack(itemBeanOptional.get());

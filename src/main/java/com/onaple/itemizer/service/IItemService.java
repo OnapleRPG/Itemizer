@@ -1,5 +1,6 @@
 package com.onaple.itemizer.service;
 
+import com.onaple.itemizer.data.beans.ItemBean;
 import com.onaple.itemizer.data.beans.ItemLoreWriter;
 import org.spongepowered.api.item.inventory.ItemStack;
 

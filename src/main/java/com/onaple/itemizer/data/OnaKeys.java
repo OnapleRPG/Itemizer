@@ -8,6 +8,7 @@ import org.spongepowered.api.data.value.mutable.Value;
 public class OnaKeys {
     public static Key<Value<Integer>> HIDDEN_FLAGS = null;
 
+
     public OnaKeys() {
         HIDDEN_FLAGS = Key.builder()
                 .id("onaple:hiddenflags")
