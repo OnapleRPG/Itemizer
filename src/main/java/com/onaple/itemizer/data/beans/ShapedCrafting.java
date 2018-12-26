@@ -1,5 +1,7 @@
 package com.onaple.itemizer.data.beans;
 
+import static org.spongepowered.api.item.recipe.crafting.CraftingRecipe.shapedBuilder;
+
 import com.onaple.itemizer.ICraftRecipes;
 import com.onaple.itemizer.Itemizer;
 import org.spongepowered.api.item.inventory.ItemStack;
@@ -8,8 +10,6 @@ import org.spongepowered.api.item.recipe.crafting.Ingredient;
 
 import java.util.Arrays;
 import java.util.Map;
-
-import static org.spongepowered.api.item.recipe.crafting.CraftingRecipe.shapedBuilder;
 
 public class ShapedCrafting implements ICraftRecipes {
     /** ID **/
@@ -71,7 +71,6 @@ public class ShapedCrafting implements ICraftRecipes {
 
     @Override
     public Recipe register() {
-        this.toString();
        return shapedBuilder().
                 aisle(this.schema).
                 where(this.content).

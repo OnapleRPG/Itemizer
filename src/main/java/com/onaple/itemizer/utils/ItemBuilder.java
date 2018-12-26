@@ -3,14 +3,13 @@ package com.onaple.itemizer.utils;
 import com.onaple.itemizer.GlobalConfig;
 import com.onaple.itemizer.Itemizer;
 import com.onaple.itemizer.data.OnaKeys;
-import com.onaple.itemizer.data.beans.*;
-
-import com.onaple.itemizer.service.IItemService;
-import com.onaple.itemizer.service.ItemService;
+import com.onaple.itemizer.data.beans.AttributeBean;
+import com.onaple.itemizer.data.beans.IItemBeanConfiguration;
+import com.onaple.itemizer.data.beans.ItemBean;
+import com.onaple.itemizer.data.beans.MinerBean;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.block.BlockType;
-import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.block.trait.BlockTrait;
 import org.spongepowered.api.data.DataContainer;
 import org.spongepowered.api.data.DataQuery;
@@ -18,17 +17,24 @@ import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.manipulator.mutable.item.BreakableData;
 import org.spongepowered.api.data.manipulator.mutable.item.EnchantmentData;
-import org.spongepowered.api.data.type.SkullTypes;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.enchantment.Enchantment;
 import org.spongepowered.api.item.enchantment.EnchantmentType;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.format.*;
+import org.spongepowered.api.text.format.TextStyles;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 import javax.inject.Singleton;
-import java.util.*;
-import java.util.stream.Collectors;
 
 @Singleton
 public class ItemBuilder {
@@ -42,6 +48,25 @@ public class ItemBuilder {
         lore = new ArrayList<>();
     }
 
+    /**
+     * Add block traits to a future block
+     * @param blockType Type of the block
+     * @param traits Map containing all the traits
+     * @return BlockState of the future block
+     */
+    private static BlockState addTraits(BlockType blockType, Map<String, String> traits) {
+        BlockState blockState = blockType.getDefaultState();
+        for (Map.Entry<String, String> trait : traits.entrySet()) {
+            Optional<BlockTrait<?>> optTrait = blockState.getTrait(trait.getKey());
+            if (optTrait.isPresent()) {
+                Optional<BlockState> newBlockState = blockState.withTrait(optTrait.get(), trait.getValue());
+                if (newBlockState.isPresent()) {
+                    blockState = newBlockState.get();
+                }
+            }
+        }
+        return blockState;
+    }
 
     /**
      * Build an itemstack from an ItemBean
@@ -53,24 +78,24 @@ public class ItemBuilder {
         if (optionalType.isPresent()) {
             Optional<BlockType> potentialBlock = optionalType.get().getBlock();
             if (potentialBlock.isPresent()) {
-               BlockState blockState = addTraits(potentialBlock.get(),itemBean.getBlockTrait());
-             this.item = ItemStack.builder().fromBlockState(blockState).build();
+                BlockState blockState = addTraits(potentialBlock.get(), itemBean.getBlockTrait());
+                this.item = ItemStack.builder().fromBlockState(blockState).build();
             } else {
                 this.item = ItemStack.builder().itemType(optionalType.get()).build();
             }
-               defineItemStack(itemBean,config.getHiddenFlags().get("Unbreakable"));
-               enchantItemStack(itemBean,config.getHiddenFlags().get("Enchantments"));
-               grantMining(itemBean,config.getHiddenFlags().get("CanDestroy"));
-               setAttribute(itemBean,config.getHiddenFlags().get("Attributes_modifiers"));
-               setNbt(itemBean);
-               setCustomDatamanipulators(itemBean);
-            Itemizer.getLogger().info("Hide flag value : "+config.getHiddenFlagsValue());
-            this.item.offer(OnaKeys.HIDDEN_FLAGS,config.getHiddenFlagsValue());
-         //   Itemizer.getLogger().info("flagFrom manipulator : " + this.item.get(OnaKeys.HIDDEN_FLAGS));
+            defineItemStack(itemBean, config.getHiddenFlags().get("Unbreakable"));
+            enchantItemStack(itemBean, config.getHiddenFlags().get("Enchantments"));
+            grantMining(itemBean, config.getHiddenFlags().get("CanDestroy"));
+            setAttribute(itemBean, config.getHiddenFlags().get("Attributes_modifiers"));
+            setNbt(itemBean);
+            setCustomDatamanipulators(itemBean);
+            Itemizer.getLogger().info("Hide flag value : " + config.getHiddenFlagsValue());
+            this.item.offer(OnaKeys.HIDDEN_FLAGS, config.getHiddenFlagsValue());
+            //   Itemizer.getLogger().info("flagFrom manipulator : " + this.item.get(OnaKeys.HIDDEN_FLAGS));
                /* this.item = ItemStack.builder()
                         .fromContainer(item.toContainer().set(DataQuery.of("UnsafeData","HideFlags"),config.getHiddenFlagsValue()))
                         .build();*/
-                addLore();
+            addLore();
            /* } else{
                 if (itemBean.getLore() != null) {
                     List<Text> loreData = new ArrayList<>();
@@ -102,14 +127,13 @@ public class ItemBuilder {
         }
     }
 
-
     /**
      * Build an itemstack from this name
      * @param name Data of the item to build
      * @return Optional of the itemstack
      */
     public Optional<ItemStack> buildItemStack(String name) {
-        Optional<ItemType> optionalType = Sponge.getRegistry().getType(ItemType.class,name);
+        Optional<ItemType> optionalType = Sponge.getRegistry().getType(ItemType.class, name);
         if (optionalType.isPresent()) {
             ItemStack itemStack = ItemStack.builder().itemType(optionalType.get()).build();
             return Optional.of(itemStack);
@@ -124,10 +148,10 @@ public class ItemBuilder {
      * @param itemBean Data of the item to define
      * @return ItemStack edited
      */
-    private void defineItemStack(ItemBean itemBean,boolean rewrite) {
+    private void defineItemStack(ItemBean itemBean, boolean rewrite) {
         //item Id
         if (itemBean.getId() != null && !itemBean.getId().isEmpty()) {
-            setCustomData("id",itemBean.getId());
+            setCustomData("id", itemBean.getId());
         }
 
         // Item name
@@ -145,18 +169,19 @@ public class ItemBuilder {
 
         // Item attributes
         item.offer(Keys.UNBREAKABLE, itemBean.isUnbreakable());
-        if(itemBean.isUnbreakable()) {
-            if(rewrite && config.getUnbreakableRewrite() != null) {
+        if (itemBean.isUnbreakable()) {
+            if (rewrite && config.getUnbreakableRewrite() != null) {
 
-                lore.add(Text.builder(config.getUnbreakableRewrite()).color(config.getColorMap().get(GlobalConfig.RewriteFlagColorList.unbreakable)).style(TextStyles.ITALIC).build());
+                lore.add(Text.builder(config.getUnbreakableRewrite()).color(config.getColorMap().get(GlobalConfig.RewriteFlagColorList.unbreakable))
+                        .style(TextStyles.ITALIC).build());
             }
         }
-        if(itemBean.getDurability() > 0){
+        if (itemBean.getDurability() > 0) {
             item.offer(Keys.ITEM_DURABILITY, itemBean.getDurability());
         }
 
 
-        if(itemBean.getToolLevel() !=0) {
+        if (itemBean.getToolLevel() != 0) {
             DataContainer container = this.item.toContainer();
             container.set(DataQuery.of("UnsafeData", "ToolLevel"), itemBean.getToolLevel());
             this.item = ItemStack.builder().fromContainer(container).build();
@@ -179,11 +204,11 @@ public class ItemBuilder {
                     enchantmentData.set(enchantmentData.enchantments().add(Enchantment.builder().
                             type(optionalEnchant.get()).
                             level(enchant.getValue()).build()));
-                    if(rewrite) {
-                        if(config.getEnchantRewrite().size()>0) {
-                            Itemizer.getLogger().info(config.getEnchantRewrite().get( optionalEnchant.get()));
+                    if (rewrite) {
+                        if (config.getEnchantRewrite().size() > 0) {
+                            Itemizer.getLogger().info(config.getEnchantRewrite().get(optionalEnchant.get()));
                             lore.add(Text
-                                    .builder(config.getEnchantRewrite().get( optionalEnchant.get())+ " " + enchant.getValue())
+                                    .builder(config.getEnchantRewrite().get(optionalEnchant.get()) + " " + enchant.getValue())
                                     .style(TextStyles.ITALIC)
                                     .color(config.getColorMap().get(GlobalConfig.RewriteFlagColorList.enchantments))
                                     .build());
@@ -194,7 +219,7 @@ public class ItemBuilder {
                 }
             }
 
-                item.offer(enchantmentData);
+            item.offer(enchantmentData);
 
         }
     }
@@ -204,19 +229,21 @@ public class ItemBuilder {
      * @param itemBean Data of the item
      * @return Item with mining powers
      */
-    private void grantMining(ItemBean itemBean,boolean rewrite) {
+    private void grantMining(ItemBean itemBean, boolean rewrite) {
         BreakableData breakableData = item.getOrCreate(BreakableData.class).get();
         List<MinerBean> minerList = Itemizer.getConfigurationHandler().getMinerList();
         List<String> minerNames = new ArrayList<>();
-        if(!itemBean.getMiners().isEmpty()) {
-            Text.Builder miningText = Text.builder(config.getCanMineRewrite().isEmpty()? "":config.getCanMineRewrite() )
+        if (!itemBean.getMiners().isEmpty()) {
+            Text.Builder miningText = Text.builder(config.getCanMineRewrite().isEmpty() ? "" : config.getCanMineRewrite())
                     .color(config.getColorMap().get(GlobalConfig.RewriteFlagColorList.canDestroyMention))
                     .style(TextStyles.UNDERLINE);
             for (String minerId : itemBean.getMiners()) {
                 for (MinerBean minerBean : minerList) {
                     if (minerBean.getId().equals(minerId)) {
                         minerBean.getMineTypes().forEach((blockName, blockType) -> {
-                            miningText.append(Text.builder(" " + blockName + " ").color(config.getColorMap().get(GlobalConfig.RewriteFlagColorList.canDestroyMention)).style(TextStyles.RESET).build());
+                            miningText.append(Text.builder(" " + blockName + " ")
+                                    .color(config.getColorMap().get(GlobalConfig.RewriteFlagColorList.canDestroyMention)).style(TextStyles.RESET)
+                                    .build());
                             Optional<BlockType> optionalBlockType = Sponge.getRegistry().getType(BlockType.class, blockType);
                             optionalBlockType.ifPresent(blockType1 -> breakableData.set(breakableData.breakable().add(blockType1)));
                         });
@@ -224,8 +251,8 @@ public class ItemBuilder {
                     }
                 }
             }
-            if(rewrite) {
-                if(! config.getCanMineRewrite().isEmpty() && config.getCanMineRewrite() != null ) {
+            if (rewrite) {
+                if (!config.getCanMineRewrite().isEmpty() && config.getCanMineRewrite() != null) {
                     lore.add(miningText.build());
                 }
 
@@ -239,105 +266,85 @@ public class ItemBuilder {
      * @param itemBean Data of the item
      * @return Item with attributes set
      */
-    private void setAttribute(ItemBean itemBean,Boolean rewrite){
-        List<DataContainer> containers = new ArrayList();
+    private void setAttribute(ItemBean itemBean, Boolean rewrite) {
+        List<DataContainer> containers = new ArrayList<>();
         Text.Builder attributeTextbuilder = Text.builder();
 
-        for(AttributeBean att : itemBean.getAttributeList()){
+        for (AttributeBean att : itemBean.getAttributeList()) {
             DataContainer dc = createAttributeModifier(att);
             containers.add(dc);
             Text.Builder attributText;
-            if(att.getOperation()==0){
-                attributText = Text.builder(String.format("%.1f", att.getAmount())+" ");
+            if (att.getOperation() == 0) {
+                attributText = Text.builder(String.format("%.1f", att.getAmount()) + " ");
 
-            } else if(att.getOperation()==1) {
+            } else if (att.getOperation() == 1) {
 
-                attributText =Text.builder( String.format("%.1f", att.getAmount()*100)+ "% ");
+                attributText = Text.builder(String.format("%.1f", att.getAmount() * 100) + "% ");
             } else {
-                attributText =Text.builder(String.format("%.1f", att.getAmount()*100)+ "% ");
+                attributText = Text.builder(String.format("%.1f", att.getAmount() * 100) + "% ");
             }
             String name = config.getModifierRewrite().get(att.getName());
-            if(name == null){
+            if (name == null) {
                 name = att.getName();
             }
             attributText.append(Text.builder(name).build());
-            if(att.getAmount()>0){
+            if (att.getAmount() > 0) {
                 attributText.color(config.getColorMap().get(GlobalConfig.RewriteFlagColorList.attributesModifiersPositive));
             } else {
                 attributText.color(config.getColorMap().get(GlobalConfig.RewriteFlagColorList.attributesModifiersNegavite));
             }
-            if(rewrite) {
+            if (rewrite) {
                 lore.add(attributText.build());
             }
         }
 
         DataContainer container = this.item.toContainer();
-        container.set(DataQuery.of("UnsafeData","AttributeModifiers"),containers);
+        container.set(DataQuery.of("UnsafeData", "AttributeModifiers"), containers);
     }
-
 
     /**
      * Create the datacontainer for an attribute's data
      * @param attribute Data of the attribute
      * @return DataContainer from which the item will be recreated
      */
-    private DataContainer createAttributeModifier(AttributeBean attribute){
+    private DataContainer createAttributeModifier(AttributeBean attribute) {
         UUID uuid = UUID.randomUUID();
         DataContainer dataContainer = DataContainer.createNew();
-        dataContainer.set(DataQuery.of("AttributeName"),attribute.getName());
-        dataContainer.set(DataQuery.of("Name"),attribute.getName());
-        dataContainer.set(DataQuery.of("Amount"),attribute.getAmount());
-        dataContainer.set(DataQuery.of("Operation"),attribute.getOperation());
-        dataContainer.set(DataQuery.of("Slot"),attribute.getSlot());
-        dataContainer.set(DataQuery.of("UUIDMost"),uuid.getMostSignificantBits());
-        dataContainer.set(DataQuery.of("UUIDLeast"),uuid.getLeastSignificantBits());
+        dataContainer.set(DataQuery.of("AttributeName"), attribute.getName());
+        dataContainer.set(DataQuery.of("Name"), attribute.getName());
+        dataContainer.set(DataQuery.of("Amount"), attribute.getAmount());
+        dataContainer.set(DataQuery.of("Operation"), attribute.getOperation());
+        dataContainer.set(DataQuery.of("Slot"), attribute.getSlot());
+        dataContainer.set(DataQuery.of("UUIDMost"), uuid.getMostSignificantBits());
+        dataContainer.set(DataQuery.of("UUIDLeast"), uuid.getLeastSignificantBits());
         return dataContainer;
     }
 
     private void addLore() {
-        item.offer(Keys.ITEM_LORE,lore);
+        item.offer(Keys.ITEM_LORE, lore);
     }
 
-    private void setNbt(ItemBean itemBean){
-        for (Map.Entry<String,Object> nbt: itemBean.getNbtList().entrySet()
-             ) {
-            setCustomData(nbt.getKey(),nbt.getValue());
+    private void setNbt(ItemBean itemBean) {
+        for (Map.Entry<String, Object> nbt : itemBean.getNbtList().entrySet()
+                ) {
+            setCustomData(nbt.getKey(), nbt.getValue());
         }
     }
-    private void setCustomData(String queryPath,Object value){
-        List<String> queryList ;
-        if(queryPath.contains(".")) {
+
+    private void setCustomData(String queryPath, Object value) {
+        List<String> queryList;
+        if (queryPath.contains(".")) {
             String[] queries = queryPath.split(".");
             Itemizer.getLogger().info(("length" + queries.length));
             queryList = Arrays.stream(queries).collect(Collectors.toList());
-        }
-        else {
+        } else {
             queryList = new ArrayList<>();
             queryList.add(queryPath);
         }
-        queryList.add(0,"UnsafeData");
+        queryList.add(0, "UnsafeData");
         DataQuery dt = DataQuery.of(queryList);
         this.item = ItemStack.builder()
-                .fromContainer(item.toContainer().set(dt,value))
+                .fromContainer(item.toContainer().set(dt, value))
                 .build();
-    }
-    /**
-     * Add block traits to a future block
-     * @param blockType Type of the block
-     * @param traits Map containing all the traits
-     * @return BlockState of the future block
-     */
-    private static BlockState addTraits(BlockType blockType, Map<String, String> traits) {
-        BlockState blockState = blockType.getDefaultState();
-        for (Map.Entry<String, String> trait : traits.entrySet()) {
-            Optional<BlockTrait<?>> optTrait = blockState.getTrait(trait.getKey());
-            if (optTrait.isPresent()) {
-                Optional<BlockState> newBlockState = blockState.withTrait(optTrait.get(), trait.getValue());
-                if (newBlockState.isPresent()) {
-                    blockState = newBlockState.get();
-                }
-            }
-        }
-        return blockState;
     }
 }

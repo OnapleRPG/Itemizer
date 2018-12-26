@@ -1,20 +1,20 @@
 package com.onaple.itemizer;
 
-import com.onaple.itemizer.commands.*;
-
+import com.onaple.itemizer.commands.FetchCommand;
+import com.onaple.itemizer.commands.GetItemInfos;
+import com.onaple.itemizer.commands.RegisterCommand;
+import com.onaple.itemizer.commands.ReloadCommand;
+import com.onaple.itemizer.commands.RetrieveCommand;
 import com.onaple.itemizer.commands.globalConfiguration.ConfigureColorCommand;
 import com.onaple.itemizer.commands.globalConfiguration.ConfigureEnchantCommand;
 import com.onaple.itemizer.commands.globalConfiguration.ConfigureModifierCommand;
 import com.onaple.itemizer.commands.globalConfiguration.ConfigureRewriteCommand;
 import com.onaple.itemizer.data.handlers.ConfigurationHandler;
-import com.onaple.itemizer.events.ItemizerPreLoadEvent;
-import com.onaple.itemizer.service.ItemService;
 import com.onaple.itemizer.service.IItemService;
+import com.onaple.itemizer.service.ItemService;
 import com.onaple.itemizer.utils.CraftRegister;
-
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import org.slf4j.Logger;
-import org.spongepowered.api.CatalogType;
 import org.spongepowered.api.CatalogTypes;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.asset.Asset;
@@ -22,6 +22,7 @@ import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.game.state.GameConstructionEvent;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.event.game.state.GameStoppedServerEvent;
@@ -29,12 +30,13 @@ import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.text.Text;
 
-import javax.inject.Inject;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
+
+import javax.inject.Inject;
 
 @Plugin(id = "itemizer", name = "Itemizer improuved items", version = "1.5",
         description = "Plugin to manage custom items and crafts",
@@ -85,10 +87,15 @@ public class Itemizer {
     }
 
     @Listener
+    public void gameConstruct(GameConstructionEvent event) {
+        itemizer = this;
+        Sponge.getServiceManager().setProvider(getInstance(), IItemService.class, new ItemService());
+    }
+
+    @Listener
     public void preInit(GamePreInitializationEvent event) {
         logger.info("Initalisation");
         loadGlobalConfig();
-        Sponge.getEventManager().post(new ItemizerPreLoadEvent());
         try {
             loadItems();
         } catch (ObjectMappingException e) {
@@ -119,9 +126,6 @@ public class Itemizer {
             Itemizer.getLogger().error(e.getMessage());
         }
         craftRegister.register(configurationHandler.getCraftList());
-
-        itemizer = this;
-        Sponge.getServiceManager().setProvider(getInstance(), IItemService.class, new ItemService());
     }
 
     @Listener
