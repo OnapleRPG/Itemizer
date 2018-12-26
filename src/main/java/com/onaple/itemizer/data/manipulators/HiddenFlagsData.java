@@ -37,10 +37,7 @@ public class HiddenFlagsData extends AbstractSingleData<Integer,HiddenFlagsData,
         return Builder.CURRENT_VERSION;
     }
 
-    @Override
-    protected Value<?> getValueGetter() {
-        return null;
-    }
+
 
     @Override
     public Optional<HiddenFlagsData> fill(DataHolder dataHolder, MergeFunction overlap) {
@@ -72,6 +69,11 @@ public class HiddenFlagsData extends AbstractSingleData<Integer,HiddenFlagsData,
     @Override
     public HiddenFlagsData copy() {
         return new HiddenFlagsData(getValue());
+    }
+
+    @Override
+    protected Value<?> getValueGetter() {
+        return Sponge.getRegistry().getValueFactory().createValue(OnaKeys.HIDDEN_FLAGS, getValue());
     }
 
     @Override

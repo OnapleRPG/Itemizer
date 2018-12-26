@@ -64,12 +64,12 @@ public class ItemBuilder {
                setAttribute(itemBean,config.getHiddenFlags().get("Attributes_modifiers"));
                setNbt(itemBean);
                setCustomDatamanipulators(itemBean);
-            Itemizer.getLogger().info("Hide flag value : "+config.getHiddenFlagsValue());
-            this.item.offer(OnaKeys.HIDDEN_FLAGS,config.getHiddenFlagsValue());
+            Itemizer.getLogger().info("Hide flag value : "+ config.getHiddenFlagsValue());
+            //this.item.offer(OnaKeys.HIDDEN_FLAGS,config.getHiddenFlagsValue());
          //   Itemizer.getLogger().info("flagFrom manipulator : " + this.item.get(OnaKeys.HIDDEN_FLAGS));
-               /* this.item = ItemStack.builder()
+                this.item = ItemStack.builder()
                         .fromContainer(item.toContainer().set(DataQuery.of("UnsafeData","HideFlags"),config.getHiddenFlagsValue()))
-                        .build();*/
+                        .build();
                 addLore();
            /* } else{
                 if (itemBean.getLore() != null) {

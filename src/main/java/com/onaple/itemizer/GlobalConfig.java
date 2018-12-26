@@ -109,7 +109,7 @@ public class GlobalConfig {
                         Map<String, String> modifierRewrite,
                         Map<RewriteFlagColorList, TextColor> colors ) {
 
-        this.descriptionRewrite = descriptionRewrite;
+
         int flagsValue = 0;
         for (Map.Entry<String, Boolean> flag : flagToHide.entrySet()) {
 

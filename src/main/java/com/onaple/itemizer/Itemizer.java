@@ -38,7 +38,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 
-@Plugin(id = "itemizer", name = "Itemizer improuved items", version = "1.5",
+@Plugin(id = "itemizer", name = "Itemizer improuved items", version = "1.5.2",
         description = "Plugin to manage custom items and crafts",
         url = "http://onaple.fr",
         authors = {"Zessirb", "Selki"})
