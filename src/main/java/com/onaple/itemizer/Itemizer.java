@@ -23,7 +23,7 @@ import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameConstructionEvent;
-import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
+import org.spongepowered.api.event.game.state.GamePostInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.event.game.state.GameStoppedServerEvent;
 import org.spongepowered.api.plugin.Plugin;
@@ -45,27 +45,17 @@ import javax.inject.Inject;
 public class Itemizer {
 
     private static Itemizer itemizer;
-
-    public static Itemizer getItemizer() {
-        return itemizer;
-    }
-
-
+    private static Logger logger;
+    private static ConfigurationHandler configurationHandler;
     @Inject
     @ConfigDir(sharedRoot = true)
     private Path configDir;
-
     private GlobalConfig globalConfig;
-
-    public GlobalConfig getGlobalConfig() {
-        return globalConfig;
-    }
-
-    private static Logger logger;
-
     @Inject
-    private void setLogger(Logger logger) {
-        this.logger = logger;
+    private CraftRegister craftRegister;
+
+    public static Itemizer getItemizer() {
+        return itemizer;
     }
 
     public static Logger getLogger() {
@@ -73,17 +63,25 @@ public class Itemizer {
     }
 
     @Inject
-    private CraftRegister craftRegister;
+    private void setLogger(Logger logger) {
+        this.logger = logger;
+    }
 
-    private static ConfigurationHandler configurationHandler;
+    public static ConfigurationHandler getConfigurationHandler() {
+        return configurationHandler;
+    }
 
     @Inject
     public void setConfigurationHandler(ConfigurationHandler configurationHandler) {
         this.configurationHandler = configurationHandler;
     }
 
-    public static ConfigurationHandler getConfigurationHandler() {
-        return configurationHandler;
+    public static PluginContainer getInstance() {
+        return Sponge.getPluginManager().getPlugin("itemizer").orElse(null);
+    }
+
+    public GlobalConfig getGlobalConfig() {
+        return globalConfig;
     }
 
     @Listener
@@ -93,7 +91,7 @@ public class Itemizer {
     }
 
     @Listener
-    public void preInit(GamePreInitializationEvent event) {
+    public void preInit(GamePostInitializationEvent event) {
         logger.info("Initalisation");
         loadGlobalConfig();
         try {
@@ -194,7 +192,7 @@ public class Itemizer {
                 .description(Text.of("Update global color configuration."))
                 .arguments(
                         GenericArguments.onlyOne(
-                                GenericArguments.enumValue(Text.of("Key"),GlobalConfig.RewriteFlagColorList.class)),
+                                GenericArguments.enumValue(Text.of("Key"), GlobalConfig.RewriteFlagColorList.class)),
                         GenericArguments.optional(
                                 GenericArguments.catalogedElement(Text.of("Color"), CatalogTypes.TEXT_COLOR))
                 ).permission("itemizer.command.rewrite")
@@ -213,10 +211,10 @@ public class Itemizer {
                 .executor(new ConfigureModifierCommand()).build();
 
         CommandSpec configurationUpdate = CommandSpec.builder()
-                .child(rewrite,"description" )
-                .child(enchantRewrite,"enchantment")
+                .child(rewrite, "description")
+                .child(enchantRewrite, "enchantment")
                 .child(modifierRewrite, "modifier")
-                .child(colorRewrite,"color")
+                .child(colorRewrite, "color")
                 .permission("itemizer.command.rewrite")
                 .build();
         Sponge.getCommandManager().register(this, configurationUpdate, "configure");
@@ -231,10 +229,6 @@ public class Itemizer {
 
     public void saveGlobalConfig() {
         getConfigurationHandler().saveGlobalConfiguration(configDir + "/itemizer/global.conf");
-    }
-
-    public static PluginContainer getInstance() {
-        return Sponge.getPluginManager().getPlugin("itemizer").orElse(null);
     }
 
     private void loadGlobalConfig() {
