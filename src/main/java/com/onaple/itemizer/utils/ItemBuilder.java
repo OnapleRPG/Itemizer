@@ -325,8 +325,7 @@ public class ItemBuilder {
     }
 
     private void setNbt(ItemBean itemBean) {
-        for (Map.Entry<String, Object> nbt : itemBean.getNbtList().entrySet()
-                ) {
+        for (Map.Entry<String, Object> nbt : itemBean.getNbtList().entrySet()) {
             setCustomData(nbt.getKey(), nbt.getValue());
         }
     }

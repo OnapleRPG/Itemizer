@@ -5,14 +5,17 @@ import com.onaple.itemizer.data.beans.AttributeBean;
 import com.onaple.itemizer.data.beans.IItemBeanConfiguration;
 import com.onaple.itemizer.data.beans.ItemBean;
 import com.onaple.itemizer.service.IItemBeanFactory;
-import com.onaple.itemizer.service.IItemService;
 import com.onaple.itemizer.service.ItemService;
 import ninja.leaping.configurate.ConfigurationNode;
+import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import ninja.leaping.configurate.objectmapping.serialize.TypeSerializer;
-import org.spongepowered.api.Sponge;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 public class ItemSerializer implements TypeSerializer<ItemBean> {
 
@@ -30,13 +33,13 @@ public class ItemSerializer implements TypeSerializer<ItemBean> {
         Map<Object, ?> enchantsNode = value.getNode("enchants").getChildrenMap();
         for (Map.Entry<Object, ?> entry : enchantsNode.entrySet()) {
             if (entry.getKey() instanceof String && entry.getValue() instanceof ConfigurationNode) {
-                enchants.put((String)entry.getKey(), ((ConfigurationNode) entry.getValue()).getNode("level").getInt());
+                enchants.put((String) entry.getKey(), ((ConfigurationNode) entry.getValue()).getNode("level").getInt());
             }
         }
-        Map<String,Object> nbtList = new HashMap<>();
-        for (Map.Entry<Object,?> entry :value.getNode("nbt").getChildrenMap().entrySet()) {
+        Map<String, Object> nbtList = new HashMap<>();
+        for (Map.Entry<Object, ?> entry : value.getNode("nbt").getChildrenMap().entrySet()) {
             if (entry.getKey() instanceof String && entry.getValue() instanceof ConfigurationNode) {
-                nbtList.put((String)entry.getKey(),((ConfigurationNode) entry.getValue()).getValue());
+                nbtList.put((String) entry.getKey(), ((ConfigurationNode) entry.getValue()).getValue());
             }
         }
         // IDs of the miners abilities
@@ -62,7 +65,7 @@ public class ItemSerializer implements TypeSerializer<ItemBean> {
          *     miners: [
          *       2
          *     ]
-         *     plugindata: [
+         *     plugin-modules: [
          *         {
          *            key: factoryId
          *            data: {
@@ -76,7 +79,7 @@ public class ItemSerializer implements TypeSerializer<ItemBean> {
         List<IItemBeanConfiguration> iItemBeanConfigurations = new ArrayList<>();
 
         for (ConfigurationNode node : data) {
-            String key = node.getString("key");
+            String key = node.getChildrenMap().get("key").getValue().toString();
             Optional<IItemBeanFactory> optional = ItemService.INSTANCE.getFactoryByKeyId(key);
             if (!optional.isPresent()) {
                 throw new IllegalStateException("No plugin registered module having key " + key);
@@ -90,7 +93,8 @@ public class ItemSerializer implements TypeSerializer<ItemBean> {
         String toolType = value.getNode("toolType").getString();
         int toolLevel = value.getNode("toolLevel").getInt();
         List<AttributeBean> attributes = value.getNode("attributes").getList(TypeToken.of(AttributeBean.class));
-        ItemBean item = new ItemBean(id, itemType, name, lore, durability, unbreakable, enchants, miners, attributes,nbtList, iItemBeanConfigurations);
+        ItemBean item =
+                new ItemBean(id, itemType, name, lore, durability, unbreakable, enchants, miners, attributes, nbtList, iItemBeanConfigurations);
         item.setToolType(toolType);
         item.setToolLevel(toolLevel);
         return item;
@@ -98,41 +102,55 @@ public class ItemSerializer implements TypeSerializer<ItemBean> {
 
     @Override
     public void serialize(TypeToken<?> type, ItemBean obj, ConfigurationNode value) throws ObjectMappingException {
-       value.getNode("id").setValue(obj.getId());
-       value.getNode("type").setValue(obj.getType());
-       if(obj.getName()!= null && !obj.getName().isEmpty()) {
-           value.getNode("name").setValue(obj.getName());
-       }
-       if(obj.getLore()!= null && !obj.getLore().isEmpty()) {
-           value.getNode("lore").setValue(obj.getLore());
-       }
+        value.getNode("id").setValue(obj.getId());
+        value.getNode("type").setValue(obj.getType());
+        if (obj.getName() != null && !obj.getName().isEmpty()) {
+            value.getNode("name").setValue(obj.getName());
+        }
+        if (obj.getLore() != null && !obj.getLore().isEmpty()) {
+            value.getNode("lore").setValue(obj.getLore());
+        }
 
-       value.getNode("durability").setValue(obj.getDurability());
-       value.getNode("unbreakable").setValue(obj.isUnbreakable());
+        value.getNode("durability").setValue(obj.getDurability());
+        value.getNode("unbreakable").setValue(obj.isUnbreakable());
 
-       if(obj.getToolLevel() != 0){
-           value.getNode("toolLevel").setValue(obj.getToolLevel());
-       }
-       if(obj.getToolType() != null) {
-           value.getNode("toolType").setValue(obj.getToolLevel());
-       }
+        if (obj.getToolLevel() != 0) {
+            value.getNode("toolLevel").setValue(obj.getToolLevel());
+        }
+        if (obj.getToolType() != null) {
+            value.getNode("toolType").setValue(obj.getToolLevel());
+        }
 
-       if(!obj.getEnchants().isEmpty()){
+        if (!obj.getEnchants().isEmpty()) {
 
-           Map<String,Map<String,Integer>> enchantList = new HashMap<>();
-           for (Map.Entry<String,Integer> entry :obj.getEnchants().entrySet()) {
+            Map<String, Map<String, Integer>> enchantList = new HashMap<>();
+            for (Map.Entry<String, Integer> entry : obj.getEnchants().entrySet()) {
 
-               Map<String,Integer> level = new HashMap<String,Integer>();
-              level.put("level",entry.getValue());
-                enchantList.put(entry.getKey(),level);
-           }
-           value.getNode("enchants").setValue(enchantList);
-       }
+                Map<String, Integer> level = new HashMap<String, Integer>();
+                level.put("level", entry.getValue());
+                enchantList.put(entry.getKey(), level);
+            }
+            value.getNode("enchants").setValue(enchantList);
+        }
 
         final TypeToken<List<AttributeBean>> token = new TypeToken<List<AttributeBean>>() {};
 
-       if(!obj.getAttributeList().isEmpty()) {
-           value.getNode("attributes").setValue(token, obj.getAttributeList());
-       }
+        if (!obj.getAttributeList().isEmpty()) {
+            value.getNode("attributes").setValue(token, obj.getAttributeList());
+        }
+
+        if (obj.getThirdpartyConfigs() != null && obj.getThirdpartyConfigs().size() > 0) {
+            List<IItemBeanConfiguration> thirdpartyConfigs = obj.getThirdpartyConfigs();
+
+            List<CommentedConfigurationNode> commentedConfigurationNodes = new ArrayList<>();
+            for (IItemBeanConfiguration config : thirdpartyConfigs) {
+                CommentedConfigurationNode nodee = config.toNode();
+                commentedConfigurationNodes.add(nodee);
+            }
+
+
+            value.getNode("plugin-modules").setValue(new TypeToken<List<CommentedConfigurationNode>>() {}, commentedConfigurationNodes);
+
+        }
     }
 }
