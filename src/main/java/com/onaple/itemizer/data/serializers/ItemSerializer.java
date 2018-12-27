@@ -21,6 +21,7 @@ public class ItemSerializer implements TypeSerializer<ItemBean> {
 
     @Override
     public ItemBean deserialize(TypeToken<?> type, ConfigurationNode value) throws ObjectMappingException {
+
         // Item characteristics
         String id = value.getNode("id").getString();
         String itemType = value.getNode("type").getString();
@@ -28,6 +29,7 @@ public class ItemSerializer implements TypeSerializer<ItemBean> {
         String lore = value.getNode("lore").getString();
         int durability = value.getNode("durability").getInt();
         boolean unbreakable = value.getNode("unbreakable").getBoolean();
+
         // Item enchantments
         Map<String, Integer> enchants = new HashMap<>();
         Map<Object, ?> enchantsNode = value.getNode("enchants").getChildrenMap();
@@ -36,12 +38,14 @@ public class ItemSerializer implements TypeSerializer<ItemBean> {
                 enchants.put((String) entry.getKey(), ((ConfigurationNode) entry.getValue()).getNode("level").getInt());
             }
         }
+
         Map<String, Object> nbtList = new HashMap<>();
         for (Map.Entry<Object, ?> entry : value.getNode("nbt").getChildrenMap().entrySet()) {
             if (entry.getKey() instanceof String && entry.getValue() instanceof ConfigurationNode) {
                 nbtList.put((String) entry.getKey(), ((ConfigurationNode) entry.getValue()).getValue());
             }
         }
+
         // IDs of the miners abilities
         List<String> miners = new ArrayList<>();
         List<? extends ConfigurationNode> minerList = value.getNode("miners").getChildrenList();
@@ -93,8 +97,8 @@ public class ItemSerializer implements TypeSerializer<ItemBean> {
         String toolType = value.getNode("toolType").getString();
         int toolLevel = value.getNode("toolLevel").getInt();
         List<AttributeBean> attributes = value.getNode("attributes").getList(TypeToken.of(AttributeBean.class));
-        ItemBean item =
-                new ItemBean(id, itemType, name, lore, durability, unbreakable, enchants, miners, attributes, nbtList, iItemBeanConfigurations);
+        ItemBean item = new ItemBean(id, itemType, name, lore, durability,
+                unbreakable, enchants, miners, attributes, nbtList, iItemBeanConfigurations);
         item.setToolType(toolType);
         item.setToolLevel(toolLevel);
         return item;
@@ -149,7 +153,8 @@ public class ItemSerializer implements TypeSerializer<ItemBean> {
             }
 
 
-            value.getNode("plugin-modules").setValue(new TypeToken<List<CommentedConfigurationNode>>() {}, commentedConfigurationNodes);
+            value.getNode("plugin-modules").getList(new TypeToken<CommentedConfigurationNode>() {})
+                    .addAll(commentedConfigurationNodes);
 
         }
     }

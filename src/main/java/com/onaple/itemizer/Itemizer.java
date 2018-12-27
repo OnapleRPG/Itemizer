@@ -245,8 +245,7 @@ public class Itemizer {
 
     public int loadItems() throws Exception {
         initDefaultConfig("items.conf");
-        return configurationHandler.readItemsConfiguration(
-                configurationHandler.loadConfiguration(configDir + "/itemizer/items.conf"));
+        return configurationHandler.readItemsConfiguration(Paths.get(configDir + "/itemizer/", "items.conf"));
     }
 
     public int loadMiners() throws Exception {

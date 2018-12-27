@@ -232,7 +232,6 @@ public class ItemBuilder {
     private void grantMining(ItemBean itemBean, boolean rewrite) {
         BreakableData breakableData = item.getOrCreate(BreakableData.class).get();
         List<MinerBean> minerList = Itemizer.getConfigurationHandler().getMinerList();
-        List<String> minerNames = new ArrayList<>();
         if (!itemBean.getMiners().isEmpty()) {
             Text.Builder miningText = Text.builder(config.getCanMineRewrite().isEmpty() ? "" : config.getCanMineRewrite())
                     .color(config.getColorMap().get(GlobalConfig.RewriteFlagColorList.canDestroyMention))
@@ -244,8 +243,7 @@ public class ItemBuilder {
                             miningText.append(Text.builder(" " + blockName + " ")
                                     .color(config.getColorMap().get(GlobalConfig.RewriteFlagColorList.canDestroyMention)).style(TextStyles.RESET)
                                     .build());
-                            Optional<BlockType> optionalBlockType = Sponge.getRegistry().getType(BlockType.class, blockType);
-                            optionalBlockType.ifPresent(blockType1 -> breakableData.set(breakableData.breakable().add(blockType1)));
+                            breakableData.set(breakableData.breakable().add(blockType));
                         });
 
                     }
@@ -268,8 +266,6 @@ public class ItemBuilder {
      */
     private void setAttribute(ItemBean itemBean, Boolean rewrite) {
         List<DataContainer> containers = new ArrayList<>();
-        Text.Builder attributeTextbuilder = Text.builder();
-
         for (AttributeBean att : itemBean.getAttributeList()) {
             DataContainer dc = createAttributeModifier(att);
             containers.add(dc);

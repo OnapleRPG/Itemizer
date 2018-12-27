@@ -1,32 +1,35 @@
 package com.onaple.itemizer.data.handlers;
 
 import com.google.common.reflect.TypeToken;
+import com.onaple.itemizer.ConfigUtils;
 import com.onaple.itemizer.GlobalConfig;
 import com.onaple.itemizer.ICraftRecipes;
 import com.onaple.itemizer.Itemizer;
 import com.onaple.itemizer.data.beans.AttributeBean;
 import com.onaple.itemizer.data.beans.ItemBean;
+import com.onaple.itemizer.data.beans.Items;
 import com.onaple.itemizer.data.beans.MinerBean;
 import com.onaple.itemizer.data.beans.PoolBean;
-import com.onaple.itemizer.data.serializers.*;
+import com.onaple.itemizer.data.serializers.AttributeSerializer;
+import com.onaple.itemizer.data.serializers.CraftingSerializer;
+import com.onaple.itemizer.data.serializers.GlobalConfigurationSerializer;
+import com.onaple.itemizer.data.serializers.ItemSerializer;
+import com.onaple.itemizer.data.serializers.MinerSerializer;
+import com.onaple.itemizer.data.serializers.PoolSerializer;
 import com.onaple.itemizer.utils.MinerUtil;
-
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
-import ninja.leaping.configurate.objectmapping.ObjectMapper;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import ninja.leaping.configurate.objectmapping.serialize.TypeSerializers;
-import org.spongepowered.api.Sponge;
-import org.spongepowered.api.entity.Item;
-import org.spongepowered.api.item.enchantment.EnchantmentType;
-import org.spongepowered.api.text.format.TextColor;
-import org.spongepowered.api.text.format.TextColors;
+
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Singleton;
-import java.io.IOException;
-import java.nio.file.Paths;
-import java.util.*;
 
 @Singleton
 public class ConfigurationHandler {
@@ -56,10 +59,13 @@ public class ConfigurationHandler {
 
     /**
      * Read items configuration and interpret it
-     * @param configurationNode ConfigurationNode to read from
+     * @param path File path
      */
-    public int readItemsConfiguration(CommentedConfigurationNode configurationNode) throws ObjectMappingException {
+    public int readItemsConfiguration(Path path) throws ObjectMappingException {
         itemList = new ArrayList<>();
+
+        Items itemRoot = ConfigUtils.load(Items.class, path);
+
         TypeSerializers.getDefaultSerializers().registerType(TypeToken.of(ItemBean.class), new ItemSerializer());
         TypeSerializers.getDefaultSerializers().registerType(TypeToken.of(AttributeBean.class), new AttributeSerializer());
         itemList = configurationNode.getNode("items").getList(TypeToken.of(ItemBean.class));

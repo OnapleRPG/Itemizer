@@ -1,35 +1,59 @@
 package com.onaple.itemizer.data.beans;
 
+import ninja.leaping.configurate.objectmapping.Setting;
+import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@ConfigSerializable
 public class ItemBean {
+
     /** ID of the item in config **/
+    @Setting
     private String id = "";
+
     /** Type of the item **/
+    @Setting
     private String type;
+
     /** Name of the item **/
+    @Setting
     private String name = "";
+
     /** Lore / description of the item **/
+    @Setting
     private String lore = "";
+
     /** number of use of the item**/
+    @Setting
     private int durability;
+
     /** Max number of use of the item **/
+    @Setting
     private int maxDurability;
+
     /** Unbreakable attribute **/
-    private boolean unbreakable = false;
+    @Setting
+    private boolean unbreakable;
+
     /** Map of enchants and their levels **/
+    @Setting
     private Map<String, Integer> enchants = new HashMap<>();
     /** IDs of the miner abilities associated **/
+    @Setting
     private List<String> miners = new ArrayList<>();
     /** List of custom attribute of the item */
+    @Setting
     private List<AttributeBean> attributeList = new ArrayList<>();
 
+    @Setting
     private List<IItemBeanConfiguration> thirdpartyConfigs = new ArrayList<>();
 
     /** Map of all NBT*/
+    @Setting
     private Map<String,Object> nbtList = new HashMap<>();
 
     public Map<String, String> getBlockTrait() {

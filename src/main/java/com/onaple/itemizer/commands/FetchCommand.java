@@ -41,10 +41,10 @@ public class FetchCommand implements CommandExecutor {
                 if (optionalItemStack.isPresent()) {
                     target.getInventory().offer(optionalItemStack.get());
                 } else {
-                    ((Player) src).sendMessage(Text.of("Item from pool " + poolId + " not valid."));
+                    src.sendMessage(Text.of("Item from pool " + poolId + " not valid."));
                 }
             } else {
-                ((Player) src).sendMessage(Text.of("Pool " + poolId + " returned nothing."));
+                src.sendMessage(Text.of("Pool " + poolId + " returned nothing."));
             }
         } else {
             Itemizer.getLogger().warn("Fetch command can only be executed by a player.");
