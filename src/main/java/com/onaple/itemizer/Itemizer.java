@@ -7,8 +7,10 @@ import com.onaple.itemizer.commands.globalConfiguration.ConfigureEnchantCommand;
 import com.onaple.itemizer.commands.globalConfiguration.ConfigureModifierCommand;
 import com.onaple.itemizer.commands.globalConfiguration.ConfigureRewriteCommand;
 import com.onaple.itemizer.data.access.ItemDAO;
+import com.onaple.itemizer.data.beans.AttributeBean;
 import com.onaple.itemizer.data.beans.ItemBean;
 import com.onaple.itemizer.data.handlers.ConfigurationHandler;
+import com.onaple.itemizer.data.translators.AttributeTranslator;
 import com.onaple.itemizer.events.ItemizerPreLoadEvent;
 import com.onaple.itemizer.service.ItemService;
 import com.onaple.itemizer.service.IItemService;
@@ -23,6 +25,7 @@ import org.spongepowered.api.asset.Asset;
 import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.config.ConfigDir;
+import org.spongepowered.api.data.DataManager;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
@@ -55,9 +58,14 @@ public class Itemizer {
     @ConfigDir(sharedRoot = true)
     private Path configDir;
 
-    private GlobalConfig globalConfig;
+    private static GlobalConfig globalConfig;
 
-    public GlobalConfig getGlobalConfig() {
+    @Inject
+    private void setGlobalConfig(GlobalConfig globalConfig){
+        this.globalConfig = globalConfig;
+    }
+
+    public static GlobalConfig getGlobalConfig() {
         return globalConfig;
     }
 
@@ -101,6 +109,9 @@ public class Itemizer {
     @Listener
     public void preInit(GamePreInitializationEvent event) {
         logger.info("Initalisation");
+
+       // Sponge.getDataManager().registerTranslator(AttributeBean.class,new AttributeTranslator());
+
         loadGlobalConfig();
         Sponge.getEventManager().post(new ItemizerPreLoadEvent());
         try {
@@ -130,7 +141,7 @@ public class Itemizer {
         } catch (ObjectMappingException e) {
             Itemizer.getLogger().error("Error while reading configuration 'crafts' : " + e.getMessage());
         } catch (Exception e) {
-            Itemizer.getLogger().error(e.getMessage());
+            e.printStackTrace();
         }
         craftRegister.register(configurationHandler.getCraftList());
 
@@ -236,7 +247,7 @@ public class Itemizer {
 
     @Listener
     public void onServerStop(GameStoppedServerEvent event) {
-        Itemizer.getConfigurationHandler().saveItemConfig(configDir + "/itemizer/items.conf");
+        getConfigurationHandler().saveItemConfig(configDir + "/itemizer/items.conf");
     }
 
     public void saveGlobalConfig() {
@@ -250,8 +261,8 @@ public class Itemizer {
     private void loadGlobalConfig() {
         initDefaultConfig("global.conf");
         try {
-            this.globalConfig = configurationHandler.readGlobalConfiguration(
-                    configurationHandler.loadConfiguration(configDir + "/itemizer/global.conf"));
+            setGlobalConfig(configurationHandler.readGlobalConfiguration(
+                    configurationHandler.loadConfiguration(configDir + "/itemizer/global.conf")));
         } catch (Exception e) {
             logger.error(e.toString());
         }

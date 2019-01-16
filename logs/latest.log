@@ -1,182 +1,182 @@
-[22:41:45] [Thread-5/INFO]: Running with arguments: [--userProperties, {}, --assetsDir, /home/raiponz/.gradle/caches/minecraft/assets, --assetIndex, 1.12, --accessToken{REDACTED}, --version, 1.12.2, --tweakClass, net.minecraftforge.fml.common.launcher.FMLTweaker, --tweakClass, org.spongepowered.mctester.api.MinecraftRunnerTweaker, --gameDir, /tmp/mctester/game, --tweakClass, net.minecraftforge.gradle.tweakers.CoremodTweaker]
-[22:41:45] [Thread-5/INFO]: Loading tweak class name net.minecraftforge.fml.common.launcher.FMLTweaker
-[22:41:45] [Thread-5/INFO]: Using primary tweak class name net.minecraftforge.fml.common.launcher.FMLTweaker
-[22:41:45] [Thread-5/INFO]: Loading tweak class name org.spongepowered.mctester.api.MinecraftRunnerTweaker
-[22:41:45] [Thread-5/INFO]: Loading tweak class name net.minecraftforge.gradle.tweakers.CoremodTweaker
-[22:41:45] [Thread-5/INFO]: Calling tweak class net.minecraftforge.fml.common.launcher.FMLTweaker
-[22:41:45] [Thread-5/INFO]: Forge Mod Loader version 14.23.4.2704 for Minecraft 1.12.2 loading
-[22:41:45] [Thread-5/INFO]: Java is Java HotSpot(TM) 64-Bit Server VM, version 1.8.0_161, running on Linux:amd64:4.15.0-38-generic, installed at /usr/lib/jvm/jdk1.8.0_161/jre
-[22:41:45] [Thread-5/ERROR]: Apache Maven library folder was not in the format expected. Using default libraries directory.
-[22:41:45] [Thread-5/ERROR]: Full: /home/raiponz/.gradle/caches/modules-2/files-2.1/org.apache.maven/maven-artifact/3.5.3/7dc72b6d6d8a6dced3d294ed54c2cc3515ade9f4/maven-artifact-3.5.3.jar
-[22:41:45] [Thread-5/ERROR]: Trimmed: /home/raiponz/.gradle/caches/modules-2/files-2.1/org.apache.maven/maven-artifact/3.5.3/
-[22:41:45] [Thread-5/INFO]: Managed to load a deobfuscated Minecraft name- we are in a deobfuscated environment. Skipping runtime deobfuscation
-[22:41:45] [Thread-5/INFO]: Ignoring missing certificate for coremod FMLCorePlugin (net.minecraftforge.fml.relauncher.FMLCorePlugin), we are in deobf and it's a forge core plugin
-[22:41:45] [Thread-5/INFO]: Ignoring missing certificate for coremod FMLForgePlugin (net.minecraftforge.classloading.FMLForgePlugin), we are in deobf and it's a forge core plugin
-[22:41:45] [Thread-5/INFO]: Searching /tmp/mctester/game/mods for mods
-[22:41:45] [Thread-5/INFO]: Loading tweaker org.spongepowered.asm.launch.MixinTweaker from spongeforge-1.12.2-2768-7.1.5-RC3512-dev.jar
-[22:41:45] [Thread-5/INFO]: Calling tweak class org.spongepowered.mctester.api.MinecraftRunnerTweaker
-[22:41:45] [Thread-5/INFO]: [org.spongepowered.mctester.internal.RemoveSecurityManager:clearSecurityManager:24]: Found SecurityManager, clearing via Unsafe
-[22:41:45] [Thread-5/INFO]: SpongePowered MIXIN Subsystem Version=0.7.11 Source=file:/home/raiponz/.gradle/caches/modules-2/files-2.1/org.spongepowered/mixin/0.7.11-SNAPSHOT/7a670207bdb97db418118ad1e9bb42424ff3776d/mixin-0.7.11-SNAPSHOT.jar Service=LaunchWrapper Env=CLIENT
-[22:41:45] [Thread-5/DEBUG]: Instantiating coremod class SpongeCoremod
-[22:41:45] [Thread-5/DEBUG]: The coremod org.spongepowered.mod.SpongeCoremod requested minecraft version 1.12.2 and minecraft is 1.12.2. It will be loaded.
-[22:41:45] [Thread-5/WARN]: The coremod SpongeCoremod (org.spongepowered.mod.SpongeCoremod) is not signed!
-[22:41:45] [Thread-5/INFO]: Compatibility level set to JAVA_8
-[22:41:45] [Thread-5/INFO]: Adding new token provider org.spongepowered.mod.SpongeCoremod$TokenProvider to MixinEnvironment[DEFAULT]
-[22:41:45] [Thread-5/INFO]: Adding new token provider org.spongepowered.mod.SpongeCoremod$TokenProvider to MixinEnvironment[PREINIT]
-[22:41:45] [Thread-5/INFO]: Adding new token provider org.spongepowered.mod.SpongeCoremod$TokenProvider to MixinEnvironment[INIT]
-[22:41:45] [Thread-5/DEBUG]: Added access transformer class org.spongepowered.mod.asm.transformer.SpongeAccessTransformer to enqueued access transformers
-[22:41:45] [Thread-5/DEBUG]: Enqueued coremod SpongeCoremod
-[22:41:45] [Thread-5/ERROR]: MixinBootstrap.doInit() called during a tweak constructor!
-[22:41:45] [Thread-5/INFO]: Calling tweak class net.minecraftforge.gradle.tweakers.CoremodTweaker
-[22:41:45] [Thread-5/INFO]: Injecting location in coremod net.minecraftforge.fml.relauncher.FMLCorePlugin
-[22:41:45] [Thread-5/INFO]: Injecting location in coremod net.minecraftforge.classloading.FMLForgePlugin
-[22:41:45] [Thread-5/INFO]: Injecting location in coremod org.spongepowered.mod.SpongeCoremod
-[22:41:45] [Thread-5/INFO]: Loading tweak class name net.minecraftforge.fml.common.launcher.FMLInjectionAndSortingTweaker
-[22:41:45] [Thread-5/INFO]: Loading tweak class name org.spongepowered.asm.launch.MixinTweaker
-[22:41:45] [Thread-5/INFO]: Loading tweak class name net.minecraftforge.fml.common.launcher.FMLDeobfTweaker
-[22:41:45] [Thread-5/INFO]: Loading tweak class name org.spongepowered.asm.mixin.EnvironmentStateTweaker
-[22:41:45] [Thread-5/INFO]: Loading tweak class name net.minecraftforge.gradle.tweakers.AccessTransformerTweaker
-[22:41:45] [Thread-5/INFO]: Calling tweak class net.minecraftforge.fml.common.launcher.FMLInjectionAndSortingTweaker
-[22:41:45] [Thread-5/INFO]: Calling tweak class net.minecraftforge.fml.common.launcher.FMLInjectionAndSortingTweaker
-[22:41:45] [Thread-5/INFO]: Calling tweak class net.minecraftforge.fml.relauncher.CoreModManager$FMLPluginWrapper
-[22:41:45] [Thread-5/DEBUG]: Injecting coremod FMLCorePlugin \{net.minecraftforge.fml.relauncher.FMLCorePlugin\} class transformers
-[22:41:45] [Thread-5/TRACE]: Registering transformer net.minecraftforge.fml.common.asm.transformers.BlamingTransformer
-[22:41:45] [Thread-5/TRACE]: Registering transformer net.minecraftforge.fml.common.asm.transformers.SideTransformer
-[22:41:45] [Thread-5/TRACE]: Registering transformer net.minecraftforge.fml.common.asm.transformers.EventSubscriptionTransformer
-[22:41:45] [Thread-5/TRACE]: Registering transformer net.minecraftforge.fml.common.asm.transformers.EventSubscriberTransformer
-[22:41:45] [Thread-5/TRACE]: Registering transformer net.minecraftforge.fml.common.asm.transformers.SoundEngineFixTransformer
-[22:41:45] [Thread-5/DEBUG]: Injection complete
-[22:41:45] [Thread-5/DEBUG]: Running coremod plugin for FMLCorePlugin \{net.minecraftforge.fml.relauncher.FMLCorePlugin\}
-[22:41:45] [Thread-5/DEBUG]: Running coremod plugin FMLCorePlugin
-[22:41:46] [Thread-5/ERROR]: FML appears to be missing any signature data. This is not a good thing
-[22:41:46] [Thread-5/DEBUG]: Coremod plugin class FMLCorePlugin run successfully
-[22:41:46] [Thread-5/INFO]: Calling tweak class net.minecraftforge.fml.relauncher.CoreModManager$FMLPluginWrapper
-[22:41:46] [Thread-5/DEBUG]: Injecting coremod FMLForgePlugin \{net.minecraftforge.classloading.FMLForgePlugin\} class transformers
-[22:41:46] [Thread-5/DEBUG]: Injection complete
-[22:41:46] [Thread-5/DEBUG]: Running coremod plugin for FMLForgePlugin \{net.minecraftforge.classloading.FMLForgePlugin\}
-[22:41:46] [Thread-5/DEBUG]: Running coremod plugin FMLForgePlugin
-[22:41:46] [Thread-5/DEBUG]: Coremod plugin class FMLForgePlugin run successfully
-[22:41:46] [Thread-5/INFO]: Calling tweak class net.minecraftforge.fml.relauncher.CoreModManager$FMLPluginWrapper
-[22:41:46] [Thread-5/DEBUG]: Injecting coremod SpongeCoremod \{org.spongepowered.mod.SpongeCoremod\} class transformers
-[22:41:46] [Thread-5/TRACE]: Registering transformer org.spongepowered.common.launch.transformer.SpongeSuperclassTransformer
-[22:41:46] [Thread-5/DEBUG]: Injection complete
-[22:41:46] [Thread-5/DEBUG]: Running coremod plugin for SpongeCoremod \{org.spongepowered.mod.SpongeCoremod\}
-[22:41:46] [Thread-5/DEBUG]: Running coremod plugin SpongeCoremod
-[22:41:46] [Thread-5/DEBUG]: Coremod plugin class SpongeCoremod run successfully
-[22:41:46] [Thread-5/INFO]: Calling tweak class org.spongepowered.asm.launch.MixinTweaker
-[22:41:46] [Thread-5/ERROR]: MixinBootstrap.doInit() called during a tweak constructor!
-[22:41:46] [Thread-5/INFO]: Initialised Mixin FML Remapper Adapter with net.minecraftforge.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper@27e27878
-[22:41:46] [Thread-5/INFO]: Calling tweak class org.spongepowered.asm.mixin.EnvironmentStateTweaker
-[22:41:46] [Thread-5/INFO]: Calling tweak class net.minecraftforge.fml.common.launcher.FMLDeobfTweaker
-[22:41:46] [Thread-5/DEBUG]: Validating minecraft
-[22:41:46] [Thread-5/INFO]: Calling tweak class net.minecraftforge.gradle.tweakers.AccessTransformerTweaker
-[22:41:46] [Thread-5/INFO]: Remapping AccessTransformer rules...
-[22:41:46] [Thread-5/INFO]: Loading tweak class name net.minecraftforge.fml.common.launcher.TerminalTweaker
-[22:41:46] [Thread-5/WARN]: Tweak class name org.spongepowered.asm.mixin.EnvironmentStateTweaker has already been visited -- skipping
-[22:41:46] [Thread-5/INFO]: Calling tweak class net.minecraftforge.fml.common.launcher.TerminalTweaker
-[22:41:51] [Thread-5/INFO]: Launching wrapped minecraft {net.minecraft.client.main.Main}
-[22:41:53] [Thread-5/INFO]: Setting user: Player675
-[22:42:00] [Thread-5/INFO]: LWJGL Version: 2.9.4
-[22:42:00] [Thread-5/INFO]: Could not load splash.properties, will create a default one
-[22:42:00] [Thread-5/INFO]: -- System Details --
+[15:31:10] [Thread-5/INFO]: Running with arguments: [--userProperties, {}, --assetsDir, /home/raiponz/.gradle/caches/minecraft/assets, --assetIndex, 1.12, --accessToken{REDACTED}, --version, 1.12.2, --tweakClass, net.minecraftforge.fml.common.launcher.FMLTweaker, --tweakClass, org.spongepowered.mctester.api.MinecraftRunnerTweaker, --gameDir, /tmp/mctester/game, --tweakClass, net.minecraftforge.gradle.tweakers.CoremodTweaker]
+[15:31:11] [Thread-5/INFO]: Loading tweak class name net.minecraftforge.fml.common.launcher.FMLTweaker
+[15:31:11] [Thread-5/INFO]: Using primary tweak class name net.minecraftforge.fml.common.launcher.FMLTweaker
+[15:31:11] [Thread-5/INFO]: Loading tweak class name org.spongepowered.mctester.api.MinecraftRunnerTweaker
+[15:31:11] [Thread-5/INFO]: Loading tweak class name net.minecraftforge.gradle.tweakers.CoremodTweaker
+[15:31:11] [Thread-5/INFO]: Calling tweak class net.minecraftforge.fml.common.launcher.FMLTweaker
+[15:31:11] [Thread-5/INFO]: Forge Mod Loader version 14.23.4.2704 for Minecraft 1.12.2 loading
+[15:31:11] [Thread-5/INFO]: Java is Java HotSpot(TM) 64-Bit Server VM, version 1.8.0_161, running on Linux:amd64:4.15.0-43-generic, installed at /usr/lib/jvm/jdk1.8.0_161/jre
+[15:31:11] [Thread-5/ERROR]: Apache Maven library folder was not in the format expected. Using default libraries directory.
+[15:31:11] [Thread-5/ERROR]: Full: /home/raiponz/.gradle/caches/modules-2/files-2.1/org.apache.maven/maven-artifact/3.5.3/7dc72b6d6d8a6dced3d294ed54c2cc3515ade9f4/maven-artifact-3.5.3.jar
+[15:31:11] [Thread-5/ERROR]: Trimmed: /home/raiponz/.gradle/caches/modules-2/files-2.1/org.apache.maven/maven-artifact/3.5.3/
+[15:31:11] [Thread-5/INFO]: Managed to load a deobfuscated Minecraft name- we are in a deobfuscated environment. Skipping runtime deobfuscation
+[15:31:11] [Thread-5/INFO]: Ignoring missing certificate for coremod FMLCorePlugin (net.minecraftforge.fml.relauncher.FMLCorePlugin), we are in deobf and it's a forge core plugin
+[15:31:11] [Thread-5/INFO]: Ignoring missing certificate for coremod FMLForgePlugin (net.minecraftforge.classloading.FMLForgePlugin), we are in deobf and it's a forge core plugin
+[15:31:11] [Thread-5/INFO]: Searching /tmp/mctester/game/mods for mods
+[15:31:11] [Thread-5/INFO]: Loading tweaker org.spongepowered.asm.launch.MixinTweaker from spongeforge-1.12.2-2768-7.1.5-RC3522-dev.jar
+[15:31:11] [Thread-5/INFO]: Calling tweak class org.spongepowered.mctester.api.MinecraftRunnerTweaker
+[15:31:11] [Thread-5/INFO]: [org.spongepowered.mctester.internal.RemoveSecurityManager:clearSecurityManager:24]: Found SecurityManager, clearing via Unsafe
+[15:31:11] [Thread-5/INFO]: SpongePowered MIXIN Subsystem Version=0.7.11 Source=file:/home/raiponz/.gradle/caches/modules-2/files-2.1/org.spongepowered/mixin/0.7.11-SNAPSHOT/7a670207bdb97db418118ad1e9bb42424ff3776d/mixin-0.7.11-SNAPSHOT.jar Service=LaunchWrapper Env=CLIENT
+[15:31:11] [Thread-5/DEBUG]: Instantiating coremod class SpongeCoremod
+[15:31:11] [Thread-5/DEBUG]: The coremod org.spongepowered.mod.SpongeCoremod requested minecraft version 1.12.2 and minecraft is 1.12.2. It will be loaded.
+[15:31:11] [Thread-5/WARN]: The coremod SpongeCoremod (org.spongepowered.mod.SpongeCoremod) is not signed!
+[15:31:11] [Thread-5/INFO]: Compatibility level set to JAVA_8
+[15:31:11] [Thread-5/INFO]: Adding new token provider org.spongepowered.mod.SpongeCoremod$TokenProvider to MixinEnvironment[DEFAULT]
+[15:31:11] [Thread-5/INFO]: Adding new token provider org.spongepowered.mod.SpongeCoremod$TokenProvider to MixinEnvironment[PREINIT]
+[15:31:11] [Thread-5/INFO]: Adding new token provider org.spongepowered.mod.SpongeCoremod$TokenProvider to MixinEnvironment[INIT]
+[15:31:11] [Thread-5/DEBUG]: Added access transformer class org.spongepowered.mod.asm.transformer.SpongeAccessTransformer to enqueued access transformers
+[15:31:11] [Thread-5/DEBUG]: Enqueued coremod SpongeCoremod
+[15:31:11] [Thread-5/ERROR]: MixinBootstrap.doInit() called during a tweak constructor!
+[15:31:11] [Thread-5/INFO]: Calling tweak class net.minecraftforge.gradle.tweakers.CoremodTweaker
+[15:31:11] [Thread-5/INFO]: Injecting location in coremod net.minecraftforge.fml.relauncher.FMLCorePlugin
+[15:31:11] [Thread-5/INFO]: Injecting location in coremod net.minecraftforge.classloading.FMLForgePlugin
+[15:31:11] [Thread-5/INFO]: Injecting location in coremod org.spongepowered.mod.SpongeCoremod
+[15:31:11] [Thread-5/INFO]: Loading tweak class name net.minecraftforge.fml.common.launcher.FMLInjectionAndSortingTweaker
+[15:31:11] [Thread-5/INFO]: Loading tweak class name org.spongepowered.asm.launch.MixinTweaker
+[15:31:11] [Thread-5/INFO]: Loading tweak class name net.minecraftforge.fml.common.launcher.FMLDeobfTweaker
+[15:31:11] [Thread-5/INFO]: Loading tweak class name org.spongepowered.asm.mixin.EnvironmentStateTweaker
+[15:31:11] [Thread-5/INFO]: Loading tweak class name net.minecraftforge.gradle.tweakers.AccessTransformerTweaker
+[15:31:11] [Thread-5/INFO]: Calling tweak class net.minecraftforge.fml.common.launcher.FMLInjectionAndSortingTweaker
+[15:31:11] [Thread-5/INFO]: Calling tweak class net.minecraftforge.fml.common.launcher.FMLInjectionAndSortingTweaker
+[15:31:11] [Thread-5/INFO]: Calling tweak class net.minecraftforge.fml.relauncher.CoreModManager$FMLPluginWrapper
+[15:31:11] [Thread-5/DEBUG]: Injecting coremod FMLCorePlugin \{net.minecraftforge.fml.relauncher.FMLCorePlugin\} class transformers
+[15:31:11] [Thread-5/TRACE]: Registering transformer net.minecraftforge.fml.common.asm.transformers.BlamingTransformer
+[15:31:11] [Thread-5/TRACE]: Registering transformer net.minecraftforge.fml.common.asm.transformers.SideTransformer
+[15:31:11] [Thread-5/TRACE]: Registering transformer net.minecraftforge.fml.common.asm.transformers.EventSubscriptionTransformer
+[15:31:11] [Thread-5/TRACE]: Registering transformer net.minecraftforge.fml.common.asm.transformers.EventSubscriberTransformer
+[15:31:11] [Thread-5/TRACE]: Registering transformer net.minecraftforge.fml.common.asm.transformers.SoundEngineFixTransformer
+[15:31:11] [Thread-5/DEBUG]: Injection complete
+[15:31:11] [Thread-5/DEBUG]: Running coremod plugin for FMLCorePlugin \{net.minecraftforge.fml.relauncher.FMLCorePlugin\}
+[15:31:11] [Thread-5/DEBUG]: Running coremod plugin FMLCorePlugin
+[15:31:12] [Thread-5/ERROR]: FML appears to be missing any signature data. This is not a good thing
+[15:31:12] [Thread-5/DEBUG]: Coremod plugin class FMLCorePlugin run successfully
+[15:31:12] [Thread-5/INFO]: Calling tweak class net.minecraftforge.fml.relauncher.CoreModManager$FMLPluginWrapper
+[15:31:12] [Thread-5/DEBUG]: Injecting coremod FMLForgePlugin \{net.minecraftforge.classloading.FMLForgePlugin\} class transformers
+[15:31:12] [Thread-5/DEBUG]: Injection complete
+[15:31:12] [Thread-5/DEBUG]: Running coremod plugin for FMLForgePlugin \{net.minecraftforge.classloading.FMLForgePlugin\}
+[15:31:12] [Thread-5/DEBUG]: Running coremod plugin FMLForgePlugin
+[15:31:12] [Thread-5/DEBUG]: Coremod plugin class FMLForgePlugin run successfully
+[15:31:12] [Thread-5/INFO]: Calling tweak class net.minecraftforge.fml.relauncher.CoreModManager$FMLPluginWrapper
+[15:31:12] [Thread-5/DEBUG]: Injecting coremod SpongeCoremod \{org.spongepowered.mod.SpongeCoremod\} class transformers
+[15:31:12] [Thread-5/TRACE]: Registering transformer org.spongepowered.common.launch.transformer.SpongeSuperclassTransformer
+[15:31:12] [Thread-5/DEBUG]: Injection complete
+[15:31:12] [Thread-5/DEBUG]: Running coremod plugin for SpongeCoremod \{org.spongepowered.mod.SpongeCoremod\}
+[15:31:12] [Thread-5/DEBUG]: Running coremod plugin SpongeCoremod
+[15:31:12] [Thread-5/DEBUG]: Coremod plugin class SpongeCoremod run successfully
+[15:31:12] [Thread-5/INFO]: Calling tweak class org.spongepowered.asm.launch.MixinTweaker
+[15:31:12] [Thread-5/ERROR]: MixinBootstrap.doInit() called during a tweak constructor!
+[15:31:12] [Thread-5/INFO]: Initialised Mixin FML Remapper Adapter with net.minecraftforge.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper@16330903
+[15:31:12] [Thread-5/INFO]: Calling tweak class org.spongepowered.asm.mixin.EnvironmentStateTweaker
+[15:31:12] [Thread-5/INFO]: Calling tweak class net.minecraftforge.fml.common.launcher.FMLDeobfTweaker
+[15:31:12] [Thread-5/DEBUG]: Validating minecraft
+[15:31:12] [Thread-5/INFO]: Calling tweak class net.minecraftforge.gradle.tweakers.AccessTransformerTweaker
+[15:31:12] [Thread-5/INFO]: Remapping AccessTransformer rules...
+[15:31:12] [Thread-5/INFO]: Loading tweak class name net.minecraftforge.fml.common.launcher.TerminalTweaker
+[15:31:12] [Thread-5/WARN]: Tweak class name org.spongepowered.asm.mixin.EnvironmentStateTweaker has already been visited -- skipping
+[15:31:12] [Thread-5/INFO]: Calling tweak class net.minecraftforge.fml.common.launcher.TerminalTweaker
+[15:31:17] [Thread-5/INFO]: Launching wrapped minecraft {net.minecraft.client.main.Main}
+[15:31:20] [Thread-5/INFO]: Setting user: Player598
+[15:31:26] [Thread-5/INFO]: LWJGL Version: 2.9.4
+[15:31:26] [Thread-5/INFO]: Could not load splash.properties, will create a default one
+[15:31:26] [Thread-5/INFO]: -- System Details --
 Details:
 	Minecraft Version: 1.12.2
-	Operating System: Linux (amd64) version 4.15.0-38-generic
+	Operating System: Linux (amd64) version 4.15.0-43-generic
 	Java Version: 1.8.0_161, Oracle Corporation
 	Java VM Version: Java HotSpot(TM) 64-Bit Server VM (mixed mode), Oracle Corporation
-	Memory: 412697064 bytes (393 MB) / 1262485504 bytes (1204 MB) up to 3719299072 bytes (3547 MB)
+	Memory: 433895384 bytes (413 MB) / 1262485504 bytes (1204 MB) up to 3719299072 bytes (3547 MB)
 	JVM Flags: 0 total; 
 	IntCache: cache: 0, tcache: 0, allocated: 0, tallocated: 0
 	FML: 
 	Loaded coremods (and transformers): 
-SpongeCoremod (spongeforge-1.12.2-2768-7.1.5-RC3512-dev.jar)
+SpongeCoremod (spongeforge-1.12.2-2768-7.1.5-RC3522-dev.jar)
   org.spongepowered.common.launch.transformer.SpongeSuperclassTransformer
 	GL info: ' Vendor: 'Intel Open Source Technology Center' Version: '3.0 Mesa 18.0.5' Renderer: 'Mesa DRI Intel(R) Haswell Mobile '
-[22:42:01] [Thread-5/INFO]: MinecraftForge v14.23.4.2704 Initialized
-[22:42:01] [Thread-5/INFO]: Starts to replace vanilla recipe ingredients with ore ingredients.
-[22:42:01] [Thread-5/INFO]: Replaced 1036 ore ingredients
-[22:42:01] [Thread-5/INFO]: Found mcmod.info at jar:file:/tmp/mctester/game/mods/spongeforge-1.12.2-2768-7.1.5-RC3512-dev.jar!/mcmod.info
-[22:42:01] [Thread-5/INFO]: Creating injector in stage 'DEVELOPMENT'
-[22:42:01] [Thread-5/INFO]: [org.slf4j.helpers.Util:report:128]: SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
-[22:42:01] [Thread-5/INFO]: [org.slf4j.helpers.Util:report:128]: SLF4J: Defaulting to no-operation (NOP) logger implementation
-[22:42:01] [Thread-5/INFO]: [org.slf4j.helpers.Util:report:128]: SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
-[22:42:04] [Thread-8/INFO]: Using sync timing. 200 frames of Display.update took 171374325 nanos
-[22:42:06] [Thread-5/INFO]: Searching /tmp/mctester/game/mods for mods
-[22:42:06] [Thread-5/WARN]: Plugin 'itemizer' seems to be missing a valid mcmod.info metadata file. This is not a problem when testing plugins, however it is recommended to include one in public plugins.
+[15:31:26] [Thread-5/INFO]: MinecraftForge v14.23.4.2704 Initialized
+[15:31:26] [Thread-5/INFO]: Starts to replace vanilla recipe ingredients with ore ingredients.
+[15:31:26] [Thread-5/INFO]: Replaced 1036 ore ingredients
+[15:31:26] [Thread-5/INFO]: Found mcmod.info at jar:file:/tmp/mctester/game/mods/spongeforge-1.12.2-2768-7.1.5-RC3522-dev.jar!/mcmod.info
+[15:31:26] [Thread-5/INFO]: Creating injector in stage 'DEVELOPMENT'
+[15:31:27] [Thread-5/INFO]: [org.slf4j.helpers.Util:report:128]: SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+[15:31:27] [Thread-5/INFO]: [org.slf4j.helpers.Util:report:128]: SLF4J: Defaulting to no-operation (NOP) logger implementation
+[15:31:27] [Thread-5/INFO]: [org.slf4j.helpers.Util:report:128]: SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+[15:31:30] [Thread-8/INFO]: Using sync timing. 200 frames of Display.update took 145356715 nanos
+[15:31:32] [Thread-5/INFO]: Searching /tmp/mctester/game/mods for mods
+[15:31:32] [Thread-5/WARN]: Plugin 'itemizer' seems to be missing a valid mcmod.info metadata file. This is not a problem when testing plugins, however it is recommended to include one in public plugins.
 Please see https://docs.spongepowered.org/master/en/plugin/plugin-meta.html for details.
-[22:42:07] [Thread-5/WARN]: Plugin 'mctester_dummy' seems to be missing a valid mcmod.info metadata file. This is not a problem when testing plugins, however it is recommended to include one in public plugins.
+[15:31:32] [Thread-5/WARN]: Plugin 'mctester_dummy' seems to be missing a valid mcmod.info metadata file. This is not a problem when testing plugins, however it is recommended to include one in public plugins.
 Please see https://docs.spongepowered.org/master/en/plugin/plugin-meta.html for details.
-[22:42:07] [Thread-5/WARN]: Plugin 'tests_runner' seems to be missing a valid mcmod.info metadata file. This is not a problem when testing plugins, however it is recommended to include one in public plugins.
+[15:31:32] [Thread-5/WARN]: Plugin 'tests_runner' seems to be missing a valid mcmod.info metadata file. This is not a problem when testing plugins, however it is recommended to include one in public plugins.
 Please see https://docs.spongepowered.org/master/en/plugin/plugin-meta.html for details.
-[22:42:08] [Thread-5/INFO]: Forge Mod Loader has identified 11 mods to load
-[22:42:08] [Thread-5/WARN]: The mod spongeforge was designed for forge 14.23.5.2768 but version 14.23.4.2704 is in use. It may not work properly.
-[22:42:08] [Thread-5/WARN]: The mod spongeforge was designed for forge 14.23.5.2768 but version 14.23.4.2704 is in use. It may not work properly.
-[22:42:08] [Thread-5/INFO]: Attempting connection with missing mods [minecraft, mcp, FML, forge, spongeapi, sponge, spongeforge, itemizer, mctester_dummy, tests_runner, mctester] at CLIENT
-[22:42:08] [Thread-5/INFO]: Attempting connection with missing mods [minecraft, mcp, FML, forge, spongeapi, sponge, spongeforge, itemizer, mctester_dummy, tests_runner, mctester] at SERVER
-[22:42:09] [Thread-5/INFO]: Reloading ResourceManager: Default, FMLFileResourcePack:Forge Mod Loader, FMLFileResourcePack:Minecraft Forge, FMLFileResourcePack:SpongeForge, FMLFileResourcePack:Itemizer improuved items, FMLFileResourcePack:McTester Dummmy, FMLFileResourcePack:Integration Tests Runner, FMLFileResourcePack:Mctester
-[22:42:09] [Thread-5/INFO]: Processing ObjectHolder annotations
-[22:42:09] [Thread-5/INFO]: Found 1168 ObjectHolder annotations
-[22:42:09] [Thread-5/INFO]: Identifying ItemStackHolder annotations
-[22:42:09] [Thread-5/INFO]: Found 0 ItemStackHolder annotations
-[22:42:09] [Thread-5/INFO]: Configured a dormant chunk cache size of 0
-[22:42:09] [Forge Version Check/INFO]: [forge] Starting version check at http://files.minecraftforge.net/maven/net/minecraftforge/forge/promotions_slim.json
-[22:42:10] [Forge Version Check/INFO]: [forge] Found status: OUTDATED Target: 14.23.5.2768
-[22:42:10] [Forge Version Check/INFO]: [spongeforge] Starting version check at https://files.minecraftforge.net/maven/org/spongepowered/spongeforge/promotions_slim.json
-[22:42:10] [Thread-5/INFO]: Applying holder lookups
-[22:42:10] [Thread-5/INFO]: Holder lookups applied
-[22:42:10] [Thread-5/INFO]: Applying holder lookups
-[22:42:10] [Thread-5/INFO]: Holder lookups applied
-[22:42:10] [Thread-5/WARN]: Potentially Dangerous alternative prefix `sponge` for name `human`, expected `spongeforge`. This could be a intended override, but in most cases indicates a broken mod.
-[22:42:10] [Thread-5/INFO]: Applying holder lookups
-[22:42:10] [Thread-5/INFO]: Holder lookups applied
-[22:42:10] [Thread-5/INFO]: Applying holder lookups
-[22:42:10] [Thread-5/INFO]: Holder lookups applied
-[22:42:10] [Thread-5/INFO]: Injecting itemstacks
-[22:42:10] [Thread-5/INFO]: Itemstack injection complete
-[22:42:10] [Forge Version Check/INFO]: [spongeforge] Found status: OUTDATED Target: 7.1.2
-[22:42:10] [Sound Library Loader/INFO]: Starting up SoundSystem...
-[22:42:11] [Thread-10/INFO]: Initializing LWJGL OpenAL
-[22:42:11] [Thread-10/INFO]: (The LWJGL binding of OpenAL.  For more information, see http://www.lwjgl.org)
-[22:42:11] [Thread-10/INFO]: OpenAL initialized.
-[22:42:11] [Sound Library Loader/INFO]: Sound engine started
-[22:42:12] [Thread-5/INFO]: Max texture size: 16384
-[22:42:12] [Thread-5/INFO]: Created: 512x512 textures-atlas
-[22:42:14] [Thread-5/INFO]: Applying holder lookups
-[22:42:14] [Thread-5/INFO]: Holder lookups applied
-[22:42:14] [Thread-5/WARN]: A custom DataBuilder is not extending AbstractDataBuilder! It is recommended that the custom data builder does extend it to gain automated content versioning updates and maintain simplicity. The offending builder's class is: class org.spongepowered.mctester.internal.framework.proxy.RemoteInvocationDataBuilder
-[22:42:14] [Thread-5/INFO]: Injecting itemstacks
-[22:42:14] [Thread-5/INFO]: Itemstack injection complete
-[22:42:15] [Thread-5/INFO]: Forge Mod Loader has successfully loaded 11 mods
-[22:42:15] [Thread-5/INFO]: Narrator library successfully loaded
-[22:42:16] [Test worker/INFO]: [org.spongepowered.mctester.internal.world.CurrentWorld:joinNewWorld:36]: Creating world MCTester-Normal-ItemizerTest--8142
-[22:42:18] [Thread-5/WARN]: Static binding violation: PRIVATE overwrite method initializeConnectionToPlayer in mixins.common.core.json:server.MixinPlayerList cannot reduce visibiliy of PUBLIC target method, visibility will be upgraded.
-[22:42:19] [Realms Notification Availability checker #1/INFO]: Could not authorize you against Realms server: Invalid session id
-[22:42:19] [Server thread/INFO]: Starting integrated minecraft server version 1.12.2
-[22:42:19] [Server thread/INFO]: Generating keypair
-[22:42:19] [Server thread/INFO]: Checking for worlds that need to be migrated...
-[22:42:19] [Server thread/INFO]: No worlds were found in need of migration.
-[22:42:19] [Server thread/INFO]: Injecting existing registry data into this server instance
-[22:42:19] [Server thread/INFO]: Applying holder lookups
-[22:42:19] [Server thread/INFO]: Holder lookups applied
-[22:42:20] [Server thread/INFO]: Loaded 488 advancements
-[22:42:20] [Server thread/INFO]: Loaded 6 advancement trees
-[22:42:21] [Server thread/INFO]: Preparing start region for level 0 (MCTester-Normal-ItemizerTest--8142)
-[22:42:22] [Server thread/INFO]: Loading world [MCTester-Normal-ItemizerTest--8142] (overworld)
-[22:42:22] [Server thread/INFO]: Loaded 488 advancements
-[22:42:22] [Server thread/INFO]: Loaded 6 advancement trees
-[22:42:22] [Server thread/INFO]: Loading world [DIM-1] (the_nether)
-[22:42:22] [Server thread/INFO]: Loaded 488 advancements
-[22:42:22] [Server thread/INFO]: Loaded 6 advancement trees
-[22:42:22] [Server thread/INFO]: Loading world [DIM1] (the_end)
-[22:42:22] [Server thread/INFO]: Changing view distance to 12, from 10
-[22:42:24] [Netty Local Client IO #0/INFO]: Server protocol version 2
-[22:42:24] [Netty Server IO #1/INFO]: Client protocol version 2
-[22:42:24] [Netty Server IO #1/INFO]: Client attempting to join with 11 mods : minecraft@1.12.2,sponge@1.12.2-7.1.5-SNAPSHOT,tests_runner@1.0,FML@8.0.99.99,spongeapi@7.1.0-6eb292fd,spongeforge@1.12.2-2768-7.1.5-RC3512,mctester@0.10.5-SNAPSHOT,forge@14.23.4.2704,itemizer@1.5.1,mcp@9.42,mctester_dummy@1.0-SNAPSHOT
-[22:42:24] [Netty Local Client IO #0/INFO]: [Netty Local Client IO #0] Client side modded connection established
-[22:42:24] [Server thread/INFO]: [Server thread] Server side modded connection established
-[22:42:24] [Server thread/ERROR]: Encountered an unexpected exception
+[15:31:34] [Thread-5/INFO]: Forge Mod Loader has identified 11 mods to load
+[15:31:34] [Thread-5/WARN]: The mod spongeforge was designed for forge 14.23.5.2768 but version 14.23.4.2704 is in use. It may not work properly.
+[15:31:34] [Thread-5/WARN]: The mod spongeforge was designed for forge 14.23.5.2768 but version 14.23.4.2704 is in use. It may not work properly.
+[15:31:34] [Thread-5/INFO]: Attempting connection with missing mods [minecraft, mcp, FML, forge, spongeapi, sponge, spongeforge, itemizer, mctester_dummy, tests_runner, mctester] at CLIENT
+[15:31:34] [Thread-5/INFO]: Attempting connection with missing mods [minecraft, mcp, FML, forge, spongeapi, sponge, spongeforge, itemizer, mctester_dummy, tests_runner, mctester] at SERVER
+[15:31:35] [Thread-5/INFO]: Reloading ResourceManager: Default, FMLFileResourcePack:Forge Mod Loader, FMLFileResourcePack:Minecraft Forge, FMLFileResourcePack:SpongeForge, FMLFileResourcePack:Itemizer improuved items, FMLFileResourcePack:McTester Dummmy, FMLFileResourcePack:Integration Tests Runner, FMLFileResourcePack:Mctester
+[15:31:35] [Thread-5/INFO]: Processing ObjectHolder annotations
+[15:31:35] [Thread-5/INFO]: Found 1168 ObjectHolder annotations
+[15:31:35] [Thread-5/INFO]: Identifying ItemStackHolder annotations
+[15:31:35] [Thread-5/INFO]: Found 0 ItemStackHolder annotations
+[15:31:35] [Thread-5/INFO]: Configured a dormant chunk cache size of 0
+[15:31:35] [Forge Version Check/INFO]: [spongeforge] Starting version check at https://files.minecraftforge.net/maven/org/spongepowered/spongeforge/promotions_slim.json
+[15:31:35] [Forge Version Check/INFO]: [spongeforge] Found status: OUTDATED Target: 7.1.2
+[15:31:35] [Forge Version Check/INFO]: [forge] Starting version check at http://files.minecraftforge.net/maven/net/minecraftforge/forge/promotions_slim.json
+[15:31:36] [Forge Version Check/INFO]: [forge] Found status: OUTDATED Target: 14.23.5.2768
+[15:31:36] [Thread-5/INFO]: Applying holder lookups
+[15:31:36] [Thread-5/INFO]: Holder lookups applied
+[15:31:36] [Thread-5/INFO]: Applying holder lookups
+[15:31:36] [Thread-5/INFO]: Holder lookups applied
+[15:31:36] [Thread-5/WARN]: Potentially Dangerous alternative prefix `sponge` for name `human`, expected `spongeforge`. This could be a intended override, but in most cases indicates a broken mod.
+[15:31:36] [Thread-5/INFO]: Applying holder lookups
+[15:31:36] [Thread-5/INFO]: Holder lookups applied
+[15:31:36] [Thread-5/INFO]: Applying holder lookups
+[15:31:36] [Thread-5/INFO]: Holder lookups applied
+[15:31:36] [Thread-5/INFO]: Injecting itemstacks
+[15:31:36] [Thread-5/INFO]: Itemstack injection complete
+[15:31:36] [Sound Library Loader/INFO]: Starting up SoundSystem...
+[15:31:37] [Thread-10/INFO]: Initializing LWJGL OpenAL
+[15:31:37] [Thread-10/INFO]: (The LWJGL binding of OpenAL.  For more information, see http://www.lwjgl.org)
+[15:31:37] [Thread-10/INFO]: OpenAL initialized.
+[15:31:37] [Sound Library Loader/INFO]: Sound engine started
+[15:31:38] [Thread-5/INFO]: Max texture size: 16384
+[15:31:38] [Thread-5/INFO]: Created: 512x512 textures-atlas
+[15:31:40] [Thread-5/INFO]: Applying holder lookups
+[15:31:40] [Thread-5/INFO]: Holder lookups applied
+[15:31:40] [Thread-5/WARN]: A custom DataBuilder is not extending AbstractDataBuilder! It is recommended that the custom data builder does extend it to gain automated content versioning updates and maintain simplicity. The offending builder's class is: class org.spongepowered.mctester.internal.framework.proxy.RemoteInvocationDataBuilder
+[15:31:40] [Thread-5/INFO]: Injecting itemstacks
+[15:31:40] [Thread-5/INFO]: Itemstack injection complete
+[15:31:40] [Thread-5/INFO]: Forge Mod Loader has successfully loaded 11 mods
+[15:31:41] [Thread-5/INFO]: Narrator library successfully loaded
+[15:31:41] [Test worker/INFO]: [org.spongepowered.mctester.internal.world.CurrentWorld:joinNewWorld:36]: Creating world MCTester-Normal-ItemizerTest--2572
+[15:31:43] [Thread-5/WARN]: Static binding violation: PRIVATE overwrite method initializeConnectionToPlayer in mixins.common.core.json:server.MixinPlayerList cannot reduce visibiliy of PUBLIC target method, visibility will be upgraded.
+[15:31:43] [Realms Notification Availability checker #1/INFO]: Could not authorize you against Realms server: Invalid session id
+[15:31:43] [Server thread/INFO]: Starting integrated minecraft server version 1.12.2
+[15:31:43] [Server thread/INFO]: Generating keypair
+[15:31:43] [Server thread/INFO]: Checking for worlds that need to be migrated...
+[15:31:43] [Server thread/INFO]: No worlds were found in need of migration.
+[15:31:43] [Server thread/INFO]: Injecting existing registry data into this server instance
+[15:31:43] [Server thread/INFO]: Applying holder lookups
+[15:31:43] [Server thread/INFO]: Holder lookups applied
+[15:31:44] [Server thread/INFO]: Loaded 488 advancements
+[15:31:44] [Server thread/INFO]: Loaded 6 advancement trees
+[15:31:45] [Server thread/INFO]: Preparing start region for level 0 (MCTester-Normal-ItemizerTest--2572)
+[15:31:46] [Server thread/INFO]: Loading world [MCTester-Normal-ItemizerTest--2572] (overworld)
+[15:31:46] [Server thread/INFO]: Loaded 488 advancements
+[15:31:46] [Server thread/INFO]: Loaded 6 advancement trees
+[15:31:46] [Server thread/INFO]: Loading world [DIM-1] (the_nether)
+[15:31:46] [Server thread/INFO]: Loaded 488 advancements
+[15:31:46] [Server thread/INFO]: Loaded 6 advancement trees
+[15:31:46] [Server thread/INFO]: Loading world [DIM1] (the_end)
+[15:31:46] [Server thread/INFO]: Changing view distance to 12, from 10
+[15:31:48] [Netty Local Client IO #0/INFO]: Server protocol version 2
+[15:31:48] [Netty Server IO #1/INFO]: Client protocol version 2
+[15:31:48] [Netty Server IO #1/INFO]: Client attempting to join with 11 mods : minecraft@1.12.2,sponge@1.12.2-7.1.5-SNAPSHOT,tests_runner@1.0,FML@8.0.99.99,spongeapi@7.1.0-81ce267d,spongeforge@1.12.2-2768-7.1.5-RC3522,mctester@0.10.5-SNAPSHOT,forge@14.23.4.2704,itemizer@1.5.2,mcp@9.42,mctester_dummy@1.0-SNAPSHOT
+[15:31:48] [Netty Local Client IO #0/INFO]: [Netty Local Client IO #0] Client side modded connection established
+[15:31:48] [Server thread/INFO]: [Server thread] Server side modded connection established
+[15:31:48] [Server thread/ERROR]: Encountered an unexpected exception
 java.lang.NoSuchMethodError: net.minecraftforge.fml.common.FMLCommonHandler.fireServerConnectionEvent(Lnet/minecraft/network/NetworkManager;)V
-	at org.spongepowered.common.SpongeImplHooks.fireServerConnectionEvent(SpongeImplHooks.java:751) ~[SpongeImplHooks.class:1.12.2-2768-7.1.5-RC3512]
+	at org.spongepowered.common.SpongeImplHooks.fireServerConnectionEvent(SpongeImplHooks.java:751) ~[SpongeImplHooks.class:1.12.2-2768-7.1.5-RC3522]
 	at net.minecraft.server.management.PlayerList.initializeConnectionToPlayer(PlayerList.java:1562) ~[PlayerList.class:?]
 	at net.minecraftforge.fml.common.network.handshake.NetworkDispatcher.completeServerSideConnection(NetworkDispatcher.java:256) ~[NetworkDispatcher.class:?]
 	at net.minecraftforge.fml.common.network.handshake.NetworkDispatcher.access$100(NetworkDispatcher.java:72) ~[NetworkDispatcher.class:?]
@@ -188,20 +188,20 @@ java.lang.NoSuchMethodError: net.minecraftforge.fml.common.FMLCommonHandler.fire
 	at net.minecraft.server.integrated.IntegratedServer.tick(IntegratedServer.java:185) ~[IntegratedServer.class:?]
 	at net.minecraft.server.MinecraftServer.run(MinecraftServer.java:526) [MinecraftServer.class:?]
 	at java.lang.Thread.run(Thread.java:748) [?:1.8.0_161]
-[22:42:24] [Server thread/ERROR]: This crash report has been saved to: /tmp/mctester/game/crash-reports/crash-2018-12-26_22.42.24-server.txt
-[22:42:24] [Server thread/INFO]: Stopping server
-[22:42:24] [Server thread/INFO]: Saving players
-[22:42:24] [Server thread/INFO]: Saving worlds
-[22:42:24] [Server thread/INFO]: Saving chunks for level 'MCTester-Normal-ItemizerTest--8142'/overworld
-[22:42:24] [Thread-5/INFO]: [net.minecraft.init.Bootstrap:printToSYSOUT:553]: ---- Minecraft Crash Report ----
+[15:31:48] [Server thread/ERROR]: This crash report has been saved to: /tmp/mctester/game/crash-reports/crash-2019-01-16_15.31.48-server.txt
+[15:31:48] [Server thread/INFO]: Stopping server
+[15:31:48] [Server thread/INFO]: Saving players
+[15:31:48] [Server thread/INFO]: Saving worlds
+[15:31:48] [Server thread/INFO]: Saving chunks for level 'MCTester-Normal-ItemizerTest--2572'/overworld
+[15:31:48] [Thread-5/INFO]: [net.minecraft.init.Bootstrap:printToSYSOUT:553]: ---- Minecraft Crash Report ----
 
 WARNING: coremods are present:
-  SpongeCoremod (spongeforge-1.12.2-2768-7.1.5-RC3512-dev.jar)
+  SpongeCoremod (spongeforge-1.12.2-2768-7.1.5-RC3522-dev.jar)
 Contact their authors BEFORE contacting forge
 
-// Uh... Did I do that?
+// My bad.
 
-Time: 12/26/18 10:42 PM
+Time: 1/16/19 3:31 PM
 Description: Exception in server tick loop
 
 java.lang.NoSuchMethodError: net.minecraftforge.fml.common.FMLCommonHandler.fireServerConnectionEvent(Lnet/minecraft/network/NetworkManager;)V
@@ -246,10 +246,10 @@ Stacktrace:
 -- System Details --
 Details:
 	Minecraft Version: 1.12.2
-	Operating System: Linux (amd64) version 4.15.0-38-generic
+	Operating System: Linux (amd64) version 4.15.0-43-generic
 	Java Version: 1.8.0_161, Oracle Corporation
 	Java VM Version: Java HotSpot(TM) 64-Bit Server VM (mixed mode), Oracle Corporation
-	Memory: 1192007816 bytes (1136 MB) / 1853882368 bytes (1768 MB) up to 3719299072 bytes (3547 MB)
+	Memory: 1188888888 bytes (1133 MB) / 1843920896 bytes (1758 MB) up to 3719299072 bytes (3547 MB)
 	JVM Flags: 0 total; 
 	IntCache: cache: 0, tcache: 0, allocated: 0, tallocated: 0
 	FML: MCP 9.42 Powered by Forge 14.23.4.2704 11 mods loaded, 11 mods active
@@ -261,30 +261,30 @@ Details:
 	| UCHIJAAAA | mcp            | 9.42                     | minecraft.jar                                | None      |
 	| UCHIJAAAA | FML            | 8.0.99.99                | forgeBin-1.12.2-14.23.4.2704.jar             | None      |
 	| UCHIJAAAA | forge          | 14.23.4.2704             | forgeBin-1.12.2-14.23.4.2704.jar             | None      |
-	| UCHIJAAAA | spongeapi      | 7.1.0-6eb292fd           | spongeforge-1.12.2-2768-7.1.5-RC3512-dev.jar | None      |
-	| UCHIJAAAA | sponge         | 1.12.2-7.1.5-SNAPSHOT    | spongeforge-1.12.2-2768-7.1.5-RC3512-dev.jar | None      |
-	| UCHIJAAAA | spongeforge    | 1.12.2-2768-7.1.5-RC3512 | spongeforge-1.12.2-2768-7.1.5-RC3512-dev.jar | None      |
-	| UCHIJAAAA | itemizer       | 1.5.1                    | main                                         | None      |
+	| UCHIJAAAA | spongeapi      | 7.1.0-81ce267d           | spongeforge-1.12.2-2768-7.1.5-RC3522-dev.jar | None      |
+	| UCHIJAAAA | sponge         | 1.12.2-7.1.5-SNAPSHOT    | spongeforge-1.12.2-2768-7.1.5-RC3522-dev.jar | None      |
+	| UCHIJAAAA | spongeforge    | 1.12.2-2768-7.1.5-RC3522 | spongeforge-1.12.2-2768-7.1.5-RC3522-dev.jar | None      |
+	| UCHIJAAAA | itemizer       | 1.5.2                    | main                                         | None      |
 	| UCHIJAAAA | mctester_dummy | 1.0-SNAPSHOT             | mctester-0.10.5-SNAPSHOT.jar                 | None      |
 	| UCHIJAAAA | tests_runner   | 1.0                      | mctester-0.10.5-SNAPSHOT.jar                 | None      |
 	| UCHIJAAAA | mctester       | 0.10.5-SNAPSHOT          | mctester-0.10.5-SNAPSHOT.jar                 | None      |
 
 	Loaded coremods (and transformers): 
-SpongeCoremod (spongeforge-1.12.2-2768-7.1.5-RC3512-dev.jar)
+SpongeCoremod (spongeforge-1.12.2-2768-7.1.5-RC3522-dev.jar)
   org.spongepowered.common.launch.transformer.SpongeSuperclassTransformer
 	GL info: ~~ERROR~~ RuntimeException: No OpenGL context found in the current thread.
 	Profiler Position: N/A (disabled)
 	Player Count: 0 / 8; []
 	Type: Integrated Server (map_client.txt)
 	Is Modded: Definitely; Client brand changed to 'fml,forge,sponge'
-[22:42:24] [Thread-5/INFO]: [net.minecraft.init.Bootstrap:printToSYSOUT:553]: #@!@# Game crashed! Crash report saved to: #@!@# /tmp/mctester/game/crash-reports/crash-2018-12-26_22.42.24-server.txt
-[22:42:24] [Thread-5/INFO]: Waiting for the server to terminate/save.
-[22:42:24] [Server thread/INFO]: Saving chunks for level 'DIM-1'/the_nether
-[22:42:24] [Server thread/INFO]: Saving chunks for level 'DIM1'/the_end
-[22:42:25] [Server thread/INFO]: Unloading world [MCTester-Normal-ItemizerTest--8142] (DIM0)
-[22:42:25] [Server thread/INFO]: Unloading world [DIM-1] (DIM-1)
-[22:42:25] [Server thread/INFO]: Unloading world [DIM1] (DIM1)
-[22:42:25] [Server thread/INFO]: Applying holder lookups
-[22:42:25] [Server thread/INFO]: Holder lookups applied
-[22:42:25] [Server thread/INFO]: The state engine was in incorrect state SERVER_STOPPING and forced into state SERVER_STOPPED. Errors may have been discarded.
-[22:42:25] [Thread-5/INFO]: Server terminated.
+[15:31:48] [Thread-5/INFO]: [net.minecraft.init.Bootstrap:printToSYSOUT:553]: #@!@# Game crashed! Crash report saved to: #@!@# /tmp/mctester/game/crash-reports/crash-2019-01-16_15.31.48-server.txt
+[15:31:48] [Thread-5/INFO]: Waiting for the server to terminate/save.
+[15:31:48] [Server thread/INFO]: Saving chunks for level 'DIM-1'/the_nether
+[15:31:48] [Server thread/INFO]: Saving chunks for level 'DIM1'/the_end
+[15:31:49] [Server thread/INFO]: Unloading world [MCTester-Normal-ItemizerTest--2572] (DIM0)
+[15:31:49] [Server thread/INFO]: Unloading world [DIM-1] (DIM-1)
+[15:31:49] [Server thread/INFO]: Unloading world [DIM1] (DIM1)
+[15:31:49] [Server thread/INFO]: Applying holder lookups
+[15:31:49] [Server thread/INFO]: Holder lookups applied
+[15:31:49] [Server thread/INFO]: The state engine was in incorrect state SERVER_STOPPING and forced into state SERVER_STOPPED. Errors may have been discarded.
+[15:31:49] [Thread-5/INFO]: Server terminated.

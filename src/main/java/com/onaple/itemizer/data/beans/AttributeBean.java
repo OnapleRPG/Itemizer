@@ -1,5 +1,18 @@
 package com.onaple.itemizer.data.beans;
 
+import com.google.common.reflect.TypeToken;
+import org.spongepowered.api.data.DataContainer;
+import org.spongepowered.api.data.DataQuery;
+import org.spongepowered.api.data.DataSerializable;
+import org.spongepowered.api.data.DataView;
+import org.spongepowered.api.data.persistence.AbstractDataBuilder;
+import org.spongepowered.api.data.persistence.DataTranslator;
+import org.spongepowered.api.data.persistence.InvalidDataException;
+import org.spongepowered.api.util.ResettableBuilder;
+
+import java.util.Optional;
+import java.util.UUID;
+
 public class AttributeBean {
     /**
      * Name of the Attribute
@@ -18,6 +31,13 @@ public class AttributeBean {
      */
     private int operation;
 
+    /**
+     *
+     * @param name
+     * @param slot
+     * @param amount
+     * @param operation
+     */
     public AttributeBean(String name, String slot, float amount, int operation) {
         this.name = name;
         this.slot = slot;
@@ -26,7 +46,9 @@ public class AttributeBean {
     }
 
     public AttributeBean() {
+
     }
+
 
     public String getName() {
         return name;
@@ -59,4 +81,11 @@ public class AttributeBean {
     public void setOperation(int operation) {
         this.operation = operation;
     }
+
+
+
+
+
+
+
 }

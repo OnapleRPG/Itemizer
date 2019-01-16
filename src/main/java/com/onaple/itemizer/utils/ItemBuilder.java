@@ -30,10 +30,10 @@ import javax.inject.Singleton;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Singleton
+
 public class ItemBuilder {
 
-    private GlobalConfig config = Itemizer.getItemizer().getGlobalConfig();
+    private GlobalConfig config = Itemizer.getGlobalConfig();
     private ItemStack item;
     private List<Text> lore;
     private Set<Key> usedKeys = new HashSet<>();
@@ -64,7 +64,22 @@ public class ItemBuilder {
                setAttribute(itemBean,config.getHiddenFlags().get("Attributes_modifiers"));
                setNbt(itemBean);
                setCustomDatamanipulators(itemBean);
-            Itemizer.getLogger().info("Hide flag value : "+ config.getHiddenFlagsValue());
+//              new OnaKeys();
+//               Optional<List<AttributeBean>> listOpt = this.item.toContainer().getObjectList(OnaKeys.ATTRIBUTE_MODIFIER.getQuery(),AttributeBean.class);
+//
+//
+//            if(listOpt.isPresent()){
+//                Itemizer.getLogger().info(listOpt.get().get(0).getClass().getName());
+//                Map<String, Map> stringMapMap = new HashMap<>();
+//                /* .getMap(OnaKeys.ATTRIBUTE_MODIFIER.getQuery()).ifPresent(o -> stringMapMap.putAll((Map<String, Map>) o));
+//                stringMapMap.forEach((s, map) -> Itemizer.getLogger().info(s + " "+  map.toString() + "\n"));*/
+//            } else {
+//              //  Itemizer.getLogger().info( this.item.toContainer().get(OnaKeys.ATTRIBUTE_MODIFIER.getQuery()).get().getClass().getName());
+//            }
+
+
+
+
             //this.item.offer(OnaKeys.HIDDEN_FLAGS,config.getHiddenFlagsValue());
          //   Itemizer.getLogger().info("flagFrom manipulator : " + this.item.get(OnaKeys.HIDDEN_FLAGS));
                 this.item = ItemStack.builder()
@@ -273,6 +288,10 @@ public class ItemBuilder {
 
         DataContainer container = this.item.toContainer();
         container.set(DataQuery.of("UnsafeData","AttributeModifiers"),containers);
+        this.item = ItemStack.builder()
+                .fromContainer(container)
+                .build();
+
     }
 
 
