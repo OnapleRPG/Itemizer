@@ -64,45 +64,11 @@ public class ItemBuilder {
                setAttribute(itemBean,config.getHiddenFlags().get("Attributes_modifiers"));
                setNbt(itemBean);
                setCustomDatamanipulators(itemBean);
-//              new OnaKeys();
-//               Optional<List<AttributeBean>> listOpt = this.item.toContainer().getObjectList(OnaKeys.ATTRIBUTE_MODIFIER.getQuery(),AttributeBean.class);
-//
-//
-//            if(listOpt.isPresent()){
-//                Itemizer.getLogger().info(listOpt.get().get(0).getClass().getName());
-//                Map<String, Map> stringMapMap = new HashMap<>();
-//                /* .getMap(OnaKeys.ATTRIBUTE_MODIFIER.getQuery()).ifPresent(o -> stringMapMap.putAll((Map<String, Map>) o));
-//                stringMapMap.forEach((s, map) -> Itemizer.getLogger().info(s + " "+  map.toString() + "\n"));*/
-//            } else {
-//              //  Itemizer.getLogger().info( this.item.toContainer().get(OnaKeys.ATTRIBUTE_MODIFIER.getQuery()).get().getClass().getName());
-//            }
-
-
-
-
-            //this.item.offer(OnaKeys.HIDDEN_FLAGS,config.getHiddenFlagsValue());
-         //   Itemizer.getLogger().info("flagFrom manipulator : " + this.item.get(OnaKeys.HIDDEN_FLAGS));
-                this.item = ItemStack.builder()
+               this.item = ItemStack.builder()
                         .fromContainer(item.toContainer().set(DataQuery.of("UnsafeData","HideFlags"),config.getHiddenFlagsValue()))
                         .build();
                 addLore();
-           /* } else{
-                if (itemBean.getLore() != null) {
-                    List<Text> loreData = new ArrayList<>();
-                    for (String loreLine : itemBean.getLore().split("\n")) {
-                        loreData.add(Text.builder(loreLine).color(TextColors.GRAY).build());
-                    }
-
-                    Set<ItemLoreWriter> itemLoreAppenders = ItemService.INSTANCE.getItemLoreAppenders(usedKeys);
-                    for (ItemLoreWriter itemLoreAppender : itemLoreAppenders) {
-                        itemLoreAppender.apply(item, loreData);
-                    }
-                    item.offer(Keys.ITEM_LORE, loreData);
-                }
-
-            }*/
-
-            return Optional.ofNullable(this.item);
+                return Optional.ofNullable(this.item);
         } else {
             Itemizer.getLogger().warn("Unknown item type : " + itemBean.getType());
         }

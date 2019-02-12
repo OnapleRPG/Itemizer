@@ -10,7 +10,6 @@ import com.onaple.itemizer.data.access.ItemDAO;
 import com.onaple.itemizer.data.beans.AttributeBean;
 import com.onaple.itemizer.data.beans.ItemBean;
 import com.onaple.itemizer.data.handlers.ConfigurationHandler;
-import com.onaple.itemizer.data.translators.AttributeTranslator;
 import com.onaple.itemizer.events.ItemizerPreLoadEvent;
 import com.onaple.itemizer.service.ItemService;
 import com.onaple.itemizer.service.IItemService;
