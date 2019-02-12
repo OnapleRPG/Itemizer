@@ -6,6 +6,7 @@ import com.onaple.itemizer.commands.globalConfiguration.ConfigureColorCommand;
 import com.onaple.itemizer.commands.globalConfiguration.ConfigureEnchantCommand;
 import com.onaple.itemizer.commands.globalConfiguration.ConfigureModifierCommand;
 import com.onaple.itemizer.commands.globalConfiguration.ConfigureRewriteCommand;
+import com.onaple.itemizer.data.OnaKeys;
 import com.onaple.itemizer.data.access.ItemDAO;
 import com.onaple.itemizer.data.beans.AttributeBean;
 import com.onaple.itemizer.data.beans.ItemBean;
@@ -110,8 +111,8 @@ public class Itemizer {
     public void preInit(GamePreInitializationEvent event) {
         logger.info("Initalisation");
 
-       // Sponge.getDataManager().registerTranslator(AttributeBean.class,new AttributeTranslator());
 
+        new OnaKeys();
         loadGlobalConfig();
         Sponge.getEventManager().post(new ItemizerPreLoadEvent());
         try {
