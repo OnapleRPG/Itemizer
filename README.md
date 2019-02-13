@@ -27,9 +27,9 @@ To install this plugin you must have a sponge server 1.12. Download the [latest 
 
 ##Minecraft Commands
 
-* `/retrieve <itemId> [player]` : Obtain an item specified in the configuration file for the given id.  
+* `/retrieve <itemId> [quantity] [player]` : Obtain an item specified in the configuration file for the given id.  
 Permission : *itemizer.command.rerieve*
-* `fetch <poolId> [player]` : Try to obtain an item from a configured pool in the configuration file with its *id*.  
+* `fetch <poolId> [quantity] [player]` : Try to obtain an item from a configured pool in the configuration file with its *id*.  
 Permission : *itemizer.command.fetch*
 * ``reload-itemizer`` : Reload each configuration file.  
 Permission : *itemizer.command.reload*
