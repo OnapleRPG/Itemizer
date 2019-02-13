@@ -27,6 +27,7 @@ public class RetrieveCommand implements CommandExecutor {
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
             Optional<ItemBean> optionalItem = args.<ItemBean>getOne("id");
             Optional<Player> targetOptional = args.getOne("player");
+            Optional<Integer> amountOptional = args.getOne("quantity");
             Player target ;
             if (targetOptional.isPresent()){
                 target = targetOptional.get();
@@ -41,7 +42,9 @@ public class RetrieveCommand implements CommandExecutor {
             if (optionalItem.isPresent()) {
                 Optional<ItemStack> optionalItemStack = new ItemBuilder().buildItemStack(optionalItem.get());
                 if (optionalItemStack.isPresent()) {
-                    target.getInventory().offer(optionalItemStack.get());
+                    ItemStack itemStack = optionalItemStack.get();
+                    amountOptional.ifPresent(itemStack::setQuantity);
+                    target.getInventory().offer(itemStack);
                 } else {
                     src.sendMessage(Text.of("Item " + optionalItem.get().getId() + " not valid."));
                 }

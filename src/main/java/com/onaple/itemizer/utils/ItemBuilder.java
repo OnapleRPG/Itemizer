@@ -162,7 +162,6 @@ public class ItemBuilder {
                             level(enchant.getValue()).build()));
                     if(rewrite) {
                         if(config.getEnchantRewrite().containsKey(optionalEnchant.get())) {
-                            Itemizer.getLogger().info(config.getEnchantRewrite().get( optionalEnchant.get()));
                             lore.add(Text
                                     .builder(config.getEnchantRewrite().get( optionalEnchant.get())+ " " + enchant.getValue())
                                     .style(TextStyles.ITALIC)
