@@ -25,6 +25,7 @@ import org.spongepowered.api.item.enchantment.EnchantmentType;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.*;
+import scala.tools.nsc.backend.icode.Opcodes;
 
 import javax.inject.Singleton;
 import java.util.*;
@@ -222,7 +223,9 @@ public class ItemBuilder {
     private void setAttribute(ItemBean itemBean,Boolean rewrite){
         List<DataContainer> containers = new ArrayList();
         Text.Builder attributeTextbuilder = Text.builder();
-
+        if(itemBean.getAttributeList().isEmpty()){
+            return;
+        }
         for(AttributeBean att : itemBean.getAttributeList()){
             DataContainer dc = createAttributeModifier(att);
             containers.add(dc);
@@ -250,6 +253,7 @@ public class ItemBuilder {
                 lore.add(attributText.build());
             }
         }
+
 
         DataContainer container = this.item.toContainer();
         container.set(DataQuery.of("UnsafeData","AttributeModifiers"),containers);
