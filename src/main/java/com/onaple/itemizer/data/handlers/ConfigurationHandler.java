@@ -11,6 +11,7 @@ import com.onaple.itemizer.data.beans.PoolBean;
 import com.onaple.itemizer.data.serializers.*;
 import com.onaple.itemizer.utils.MinerUtil;
 
+import cz.neumimto.config.blackjack.and.hookers.NotSoStupidObjectMapper;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
@@ -112,13 +113,11 @@ public class ConfigurationHandler {
      */
     public CommentedConfigurationNode loadConfiguration(String configName) throws Exception {
         ConfigurationLoader<CommentedConfigurationNode> configLoader = getConfigurationLoader(configName);
-        CommentedConfigurationNode configNode = null;
         try {
-            configNode = configLoader.load();
+            return configLoader.load();
         } catch (IOException e) {
             throw new Exception("Error while loading configuration '" + configName + "' : " + e.getMessage());
         }
-        return configNode;
     }
 
     private ConfigurationLoader<CommentedConfigurationNode> getConfigurationLoader(String filename){
@@ -126,52 +125,13 @@ public class ConfigurationHandler {
     }
 
     public GlobalConfig readGlobalConfiguration(CommentedConfigurationNode configurationNode) {
-    /*    boolean DescriptionRewrite = configurationNode.getNode("DescriptionRewrite").getBoolean();
-        Map<String,Boolean> hiddenFlags = new HashMap<>();
-        configurationNode.getNode("RewriteParts").getChildrenMap().forEach((o, o2) -> {
-            if(o instanceof String  && o2.getValue() instanceof Boolean){
-                hiddenFlags.put((String) o,(Boolean) o2.getValue());
-            }
-        });
-        Map<EnchantmentType,String> enchantMap = new HashMap<>();
-        configurationNode.getNode("EnchantRewrite").getChildrenMap().forEach((o, o2) -> {
-            if(o instanceof String  && o2.getValue() instanceof String){
-                Optional<EnchantmentType> enchant =  Sponge.getRegistry().getType(EnchantmentType.class,(String) o);
-                enchant.ifPresent(enchantmentType ->   enchantMap.put(enchantmentType,(String) o2.getValue()));
-            }
-        });
-        Map<String,String> modifierMap = new HashMap<>();
-        configurationNode.getNode("ModifierRewrite").getChildrenMap().forEach((o, o2) -> {
-            if(o instanceof String  && o2.getValue() instanceof String){
-                modifierMap.put((String) o,(String) o2.getValue());
-            }
-        });
-
-        String unbreakable = configurationNode.getNode("UnbreakableRewrite").getString();
-
-        String canMineRewrite = configurationNode.getNode("CanMineRewrite").getString();
-
-        Map<String,TextColor> colors = new HashMap<>();
-
-        configurationNode.getNode("DefaultColor").getChildrenMap().forEach((o, o2) -> {
-            if(o instanceof String  && o2.getValue() instanceof String){
-                Optional<TextColor> colorOptional = Sponge.getRegistry().getType(TextColor.class, o2.getString());
-
-                colorOptional.ifPresent(textColor -> {
-                    Itemizer.getLogger().info(textColor.toString());
-                    colors.put((String)o,textColor);
-                });
-
-            }
-        });*/
-
-        TypeSerializers.getDefaultSerializers().registerType(TypeToken.of(GlobalConfig.class), new GlobalConfigurationSerializer());
         try {
-            return configurationNode.getValue(TypeToken.of(GlobalConfig.class));
+            ObjectMapper<GlobalConfig> globalConfigObjectMapper = NotSoStupidObjectMapper.forClass(GlobalConfig.class);
+            return globalConfigObjectMapper.bind(new GlobalConfig()).populate(configurationNode);
         } catch (ObjectMappingException e) {
             Itemizer.getLogger().error(e.toString());
+            throw new RuntimeException(e);
         }
-        return null;
     }
 
     public void saveGlobalConfiguration(String filename){

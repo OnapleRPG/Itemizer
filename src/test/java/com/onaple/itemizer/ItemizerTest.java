@@ -17,7 +17,7 @@ import org.spongepowered.mctester.junit.TestUtils;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-@RunWith(MinecraftRunner.class)
+//@RunWith(MinecraftRunner.class)
 public class ItemizerTest extends BaseTest {
 
     @Rule
@@ -30,7 +30,7 @@ public class ItemizerTest extends BaseTest {
     /**
      * Command /reload-itemizer should returns confirmation messages
      */
-    @Test
+ //   @Test
     public void testReloadItemizer() throws Throwable {
         String itemsReloadedString = "Items configuration successfully reloaded";
         String minersReloadedString = "Miners configuration successfully reloaded";
@@ -59,7 +59,7 @@ public class ItemizerTest extends BaseTest {
     /**
      * Trying to retrieve a configured item
      */
-    @Test
+  //  @Test
     public void testRetrieveItem() throws Throwable {
         this.testUtils.getClient().sendMessage("/retrieve 1");
         this.testUtils.waitForInventoryPropagation();

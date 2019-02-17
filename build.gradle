@@ -52,7 +52,7 @@ versioning {
     major = 1
     minor = 5
     patch = 4
-
+    
 }
 
 version= versioning.name+'-'+versioning.build
@@ -75,11 +75,23 @@ repositories {
 }
 
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+
+
+configurations {
+    extraLibs
+}
+
+
+
 dependencies {
     implementation 'org.spongepowered:spongeapi:7.1.0-SNAPSHOT'
     compile 'org.xerial:sqlite-jdbc:3.7.2'
     testCompile "junit:junit:4.11"
     testCompile 'org.spongepowered:mctester:0.10.5-SNAPSHOT'
+    compile 'com.github.Sponge-RPG-dev:ConfigurateButWithBlackjackAndHookers:f86d75d298'
+    extraLibs 'com.github.Sponge-RPG-dev:ConfigurateButWithBlackjackAndHookers:f86d75d298'
+    
 }
 
 sonarqube {
@@ -95,6 +107,14 @@ test {
         exceptionFormat "short"
     }
 }
+
+
+jar {
+    from {
+        configurations.extraLibs.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
 allprojects {
     gradle.projectsEvaluated {
         tasks.withType(JavaCompile) {
