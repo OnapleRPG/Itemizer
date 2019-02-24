@@ -8,7 +8,6 @@ import org.spongepowered.api.item.enchantment.EnchantmentType;
 import org.spongepowered.api.text.format.TextColor;
 
 import javax.inject.Singleton;
-import java.util.HashMap;
 import java.util.Map;
 
 @Singleton

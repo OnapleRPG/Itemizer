@@ -4,10 +4,7 @@ import com.google.common.reflect.TypeToken;
 import com.onaple.itemizer.GlobalConfig;
 import com.onaple.itemizer.ICraftRecipes;
 import com.onaple.itemizer.Itemizer;
-import com.onaple.itemizer.data.beans.AttributeBean;
-import com.onaple.itemizer.data.beans.ItemBean;
-import com.onaple.itemizer.data.beans.MinerBean;
-import com.onaple.itemizer.data.beans.PoolBean;
+import com.onaple.itemizer.data.beans.*;
 import com.onaple.itemizer.data.serializers.*;
 import com.onaple.itemizer.utils.MinerUtil;
 
@@ -57,25 +54,35 @@ public class ConfigurationHandler {
 
     /**
      * Read items configuration and interpret it
-     * @param configurationNode ConfigurationNode to read from
+     * @param path Path to the file to read configuration from
      */
-    public int readItemsConfiguration(CommentedConfigurationNode configurationNode) throws ObjectMappingException {
+    public int readItemsConfiguration(String path) throws ObjectMappingException {
         itemList = new ArrayList<>();
-        TypeSerializers.getDefaultSerializers().registerType(TypeToken.of(ItemBean.class), new ItemSerializer());
-        TypeSerializers.getDefaultSerializers().registerType(TypeToken.of(AttributeBean.class), new AttributeSerializer());
-        itemList = configurationNode.getNode("items").getList(TypeToken.of(ItemBean.class));
+        HoconConfigurationLoader.Builder builder = HoconConfigurationLoader.builder().setPath(Paths.get(path));
+        HoconConfigurationLoader build = builder.build();
+        ObjectMapper<ItemsRootConfig> c = NotSoStupidObjectMapper.forClass(ItemsRootConfig.class);
+        try {
+            itemList = c.bind(new ItemsRootConfig()).populate(build.load()).getItems();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         Itemizer.getLogger().info(itemList.size() + " items loaded from configuration.");
         return itemList.size();
     }
 
     /**
      * Read miners configuration and interpret it
-     * @param configurationNode ConfigurationNode to read from
+     * * @param path Path to the file to read configuration from
      */
-    public int readMinerConfiguration(CommentedConfigurationNode configurationNode) throws ObjectMappingException {
+    public int readMinerConfiguration(String path) throws ObjectMappingException, IOException {
         minerList = new ArrayList<>();
-        TypeSerializers.getDefaultSerializers().registerType(TypeToken.of(MinerBean.class), new MinerSerializer());
-        minerList = configurationNode.getNode("miners").getList(TypeToken.of(MinerBean.class));
+
+        HoconConfigurationLoader hcl = HoconConfigurationLoader.builder().setPath(Paths.get(path)).build();
+        ObjectMapper<MinerBeanRoot> c = NotSoStupidObjectMapper.forClass(MinerBeanRoot.class);
+        MinerBeanRoot res = c.bind(new MinerBeanRoot()).populate(hcl.load());
+        minerList = res.getMiners();
+
         MinerUtil minerUtil = new MinerUtil(minerList);
         minerList = minerUtil.getExpandedMiners();
         Itemizer.getLogger().info(minerList.size() + " miners loaded from configuration.");
@@ -96,46 +103,34 @@ public class ConfigurationHandler {
 
     /**
      * Read pools configuration and interpret it. Must be the last config file read.
-     * @param configurationNode ConfigurationNode to read from
+     * @param path
      */
-    public int readPoolsConfiguration(CommentedConfigurationNode configurationNode) throws ObjectMappingException {
+    public int readPoolsConfiguration(String path) throws ObjectMappingException, IOException {
         poolList = new ArrayList<>();
-        TypeSerializers.getDefaultSerializers().registerType(TypeToken.of(PoolBean.class), new PoolSerializer());
-        poolList = configurationNode.getNode("pools").getList(TypeToken.of(PoolBean.class));
+
+        HoconConfigurationLoader hcl = HoconConfigurationLoader.builder().setPath(Paths.get(path)).build();
+        ObjectMapper<PoolBeanRoot> c = NotSoStupidObjectMapper.forClass(PoolBeanRoot.class);
+        PoolBeanRoot res = c.bind(new PoolBeanRoot()).populate(hcl.load());
+        poolList = res.getPoolList();
+
         Itemizer.getLogger().info(poolList.size() + " pools loaded from configuration.");
         return poolList.size();
     }
 
-    /**
-     * Load configuration from file
-     * @param configName Name of the configuration in the configuration folder
-     * @return Configuration ready to be used
-     */
-    public CommentedConfigurationNode loadConfiguration(String configName) throws Exception {
-        ConfigurationLoader<CommentedConfigurationNode> configLoader = getConfigurationLoader(configName);
-        try {
-            return configLoader.load();
-        } catch (IOException e) {
-            throw new Exception("Error while loading configuration '" + configName + "' : " + e.getMessage());
-        }
-    }
 
-    private ConfigurationLoader<CommentedConfigurationNode> getConfigurationLoader(String filename){
-       return HoconConfigurationLoader.builder().setPath(Paths.get(filename)).build();
-    }
-
-    public GlobalConfig readGlobalConfiguration(CommentedConfigurationNode configurationNode) {
+    public GlobalConfig readGlobalConfiguration(String path) {
         try {
             ObjectMapper<GlobalConfig> globalConfigObjectMapper = NotSoStupidObjectMapper.forClass(GlobalConfig.class);
-            return globalConfigObjectMapper.bind(new GlobalConfig()).populate(configurationNode);
-        } catch (ObjectMappingException e) {
-            Itemizer.getLogger().error(e.toString());
+            HoconConfigurationLoader build = HoconConfigurationLoader.builder().setPath(Paths.get(path)).build();
+            return globalConfigObjectMapper.bind(new GlobalConfig()).populate(build.load());
+        } catch (Exception e) {
+            Itemizer.getLogger().error("Could not read " + path, e.toString());
             throw new RuntimeException(e);
         }
     }
 
     public void saveGlobalConfiguration(String filename){
-        ConfigurationLoader<CommentedConfigurationNode> config = getConfigurationLoader(filename);
+        ConfigurationLoader<CommentedConfigurationNode> config = HoconConfigurationLoader.builder().setPath(Paths.get(filename)).build();
         final TypeToken<GlobalConfig> token = new TypeToken<GlobalConfig>() {};
         try {
 
@@ -147,8 +142,9 @@ public class ConfigurationHandler {
         }
     }
 
+
     public void saveItemConfig(String filename){
-        ConfigurationLoader<CommentedConfigurationNode> configLoader = getConfigurationLoader(filename);
+        ConfigurationLoader<CommentedConfigurationNode> configLoader = HoconConfigurationLoader.builder().setPath(Paths.get(filename)).build();
         final TypeToken<List<ItemBean>> token = new TypeToken<List<ItemBean>>() {};
         try {
             CommentedConfigurationNode root =  configLoader.load();

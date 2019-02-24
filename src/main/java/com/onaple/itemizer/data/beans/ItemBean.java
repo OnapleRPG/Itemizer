@@ -1,63 +1,83 @@
 package com.onaple.itemizer.data.beans;
 
+import cz.neumimto.config.blackjack.and.hookers.annotations.CustomAdapter;
+import ninja.leaping.configurate.objectmapping.Setting;
+import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@ConfigSerializable
 public class ItemBean {
     /** ID of the item in config **/
-    private String id = "";
+    @Setting("id")
+    private String id;
+
     /** Type of the item **/
+    @Setting("type")
     private String type;
+
     /** Name of the item **/
-    private String name = "";
+    @Setting("name")
+    private String name;
+
     /** Lore / description of the item **/
-    private String lore = "";
+    @Setting("lore")
+    private String lore;
+
     /** number of use of the item**/
+    @Setting("durability")
     private int durability;
+
     /** Max number of use of the item **/
+    @Setting("maxDurability")
     private int maxDurability;
+
+
     /** Unbreakable attribute **/
+    @Setting("unbreakable")
     private boolean unbreakable = false;
+
     /** Map of enchants and their levels **/
-    private Map<String, Integer> enchants = new HashMap<>();
+    @Setting("enchants")
+    @CustomAdapter(EnchantsAdapter.class)
+    private Map<String, Integer> enchants;
+
     /** IDs of the miner abilities associated **/
-    private List<String> miners = new ArrayList<>();
+    @Setting("miners")
+    private List<String> miners;
+
     /** List of custom attribute of the item */
-    private List<AttributeBean> attributeList = new ArrayList<>();
+    @Setting("attributes")
+    private List<AttributeBean> attributeList;
 
     private List<IItemBeanConfiguration> thirdpartyConfigs = new ArrayList<>();
 
     /** Map of all NBT*/
-    private Map<String,Object> nbtList = new HashMap<>();
+    /*
+    @Setting("nbt")
+    @CustomAdapter(NBTAdapter.class)
+    */
+    private Map<String, Object> nbtList = new HashMap<>();
 
     public Map<String, String> getBlockTrait() {
         return blockTrait;
     }
 
-    public void setBlockTrait(Map<String, String> blockTrait) {
-        this.blockTrait = blockTrait;
-    }
-
     /** Map of block traits**/
     private Map<String,String> blockTrait = new HashMap<>();
 
+    @Setting("toolType")
+    private String toolType;
+
+    @Setting("toolLevel")
+    private int toolLevel;
 
     public Map<String, Object> getNbtList() {
         return nbtList;
     }
-
-    public void setNbtList(Map<String, Object> nbtList) {
-        this.nbtList = nbtList;
-    }
-
-    private String toolType;
-
-    public ItemBean() {
-    }
-
-    private int toolLevel;
 
     public String getToolType() {
         return toolType;
@@ -79,27 +99,8 @@ public class ItemBean {
         this.type = type;
         this.attributeList = new ArrayList<>();
     }
-    public ItemBean(String id,
-                    String type,
-                    String name,
-                    String lore,
-                    int durability,
-                    boolean unbreakable,
-                    Map<String, Integer> enchants,
-                    List<String> miners,
-                    List<AttributeBean> attributeList,
-                    Map<String, Object> nbtList, List<IItemBeanConfiguration> thirdpartyConfigs) {
-        this.id = id;
-        this.type = type;
-        this.name = name;
-        this.lore = lore;
-        this.durability = durability;
-        this.unbreakable = unbreakable;
-        this.enchants = enchants;
-        this.miners = miners;
-        this.attributeList = attributeList;
-        this.nbtList = nbtList;
-        this.thirdpartyConfigs = thirdpartyConfigs;
+
+    public ItemBean() {
     }
 
     public int getDurability() {

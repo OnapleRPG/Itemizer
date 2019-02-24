@@ -249,11 +249,11 @@ public class Itemizer {
 
     @Listener
     public void onServerStop(GameStoppedServerEvent event) {
-        getConfigurationHandler().saveItemConfig(configDir + "/itemizer/items.conf");
+      //  getConfigurationHandler().saveItemConfig(configDir + "/itemizer/items.conf");
     }
 
     public void saveGlobalConfig() {
-        getConfigurationHandler().saveGlobalConfiguration(configDir + "/itemizer/global.conf");
+     //   getConfigurationHandler().saveGlobalConfiguration(configDir + "/itemizer/global.conf");
     }
 
     public static PluginContainer getInstance() {
@@ -263,8 +263,7 @@ public class Itemizer {
     private void loadGlobalConfig() {
         initDefaultConfig("global.conf");
         try {
-            setGlobalConfig(configurationHandler.readGlobalConfiguration(
-                    configurationHandler.loadConfiguration(configDir + "/itemizer/global.conf")));
+            setGlobalConfig(configurationHandler.readGlobalConfiguration(configDir + "/itemizer/global.conf"));
         } catch (Exception e) {
             logger.error(e.toString());
         }
@@ -274,23 +273,22 @@ public class Itemizer {
 
     public int loadItems() throws Exception {
         initDefaultConfig("items.conf");
-        return configurationHandler.readItemsConfiguration(
-                configurationHandler.loadConfiguration(configDir + "/itemizer/items.conf"));
+        return configurationHandler.readItemsConfiguration(configDir + "/itemizer/items.conf");
     }
 
     public int loadMiners() throws Exception {
         initDefaultConfig("miners.conf");
-        return configurationHandler.readMinerConfiguration(configurationHandler.loadConfiguration(configDir + "/itemizer/miners.conf"));
+        return configurationHandler.readMinerConfiguration(configDir + "/itemizer/miners.conf");
     }
 
     public int loadPools() throws Exception {
         initDefaultConfig("pools.conf");
-        return configurationHandler.readPoolsConfiguration(configurationHandler.loadConfiguration(configDir + "/itemizer/pools.conf"));
+        return configurationHandler.readPoolsConfiguration(configDir + "/itemizer/pools.conf");
     }
 
     public int loadCrafts() throws Exception {
         initDefaultConfig("crafts.conf");
-        return configurationHandler.readCraftConfiguration(configurationHandler.loadConfiguration(configDir + "/itemizer/crafts.conf"));
+        return configurationHandler.readCraftConfiguration(configDir + "/itemizer/crafts.conf");
     }
 
     private void initDefaultConfig(String path) {
