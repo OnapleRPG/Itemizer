@@ -6,10 +6,12 @@ import com.onaple.itemizer.commands.globalConfiguration.ConfigureColorCommand;
 import com.onaple.itemizer.commands.globalConfiguration.ConfigureEnchantCommand;
 import com.onaple.itemizer.commands.globalConfiguration.ConfigureModifierCommand;
 import com.onaple.itemizer.commands.globalConfiguration.ConfigureRewriteCommand;
+import com.onaple.itemizer.data.OnaKeys;
 import com.onaple.itemizer.data.access.ItemDAO;
 import com.onaple.itemizer.data.beans.AttributeBean;
 import com.onaple.itemizer.data.beans.ItemBean;
 import com.onaple.itemizer.data.handlers.ConfigurationHandler;
+import com.onaple.itemizer.data.manipulator.HideFlagData;
 import com.onaple.itemizer.events.ItemizerPreLoadEvent;
 import com.onaple.itemizer.service.ItemService;
 import com.onaple.itemizer.service.IItemService;
@@ -25,6 +27,7 @@ import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.data.DataManager;
+import org.spongepowered.api.data.DataRegistration;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
@@ -93,6 +96,8 @@ public class Itemizer {
         return itemDAO;
     }
 
+    @Inject
+    PluginContainer container;
 
     private static ConfigurationHandler configurationHandler;
 
@@ -108,6 +113,14 @@ public class Itemizer {
     @Listener
     public void preInit(GamePreInitializationEvent event) {
         logger.info("Initalisation");
+        new OnaKeys();
+        DataRegistration.builder()
+                .dataName("Hidden flags")
+                .manipulatorId("hidden_flags") // prefix is added for you and you can't add it yourself
+                .dataClass(HideFlagData.class)
+                .immutableClass(HideFlagData.Immutable.class)
+                .builder(new HideFlagData.Builder())
+                .buildAndRegister(container);
 
        // Sponge.getDataManager().registerTranslator(AttributeBean.class,new AttributeTranslator());
 
@@ -150,6 +163,8 @@ public class Itemizer {
 
     @Listener
     public void onServerStart(GameStartedServerEvent event) throws Exception {
+
+
 
         CommandSpec retrieve = CommandSpec.builder()
                 .description(Text.of("Retrieve an item from a configuration file with its id."))

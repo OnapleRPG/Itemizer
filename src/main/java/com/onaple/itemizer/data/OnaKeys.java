@@ -6,6 +6,7 @@ import org.spongepowered.api.data.DataQuery;
 import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.data.value.BaseValue;
 import org.spongepowered.api.data.value.mutable.Value;
+import org.spongepowered.api.util.TypeTokens;
 
 import java.util.List;
 
@@ -15,10 +16,10 @@ public class OnaKeys {
 
     public OnaKeys() {
         HIDDEN_FLAGS = Key.builder()
-                .id("hiddenflags")
+                .id("itemizer:hidden_flags")
                 .name("Hidden flags")
                 .query(DataQuery.of(".","HideFlags"))
-                .type(new TypeToken<Value<Integer>>(){})
+                .type(TypeTokens.INTEGER_VALUE_TOKEN)
                 .build();
         ATTRIBUTE_MODIFIER = Key.builder()
                 .id("attributemodifier")
