@@ -11,6 +11,7 @@ import com.onaple.itemizer.data.access.ItemDAO;
 import com.onaple.itemizer.data.beans.AttributeBean;
 import com.onaple.itemizer.data.beans.ItemBean;
 import com.onaple.itemizer.data.handlers.ConfigurationHandler;
+import com.onaple.itemizer.data.manipulator.AttributeModifiersData;
 import com.onaple.itemizer.data.manipulator.HideFlagData;
 import com.onaple.itemizer.events.ItemizerPreLoadEvent;
 import com.onaple.itemizer.service.ItemService;
@@ -120,6 +121,14 @@ public class Itemizer {
                 .dataClass(HideFlagData.class)
                 .immutableClass(HideFlagData.Immutable.class)
                 .builder(new HideFlagData.Builder())
+                .buildAndRegister(container);
+
+        DataRegistration.builder()
+                .dataName("Attribute modifiers")
+                .manipulatorId("attribute_modifier")
+                .dataClass(AttributeModifiersData.class)
+                .immutableClass(AttributeModifiersData.Immutable.class)
+                .builder(new AttributeModifiersData.AttributeDataBuilder())
                 .buildAndRegister(container);
 
        // Sponge.getDataManager().registerTranslator(AttributeBean.class,new AttributeTranslator());

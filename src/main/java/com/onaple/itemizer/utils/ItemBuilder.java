@@ -5,6 +5,7 @@ import com.onaple.itemizer.Itemizer;
 import com.onaple.itemizer.data.OnaKeys;
 import com.onaple.itemizer.data.beans.*;
 
+import com.onaple.itemizer.data.manipulator.AttributeModifiersData;
 import com.onaple.itemizer.data.manipulator.HideFlagData;
 import com.onaple.itemizer.service.IItemService;
 import com.onaple.itemizer.service.ItemService;
@@ -63,14 +64,16 @@ public class ItemBuilder {
             defineItemStack(itemBean, config.getHiddenFlags().get("Unbreakable"));
             enchantItemStack(itemBean, config.getHiddenFlags().get("Enchantments"));
             grantMining(itemBean, config.getHiddenFlags().get("CanDestroy"));
-            setAttribute(itemBean, config.getHiddenFlags().get("Attributes_modifiers"));
+            if (!itemBean.getAttributeList().isEmpty()) {
+                setAttribute(itemBean, config.getHiddenFlags().get("Attributes_modifiers"));
+            }
             setNbt(itemBean);
             setCustomDatamanipulators(itemBean);
             //experimental
 
             this.item.offer(item.getOrCreate(HideFlagData.class).get());
-            item.offer(OnaKeys.HIDDEN_FLAGS,31);
-            Itemizer.getLogger().info("hide flag value from manipulator : {}",this.item.get(OnaKeys.HIDDEN_FLAGS).get());
+            item.offer(OnaKeys.HIDDEN_FLAGS, config.getHiddenFlagsValue());
+            Itemizer.getLogger().info("hide flag value from manipulator : {}", this.item.get(OnaKeys.HIDDEN_FLAGS).get());
             addLore();
             return Optional.ofNullable(this.item);
         } else {
@@ -229,11 +232,14 @@ public class ItemBuilder {
      * @return Item with attributes set
      */
     private void setAttribute(ItemBean itemBean, Boolean rewrite) {
-        List<DataContainer> containers = new ArrayList();
+        List<AttributeParams> params = new ArrayList();
         Text.Builder attributeTextbuilder = Text.builder();
 
         for (AttributeBean att : itemBean.getAttributeList()) {
-            DataContainer dc = createAttributeModifier(att);
+            params.add(new AttributeParams(att));
+
+
+           /* DataContainer dc = createAttributeModifier(att);
             containers.add(dc);
             Text.Builder attributText;
             if (att.getOperation() == 0) {
@@ -257,14 +263,19 @@ public class ItemBuilder {
             }
             if (rewrite) {
                 lore.add(attributText.build());
-            }
+            }*/
         }
+        this.item.offer(this.item.getOrCreate(AttributeModifiersData.class).get());
 
-        DataContainer container = this.item.toContainer();
+        Itemizer.getLogger().info(" item named : {} can support modifier : {}", itemBean.getName(), this.item.supports(OnaKeys.ATTRIBUTE_MODIFIER));
+        Itemizer.getLogger().info("attributes to apply : [{}]",params);
+        this.item.offer(OnaKeys.ATTRIBUTE_MODIFIER, params);
+        Itemizer.getLogger().info("attribute modifier [{}]", this.item.get(OnaKeys.ATTRIBUTE_MODIFIER).get());
+       /* DataContainer container = this.item.toContainer();
         container.set(DataQuery.of("UnsafeData", "AttributeModifiers"), containers);
         this.item = ItemStack.builder()
                 .fromContainer(container)
-                .build();
+                .build();*/
 
     }
 
