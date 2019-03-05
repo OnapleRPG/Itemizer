@@ -22,7 +22,7 @@ import java.util.Optional;
 public class HideFlagData extends AbstractIntData<HideFlagData, HideFlagData.Immutable> {
 
     public HideFlagData() {
-        this(0,OnaKeys.HIDDEN_FLAGS);
+        this(1,OnaKeys.HIDDEN_FLAGS);
     }
 
     protected HideFlagData(int value, Key<? extends BaseValue<Integer>> usedKey) {
@@ -40,8 +40,9 @@ public class HideFlagData extends AbstractIntData<HideFlagData, HideFlagData.Imm
     @Override
     public Optional<HideFlagData> from(DataContainer container) {
         Itemizer.getLogger().info("from conteneur , {}" ,container );
+
         if(container.contains(OnaKeys.HIDDEN_FLAGS)){
-            int friend = container.getInt(OnaKeys.HIDDEN_FLAGS.getQuery()).orElse(0);
+            int friend = container.getInt(OnaKeys.HIDDEN_FLAGS.getQuery()).orElse(1);
             return Optional.of(setValue(friend));
         }
         return Optional.empty();
@@ -59,7 +60,7 @@ public class HideFlagData extends AbstractIntData<HideFlagData, HideFlagData.Imm
 
     @Override
     public Immutable asImmutable() {
-        return new Immutable(getValue(),OnaKeys.HIDDEN_FLAGS);
+        return new Immutable(getValue());
     }
 
     @Override
@@ -69,8 +70,8 @@ public class HideFlagData extends AbstractIntData<HideFlagData, HideFlagData.Imm
 
     public class Immutable extends AbstractImmutableSingleData<Integer,HideFlagData.Immutable,HideFlagData>{
 
-        protected Immutable(Integer value, Key<? extends BaseValue<Integer>> usedKey) {
-            super(value, usedKey);
+        protected Immutable(Integer value) {
+            super(value, OnaKeys.HIDDEN_FLAGS);
         }
 
         @Override

@@ -11,8 +11,9 @@ import org.spongepowered.api.util.TypeTokens;
 import java.util.List;
 
 public class OnaKeys {
-    public static Key<Value<Integer>> HIDDEN_FLAGS = null;
+    public static Key<Value<Integer>> HIDDEN_FLAGS;
     public static Key<Value<List<AttributeBean>>> ATTRIBUTE_MODIFIER = null;
+    static Key<Value<String>> ATTRIBUTE_NAME;
 
     public OnaKeys() {
         HIDDEN_FLAGS = Key.builder()
@@ -24,8 +25,12 @@ public class OnaKeys {
         ATTRIBUTE_MODIFIER = Key.builder()
                 .id("attributemodifier")
                 .name("Attribute modifier")
-                .query(DataQuery.of("UnsafeData","AttributeModifier"))
+                .query(DataQuery.of(".","AttributeModifier"))
                 .type(new TypeToken<Value<List<AttributeBean>>>() {})
                 .build();
+        ATTRIBUTE_NAME = Key.builder()
+                .id("attributemodifiername")
+                .name("Attribute modifier name")
+                .
     }
 }

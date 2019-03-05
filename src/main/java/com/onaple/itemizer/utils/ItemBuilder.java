@@ -5,6 +5,7 @@ import com.onaple.itemizer.Itemizer;
 import com.onaple.itemizer.data.OnaKeys;
 import com.onaple.itemizer.data.beans.*;
 
+import com.onaple.itemizer.data.manipulator.HideFlagData;
 import com.onaple.itemizer.service.IItemService;
 import com.onaple.itemizer.service.ItemService;
 import org.spongepowered.api.Sponge;
@@ -66,15 +67,14 @@ public class ItemBuilder {
             setNbt(itemBean);
             setCustomDatamanipulators(itemBean);
             //experimental
-            this.item.offer(OnaKeys.HIDDEN_FLAGS, 31);
-            Itemizer.getLogger().info(this.item.get(OnaKeys.HIDDEN_FLAGS).toString());
-            this.item = ItemStack.builder()
-                    .fromContainer(item.toContainer().set(DataQuery.of("UnsafeData", "HideFlags"), config.getHiddenFlagsValue()))
-                    .build();
+
+            this.item.offer(item.getOrCreate(HideFlagData.class).get());
+            item.offer(OnaKeys.HIDDEN_FLAGS,31);
+            Itemizer.getLogger().info("hide flag value from manipulator : {}",this.item.get(OnaKeys.HIDDEN_FLAGS).get());
             addLore();
             return Optional.ofNullable(this.item);
         } else {
-            Itemizer.getLogger().warn("Unknown item type : " + itemBean.getType());
+            Itemizer.getLogger().warn("Unknown item type : {}", itemBean.getType());
         }
         return Optional.empty();
     }
