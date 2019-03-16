@@ -22,11 +22,6 @@ public class MinerBean {
     @Setting
     private List<String> inheritances;
 
-    public MinerBean(String id, Map<String,String> mineTypes, List<String> inheritances) {
-        this.id = id;
-        this.inheritances = inheritances;
-    }
-
     public String getId() {
         return id;
     }

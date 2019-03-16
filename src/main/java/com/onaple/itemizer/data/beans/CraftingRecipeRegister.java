@@ -1,8 +1,9 @@
 package com.onaple.itemizer.data.beans;
 
-import com.onaple.itemizer.Itemizer;
 import com.onaple.itemizer.ICraftRecipes;
+import com.onaple.itemizer.Itemizer;
 import org.spongepowered.api.item.inventory.ItemStack;
+import org.spongepowered.api.item.recipe.crafting.CraftingRecipe;
 import org.spongepowered.api.item.recipe.crafting.Ingredient;
 import org.spongepowered.api.item.recipe.crafting.ShapelessCraftingRecipe;
 
@@ -41,7 +42,8 @@ public class CraftingRecipeRegister implements ICraftRecipes {
 
     @Override
     public ShapelessCraftingRecipe register() {
-        return  org.spongepowered.api.item.recipe.crafting.CraftingRecipe.shapelessBuilder().addIngredient(Ingredient.builder().with(this.getContent()).build()).
-                result(this.getResult()).build("craft"+ id, Itemizer.getInstance());
+        return CraftingRecipe.shapelessBuilder()
+                .addIngredient(Ingredient.builder().with(this.getContent()).build())
+                .result(this.getResult()).build("craft"+ id, Itemizer.getInstance());
     }
 }

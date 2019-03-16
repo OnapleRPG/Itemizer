@@ -1,7 +1,6 @@
 package com.onaple.itemizer.data.serializers;
 
 import com.google.common.reflect.TypeToken;
-import com.onaple.itemizer.Itemizer;
 import com.onaple.itemizer.data.beans.MinerBean;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
@@ -38,7 +37,7 @@ public class MinerSerializer implements TypeSerializer<MinerBean> {
                 inheritances.add(inheritance);
             }
         }
-        return new MinerBean(id, mineTypes, inheritances);
+        return null;//new MinerBean(id, mineTypes, inheritances);
     }
 
     @Override

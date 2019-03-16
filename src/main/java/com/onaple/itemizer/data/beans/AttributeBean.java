@@ -1,21 +1,29 @@
 package com.onaple.itemizer.data.beans;
 
+import ninja.leaping.configurate.objectmapping.Setting;
+import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable;
+
+@ConfigSerializable
 public class AttributeBean {
     /**
      * Name of the Attribute
      */
+    @Setting("name")
     private String name;
     /**
     * Slot of the item
      */
+    @Setting("slot")
     private String slot;
     /**
      * amount of the modifier
      */
+    @Setting("amount")
     private float amount;
     /**
      * operation : 0 = addition ; 1 = % additive ; 2 = % multiplicative
      */
+    @Setting("operation")
     private int operation;
 
     public AttributeBean(String name, String slot, float amount, int operation) {

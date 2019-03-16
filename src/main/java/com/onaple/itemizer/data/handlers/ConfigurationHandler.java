@@ -5,15 +5,12 @@ import com.onaple.itemizer.ConfigUtils;
 import com.onaple.itemizer.GlobalConfig;
 import com.onaple.itemizer.ICraftRecipes;
 import com.onaple.itemizer.Itemizer;
-import com.onaple.itemizer.data.beans.AttributeBean;
 import com.onaple.itemizer.data.beans.ItemBean;
 import com.onaple.itemizer.data.beans.Items;
 import com.onaple.itemizer.data.beans.MinerBean;
 import com.onaple.itemizer.data.beans.PoolBean;
-import com.onaple.itemizer.data.serializers.AttributeSerializer;
 import com.onaple.itemizer.data.serializers.CraftingSerializer;
 import com.onaple.itemizer.data.serializers.GlobalConfigurationSerializer;
-import com.onaple.itemizer.data.serializers.ItemSerializer;
 import com.onaple.itemizer.data.serializers.MinerSerializer;
 import com.onaple.itemizer.data.serializers.PoolSerializer;
 import com.onaple.itemizer.utils.MinerUtil;
@@ -61,14 +58,11 @@ public class ConfigurationHandler {
      * Read items configuration and interpret it
      * @param path File path
      */
-    public int readItemsConfiguration(Path path) throws ObjectMappingException {
+    public int readItemsConfiguration(Path path) {
         itemList = new ArrayList<>();
 
         Items itemRoot = ConfigUtils.load(Items.class, path);
-
-        TypeSerializers.getDefaultSerializers().registerType(TypeToken.of(ItemBean.class), new ItemSerializer());
-        TypeSerializers.getDefaultSerializers().registerType(TypeToken.of(AttributeBean.class), new AttributeSerializer());
-        itemList = configurationNode.getNode("items").getList(TypeToken.of(ItemBean.class));
+        itemList = itemRoot.getItems();
         Itemizer.getLogger().info(itemList.size() + " items loaded from configuration.");
         return itemList.size();
     }

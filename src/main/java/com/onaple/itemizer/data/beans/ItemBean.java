@@ -53,7 +53,7 @@ public class ItemBean {
     private List<IItemBeanConfiguration> thirdpartyConfigs = new ArrayList<>();
 
     /** Map of all NBT*/
-    @Setting
+    //@Setting
     private Map<String,Object> nbtList = new HashMap<>();
 
     public Map<String, String> getBlockTrait() {

@@ -1,6 +1,5 @@
 package com.onaple.itemizer;
 
-import org.spongepowered.api.item.enchantment.Enchantment;
 import org.spongepowered.api.item.enchantment.EnchantmentType;
 import org.spongepowered.api.text.format.TextColor;
 
@@ -66,6 +65,7 @@ public class GlobalConfig {
         enchantments,
         lore,
         unbreakable,
+        others
     }
     private Map<String,String> rewriteChoice = new HashMap<String,String>(){{
         put("unbreakable","UnbreakableRewrite");
