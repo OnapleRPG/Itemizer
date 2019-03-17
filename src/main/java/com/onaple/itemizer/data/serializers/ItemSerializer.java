@@ -2,7 +2,7 @@ package com.onaple.itemizer.data.serializers;
 
 import com.google.common.reflect.TypeToken;
 import com.onaple.itemizer.data.beans.AttributeBean;
-import com.onaple.itemizer.data.beans.IItemBeanConfiguration;
+import com.onaple.itemizer.data.beans.ItemNbtFactory;
 import com.onaple.itemizer.data.beans.ItemBean;
 import com.onaple.itemizer.data.beans.ItemEnchant;
 import com.onaple.itemizer.service.ItemNBTModule;
@@ -81,7 +81,7 @@ public class ItemSerializer implements TypeSerializer<ItemBean> {
          *   },
          */
         List<? extends ConfigurationNode> data = value.getNode("plugin-modules").getChildrenList();
-        List<IItemBeanConfiguration> iItemBeanConfigurations = new ArrayList<>();
+        List<ItemNbtFactory> itemNbtFactories = new ArrayList<>();
 
         for (ConfigurationNode node : data) {
             String key = node.getChildrenMap().get("key").getValue().toString();
@@ -91,8 +91,8 @@ public class ItemSerializer implements TypeSerializer<ItemBean> {
             }
             ItemNBTModule itemNBTModule = optional.get();
             ConfigurationNode data4fct = node.getNode("data");
-            IItemBeanConfiguration build = itemNBTModule.build(data4fct);
-            iItemBeanConfigurations.add(build);
+            ItemNbtFactory build = itemNBTModule.build(data4fct);
+            itemNbtFactories.add(build);
         }
         // tool
         String toolType = value.getNode("toolType").getString();
@@ -145,10 +145,10 @@ public class ItemSerializer implements TypeSerializer<ItemBean> {
         }
 
         if (obj.getThirdpartyConfigs() != null && obj.getThirdpartyConfigs().size() > 0) {
-            List<IItemBeanConfiguration> thirdpartyConfigs = obj.getThirdpartyConfigs();
+            List<ItemNbtFactory> thirdpartyConfigs = obj.getThirdpartyConfigs();
 
             List<CommentedConfigurationNode> commentedConfigurationNodes = new ArrayList<>();
-            for (IItemBeanConfiguration config : thirdpartyConfigs) {
+            for (ItemNbtFactory config : thirdpartyConfigs) {
                 CommentedConfigurationNode nodee = config.toNode();
                 commentedConfigurationNodes.add(nodee);
             }

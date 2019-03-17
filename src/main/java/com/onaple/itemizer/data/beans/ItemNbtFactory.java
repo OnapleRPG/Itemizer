@@ -7,7 +7,7 @@ import org.spongepowered.api.data.manipulator.DataManipulator;
 import org.spongepowered.api.item.inventory.ItemStack;
 
 @ConfigSerializable
-public interface IItemBeanConfiguration {
+public interface ItemNbtFactory {
 
     Key getKey();
 

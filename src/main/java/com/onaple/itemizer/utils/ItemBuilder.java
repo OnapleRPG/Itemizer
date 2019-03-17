@@ -4,7 +4,7 @@ import com.onaple.itemizer.GlobalConfig;
 import com.onaple.itemizer.Itemizer;
 import com.onaple.itemizer.data.OnaKeys;
 import com.onaple.itemizer.data.beans.AttributeBean;
-import com.onaple.itemizer.data.beans.IItemBeanConfiguration;
+import com.onaple.itemizer.data.beans.ItemNbtFactory;
 import com.onaple.itemizer.data.beans.ItemBean;
 import com.onaple.itemizer.data.beans.ItemEnchant;
 import com.onaple.itemizer.data.beans.MinerBean;
@@ -117,8 +117,8 @@ public class ItemBuilder {
     }
 
     private void setCustomDatamanipulators(ItemBean itemBean) {
-        List<IItemBeanConfiguration> thirdpartyConfigs = itemBean.getThirdpartyConfigs();
-        for (IItemBeanConfiguration cfg : thirdpartyConfigs) {
+        List<ItemNbtFactory> thirdpartyConfigs = itemBean.getThirdpartyConfigs();
+        for (ItemNbtFactory cfg : thirdpartyConfigs) {
             cfg.apply(item);
             usedKeys.add(cfg.getKey());
         }

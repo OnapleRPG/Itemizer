@@ -51,7 +51,7 @@ public class ItemBean {
     private List<AttributeBean> attributeList = new ArrayList<>();
 
     @Setting
-    private List<IItemBeanConfiguration> thirdpartyConfigs = new ArrayList<>();
+    private List<ItemNbtFactory> thirdpartyConfigs = new ArrayList<>();
 
     /** Map of all NBT*/
     //@Setting
@@ -171,11 +171,11 @@ public class ItemBean {
         this.attributeList = attributeList;
     }
 
-    public List<IItemBeanConfiguration> getThirdpartyConfigs() {
+    public List<ItemNbtFactory> getThirdpartyConfigs() {
         return thirdpartyConfigs;
     }
 
-    public void setThirdpartyConfigs(List<IItemBeanConfiguration> thirdpartyConfigs) {
+    public void setThirdpartyConfigs(List<ItemNbtFactory> thirdpartyConfigs) {
         this.thirdpartyConfigs = thirdpartyConfigs;
     }
 
