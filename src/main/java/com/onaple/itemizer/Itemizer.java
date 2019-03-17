@@ -96,17 +96,13 @@ public class Itemizer {
         loadGlobalConfig();
         try {
             loadItems();
-        } catch (ObjectMappingException e) {
-            Itemizer.getLogger().error("Error while reading configuration 'items' : " + e.getMessage());
         } catch (Exception e) {
-            Itemizer.getLogger().error(e.getMessage());
+            Itemizer.getLogger().error("Error while reading configuration 'items' : " + e.getMessage());
         }
         try {
             loadMiners();
-        } catch (ObjectMappingException e) {
-            Itemizer.getLogger().error("Error while reading configuration 'miners' : " + e.getMessage());
         } catch (Exception e) {
-            Itemizer.getLogger().error(e.getMessage());
+            Itemizer.getLogger().error("Error while reading configuration 'miners' : " + e.getMessage());
         }
 
         try {
@@ -243,14 +239,16 @@ public class Itemizer {
     }
 
 
-    public int loadItems() throws Exception {
+    public int loadItems(){
         initDefaultConfig("items.conf");
-        return configurationHandler.readItemsConfiguration(Paths.get(configDir + "/itemizer/", "items.conf"));
+        return configurationHandler.readItemsConfiguration(
+                Paths.get(configDir + "/itemizer/", "items.conf"));
     }
 
-    public int loadMiners() throws Exception {
+    public int loadMiners() {
         initDefaultConfig("miners.conf");
-        return configurationHandler.readMinerConfiguration(configurationHandler.loadConfiguration(configDir + "/itemizer/miners.conf"));
+        return configurationHandler.readMinerConfiguration(
+                Paths.get(configDir + "/itemizer/", "miners.conf"));
     }
 
     public int loadPools() throws Exception {

@@ -31,11 +31,6 @@ public class ReloadCommand implements CommandExecutor {
                     .append(Text.builder("" + itemCount).color(TextColors.GOLD).build())
                     .append(Text.builder(" items loaded.").color(TextColors.GREEN).build())
                     .build());
-        } catch (ObjectMappingException e) {
-            src.sendMessage(Text.builder()
-                    .append(Text.builder("Items configuration reload failed. ").color(TextColors.DARK_RED).build())
-                    .append(Text.builder(e.getMessage()).color(TextColors.RED).build())
-                    .build());
         } catch (Exception e){
             src.sendMessage(Text.builder()
                     .append(Text.builder("Items configuration reload failed. ").color(TextColors.DARK_RED).build())
@@ -49,11 +44,6 @@ public class ReloadCommand implements CommandExecutor {
                     .append(Text.builder("Miners configuration successfully reloaded. ").color(TextColors.GREEN).build())
                     .append(Text.builder("" + minersCount).color(TextColors.GOLD).build())
                     .append(Text.builder(" miners are loaded.").color(TextColors.GREEN).build())
-                    .build());
-        } catch (ObjectMappingException e) {
-            src.sendMessage(Text.builder()
-                    .append(Text.builder("Miners configuration reload failed. ").color(TextColors.DARK_RED).build())
-                    .append(Text.builder(e.getMessage()).color(TextColors.RED).build())
                     .build());
         } catch (Exception e){
             src.sendMessage(Text.builder()

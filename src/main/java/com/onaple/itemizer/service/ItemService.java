@@ -18,7 +18,7 @@ public class ItemService implements IItemService {
         INSTANCE = this;
     }
 
-    private Map<String, IItemBeanFactory> thirdPartyConfigs = new HashMap<>();
+    private Map<String, ItemNBTModule> thirdPartyConfigs = new HashMap<>();
 
     private Map<Key, ItemLoreWriter> customLoreAppenders = new HashMap<>();
 
@@ -38,12 +38,12 @@ public class ItemService implements IItemService {
     }
 
     @Override
-    public void addThirdpartyConfig(IItemBeanFactory factory) {
+    public void addThirdpartyConfig(ItemNBTModule factory) {
         thirdPartyConfigs.put(factory.getKeyId(), factory);
     }
 
     @Override
-    public Optional<IItemBeanFactory> getFactoryByKeyId(String keyId) {
+    public Optional<ItemNBTModule> getFactoryByKeyId(String keyId) {
         return Optional.ofNullable(thirdPartyConfigs.get(keyId));
     }
 

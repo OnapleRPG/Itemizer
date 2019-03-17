@@ -4,7 +4,8 @@ import com.google.common.reflect.TypeToken;
 import com.onaple.itemizer.data.beans.AttributeBean;
 import com.onaple.itemizer.data.beans.IItemBeanConfiguration;
 import com.onaple.itemizer.data.beans.ItemBean;
-import com.onaple.itemizer.service.IItemBeanFactory;
+import com.onaple.itemizer.data.beans.ItemEnchant;
+import com.onaple.itemizer.service.ItemNBTModule;
 import com.onaple.itemizer.service.ItemService;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
@@ -84,24 +85,24 @@ public class ItemSerializer implements TypeSerializer<ItemBean> {
 
         for (ConfigurationNode node : data) {
             String key = node.getChildrenMap().get("key").getValue().toString();
-            Optional<IItemBeanFactory> optional = ItemService.INSTANCE.getFactoryByKeyId(key);
+            Optional<ItemNBTModule> optional = ItemService.INSTANCE.getFactoryByKeyId(key);
             if (!optional.isPresent()) {
                 throw new IllegalStateException("No plugin registered module having key " + key);
             }
-            IItemBeanFactory iItemBeanFactory = optional.get();
+            ItemNBTModule itemNBTModule = optional.get();
             ConfigurationNode data4fct = node.getNode("data");
-            IItemBeanConfiguration build = iItemBeanFactory.build(data4fct);
+            IItemBeanConfiguration build = itemNBTModule.build(data4fct);
             iItemBeanConfigurations.add(build);
         }
         // tool
         String toolType = value.getNode("toolType").getString();
         int toolLevel = value.getNode("toolLevel").getInt();
         List<AttributeBean> attributes = value.getNode("attributes").getList(TypeToken.of(AttributeBean.class));
-        ItemBean item = new ItemBean(id, itemType, name, lore, durability,
-                unbreakable, enchants, miners, attributes, nbtList, iItemBeanConfigurations);
-        item.setToolType(toolType);
-        item.setToolLevel(toolLevel);
-        return item;
+      //  ItemBean item = new ItemBean(id, itemType, name, lore, durability,
+      //          unbreakable, enchants, miners, attributes, nbtList, iItemBeanConfigurations);
+     //   item.setToolType(toolType);
+      //  item.setToolLevel(toolLevel);
+        return null;
     }
 
     @Override
@@ -128,10 +129,10 @@ public class ItemSerializer implements TypeSerializer<ItemBean> {
         if (!obj.getEnchants().isEmpty()) {
 
             Map<String, Map<String, Integer>> enchantList = new HashMap<>();
-            for (Map.Entry<String, Integer> entry : obj.getEnchants().entrySet()) {
+            for (Map.Entry<String, ItemEnchant> entry : obj.getEnchants().entrySet()) {
 
                 Map<String, Integer> level = new HashMap<String, Integer>();
-                level.put("level", entry.getValue());
+                level.put("level", entry.getValue().getLevel());
                 enchantList.put(entry.getKey(), level);
             }
             value.getNode("enchants").setValue(enchantList);

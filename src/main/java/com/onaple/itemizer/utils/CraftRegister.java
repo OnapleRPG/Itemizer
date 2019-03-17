@@ -7,8 +7,10 @@ import org.spongepowered.api.item.recipe.crafting.ShapedCraftingRecipe;
 import org.spongepowered.api.item.recipe.crafting.ShapelessCraftingRecipe;
 import org.spongepowered.api.item.recipe.smelting.SmeltingRecipe;
 
-import javax.inject.Singleton;
 import java.util.List;
+
+import javax.inject.Singleton;
+
 
 @Singleton
 public class CraftRegister {

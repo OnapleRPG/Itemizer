@@ -6,6 +6,7 @@ import com.onaple.itemizer.data.OnaKeys;
 import com.onaple.itemizer.data.beans.AttributeBean;
 import com.onaple.itemizer.data.beans.IItemBeanConfiguration;
 import com.onaple.itemizer.data.beans.ItemBean;
+import com.onaple.itemizer.data.beans.ItemEnchant;
 import com.onaple.itemizer.data.beans.MinerBean;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockState;
@@ -74,14 +75,13 @@ public class ItemBuilder {
      * @return Optional of the itemstack
      */
     public Optional<ItemStack> buildItemStack(ItemBean itemBean) {
-        Optional<ItemType> optionalType = Sponge.getRegistry().getType(ItemType.class, itemBean.getType());
-        if (optionalType.isPresent()) {
-            Optional<BlockType> potentialBlock = optionalType.get().getBlock();
+
+            Optional<BlockType> potentialBlock = itemBean.getType().getBlock();
             if (potentialBlock.isPresent()) {
                 BlockState blockState = addTraits(potentialBlock.get(), itemBean.getBlockTrait());
                 this.item = ItemStack.builder().fromBlockState(blockState).build();
             } else {
-                this.item = ItemStack.builder().itemType(optionalType.get()).build();
+                this.item = ItemStack.builder().itemType(itemBean.getType()).build();
             }
             defineItemStack(itemBean, config.getHiddenFlags().get("Unbreakable"));
             enchantItemStack(itemBean, config.getHiddenFlags().get("Enchantments"));
@@ -113,10 +113,7 @@ public class ItemBuilder {
             }*/
 
             return Optional.ofNullable(this.item);
-        } else {
-            Itemizer.getLogger().warn("Unknown item type : " + itemBean.getType());
-        }
-        return Optional.empty();
+
     }
 
     private void setCustomDatamanipulators(ItemBean itemBean) {
@@ -195,15 +192,15 @@ public class ItemBuilder {
      * @return Enchanted (or not) ItemStack
      */
     private void enchantItemStack(ItemBean itemBean, boolean rewrite) {
-        Map<String, Integer> enchants = itemBean.getEnchants();
+        Map<String, ItemEnchant> enchants = itemBean.getEnchants();
         if (!enchants.isEmpty()) {
             EnchantmentData enchantmentData = item.getOrCreate(EnchantmentData.class).get();
-            for (Map.Entry<String, Integer> enchant : enchants.entrySet()) {
+            for (Map.Entry<String, ItemEnchant> enchant : enchants.entrySet()) {
                 Optional<EnchantmentType> optionalEnchant = Sponge.getRegistry().getType(EnchantmentType.class, enchant.getKey());
                 if (optionalEnchant.isPresent()) {
                     enchantmentData.set(enchantmentData.enchantments().add(Enchantment.builder().
                             type(optionalEnchant.get()).
-                            level(enchant.getValue()).build()));
+                            level(enchant.getValue().getLevel()).build()));
                     if (rewrite) {
                         if (config.getEnchantRewrite().size() > 0) {
                             Itemizer.getLogger().info(config.getEnchantRewrite().get(optionalEnchant.get()));

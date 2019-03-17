@@ -1,7 +1,6 @@
 package com.onaple.itemizer.data.serializers;
 
 import com.google.common.reflect.TypeToken;
-import com.onaple.itemizer.Itemizer;
 import com.onaple.itemizer.data.access.ItemDAO;
 import com.onaple.itemizer.data.beans.ItemBean;
 import com.onaple.itemizer.data.beans.PoolBean;
@@ -9,7 +8,10 @@ import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import ninja.leaping.configurate.objectmapping.serialize.TypeSerializer;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 public class PoolSerializer implements TypeSerializer<PoolBean> {
 
@@ -28,7 +30,7 @@ public class PoolSerializer implements TypeSerializer<PoolBean> {
                 item = ItemDAO.getItem(reference);
             }
             if (!item.isPresent() && itemType != null){
-                item = Optional.of(new ItemBean(itemType));
+             //   item = Optional.of(new ItemBean(item.get()));
             }
             if (probability > 0 && item.isPresent()) {
                 items.put(probability, item.get());

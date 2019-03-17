@@ -8,10 +8,10 @@ import com.onaple.itemizer.Itemizer;
 import com.onaple.itemizer.data.beans.ItemBean;
 import com.onaple.itemizer.data.beans.Items;
 import com.onaple.itemizer.data.beans.MinerBean;
+import com.onaple.itemizer.data.beans.Mining;
 import com.onaple.itemizer.data.beans.PoolBean;
 import com.onaple.itemizer.data.serializers.CraftingSerializer;
 import com.onaple.itemizer.data.serializers.GlobalConfigurationSerializer;
-import com.onaple.itemizer.data.serializers.MinerSerializer;
 import com.onaple.itemizer.data.serializers.PoolSerializer;
 import com.onaple.itemizer.utils.MinerUtil;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
@@ -59,8 +59,6 @@ public class ConfigurationHandler {
      * @param path File path
      */
     public int readItemsConfiguration(Path path) {
-        itemList = new ArrayList<>();
-
         Items itemRoot = ConfigUtils.load(Items.class, path);
         itemList = itemRoot.getItems();
         Itemizer.getLogger().info(itemList.size() + " items loaded from configuration.");
@@ -69,14 +67,11 @@ public class ConfigurationHandler {
 
     /**
      * Read miners configuration and interpret it
-     * @param configurationNode ConfigurationNode to read from
+     * @param path path to file
      */
-    public int readMinerConfiguration(CommentedConfigurationNode configurationNode) throws ObjectMappingException {
-        minerList = new ArrayList<>();
-        TypeSerializers.getDefaultSerializers().registerType(TypeToken.of(MinerBean.class), new MinerSerializer());
-        minerList = configurationNode.getNode("miners").getList(TypeToken.of(MinerBean.class));
-        MinerUtil minerUtil = new MinerUtil(minerList);
-        minerList = minerUtil.getExpandedMiners();
+    public int readMinerConfiguration(Path path) {
+        Mining load = ConfigUtils.load(Mining.class, path);
+        minerList = new MinerUtil(load.getMiners()).getExpandedMiners();
         Itemizer.getLogger().info(minerList.size() + " miners loaded from configuration.");
         return minerList.size();
     }

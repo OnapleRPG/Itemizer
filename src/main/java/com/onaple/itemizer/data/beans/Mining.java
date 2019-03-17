@@ -6,18 +6,15 @@ import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable;
 import java.util.List;
 
 /**
- * Created by NeumimTo on 27.12.2018.
+ * Created by NeumimTo on 17.3.2019.
  */
 @ConfigSerializable
-public class Items {
+public class Mining {
 
-    @Setting("items")
-    private List<ItemBean> items;
+    @Setting("miners")
+    private List<MinerBean> miners;
 
-    public Items() {
-    }
-
-    public List<ItemBean> getItems() {
-        return items;
+    public List<MinerBean> getMiners() {
+        return miners;
     }
 }
