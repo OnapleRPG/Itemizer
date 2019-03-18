@@ -8,7 +8,8 @@ import com.onaple.itemizer.data.beans.ItemEnchant;
 import com.onaple.itemizer.service.ItemNBTModule;
 import com.onaple.itemizer.service.ItemService;
 import ninja.leaping.configurate.ConfigurationNode;
-import ninja.leaping.configurate.commented.CommentedConfigurationNode;
+import ninja.leaping.configurate.SimpleConfigurationNode;
+import ninja.leaping.configurate.objectmapping.ObjectMapper;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import ninja.leaping.configurate.objectmapping.serialize.TypeSerializer;
 
@@ -144,17 +145,19 @@ public class ItemSerializer implements TypeSerializer<ItemBean> {
             value.getNode("attributes").setValue(token, obj.getAttributeList());
         }
 
-        if (obj.getThirdpartyConfigs() != null && obj.getThirdpartyConfigs().size() > 0) {
-            List<ItemNbtFactory> thirdpartyConfigs = obj.getThirdpartyConfigs();
+        if (obj.getNbt() != null && obj.getNbt().size() > 0) {
+            List<ItemNbtFactory> thirdpartyConfigs = obj.getNbt();
 
-            List<CommentedConfigurationNode> commentedConfigurationNodes = new ArrayList<>();
+            List<SimpleConfigurationNode> commentedConfigurationNodes = new ArrayList<>();
             for (ItemNbtFactory config : thirdpartyConfigs) {
-                CommentedConfigurationNode nodee = config.toNode();
-                commentedConfigurationNodes.add(nodee);
+                ObjectMapper<ItemNbtFactory>.BoundInstance boundInstance = ObjectMapper.forObject(config);
+                SimpleConfigurationNode root = SimpleConfigurationNode.root();
+                boundInstance.serialize(root);
+                commentedConfigurationNodes.add(root);
             }
 
 
-            value.getNode("plugin-modules").getList(new TypeToken<CommentedConfigurationNode>() {})
+            value.getNode("plugin-modules").getList(new TypeToken<SimpleConfigurationNode>() {})
                     .addAll(commentedConfigurationNodes);
 
         }

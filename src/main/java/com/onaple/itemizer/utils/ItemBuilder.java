@@ -87,7 +87,6 @@ public class ItemBuilder {
             enchantItemStack(itemBean, config.getHiddenFlags().get("Enchantments"));
             grantMining(itemBean, config.getHiddenFlags().get("CanDestroy"));
             setAttribute(itemBean, config.getHiddenFlags().get("Attributes_modifiers"));
-            setNbt(itemBean);
             setCustomDatamanipulators(itemBean);
             Itemizer.getLogger().info("Hide flag value : " + config.getHiddenFlagsValue());
             this.item.offer(OnaKeys.HIDDEN_FLAGS, config.getHiddenFlagsValue());
@@ -111,13 +110,13 @@ public class ItemBuilder {
                 }
 
             }*/
-
+            setNbt(itemBean);
             return Optional.ofNullable(this.item);
 
     }
 
     private void setCustomDatamanipulators(ItemBean itemBean) {
-        List<ItemNbtFactory> thirdpartyConfigs = itemBean.getThirdpartyConfigs();
+        List<ItemNbtFactory> thirdpartyConfigs = itemBean.getNbt();
         for (ItemNbtFactory cfg : thirdpartyConfigs) {
             cfg.apply(item);
             usedKeys.add(cfg.getKey());
@@ -318,8 +317,8 @@ public class ItemBuilder {
     }
 
     private void setNbt(ItemBean itemBean) {
-        for (Map.Entry<String, Object> nbt : itemBean.getNbtList().entrySet()) {
-            setCustomData(nbt.getKey(), nbt.getValue());
+        for (ItemNbtFactory itemNbtFactory : itemBean.getNbt()) {
+            itemNbtFactory.apply(this.item);
         }
     }
 

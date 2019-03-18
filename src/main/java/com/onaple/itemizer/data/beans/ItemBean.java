@@ -14,7 +14,7 @@ public class ItemBean {
 
     /** ID of the item in config **/
     @Setting("id")
-    private String id = "";
+    private String id;
 
     /** Type of the item **/
     @Setting("type")
@@ -22,11 +22,11 @@ public class ItemBean {
 
     /** Name of the item **/
     @Setting("name")
-    private String name = "";
+    private String name;
 
     /** Lore / description of the item **/
     @Setting("lore")
-    private String lore = "";
+    private String lore;
 
     /** number of use of the item**/
     @Setting("durability")
@@ -41,21 +41,17 @@ public class ItemBean {
     private boolean unbreakable;
 
     /** Map of enchants and their levels **/
-    @Setting
+    @Setting("enchants")
     private Map<String, ItemEnchant> enchants = new HashMap<>();
     /** IDs of the miner abilities associated **/
     @Setting
     private List<String> miners = new ArrayList<>();
     /** List of custom attribute of the item */
-    @Setting
+    @Setting("attributes")
     private List<AttributeBean> attributeList = new ArrayList<>();
 
-    @Setting
-    private List<ItemNbtFactory> thirdpartyConfigs = new ArrayList<>();
-
-    /** Map of all NBT*/
-    //@Setting
-    private Map<String,Object> nbtList = new HashMap<>();
+    @Setting("nbt")
+    private List<ItemNbtFactory> nbt = new ArrayList<>();
 
     public Map<String, String> getBlockTrait() {
         return blockTrait;
@@ -67,15 +63,6 @@ public class ItemBean {
 
     /** Map of block traits**/
     private Map<String,String> blockTrait = new HashMap<>();
-
-
-    public Map<String, Object> getNbtList() {
-        return nbtList;
-    }
-
-    public void setNbtList(Map<String, Object> nbtList) {
-        this.nbtList = nbtList;
-    }
 
     private String toolType;
 
@@ -171,12 +158,12 @@ public class ItemBean {
         this.attributeList = attributeList;
     }
 
-    public List<ItemNbtFactory> getThirdpartyConfigs() {
-        return thirdpartyConfigs;
+    public List<ItemNbtFactory> getNbt() {
+        return nbt;
     }
 
-    public void setThirdpartyConfigs(List<ItemNbtFactory> thirdpartyConfigs) {
-        this.thirdpartyConfigs = thirdpartyConfigs;
+    public void setNbt(List<ItemNbtFactory> nbt) {
+        this.nbt = nbt;
     }
 
     @Override

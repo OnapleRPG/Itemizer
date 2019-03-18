@@ -1,6 +1,5 @@
 package com.onaple.itemizer.data.beans;
 
-import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable;
 import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.data.manipulator.DataManipulator;
@@ -17,5 +16,4 @@ public interface ItemNbtFactory {
 
     DataManipulator<?,?> constructDataManipulator();
 
-    CommentedConfigurationNode toNode();
 }
