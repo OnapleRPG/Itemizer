@@ -95,14 +95,14 @@ public class Itemizer {
         logger.info("Initalisation");
         loadGlobalConfig();
         try {
-            loadItems();
-        } catch (Exception e) {
-            Itemizer.getLogger().error("Error while reading configuration 'items' : " + e.getMessage());
-        }
-        try {
             loadMiners();
         } catch (Exception e) {
             Itemizer.getLogger().error("Error while reading configuration 'miners' : " + e.getMessage());
+        }
+        try {
+            loadItems();
+        } catch (Exception e) {
+            Itemizer.getLogger().error("Error while reading configuration 'items' : " + e.getMessage());
         }
 
         try {

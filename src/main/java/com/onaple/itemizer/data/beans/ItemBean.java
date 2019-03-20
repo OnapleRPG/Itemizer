@@ -1,5 +1,7 @@
 package com.onaple.itemizer.data.beans;
 
+import com.onaple.itemizer.data.serializers.MinerBeanAdapter;
+import cz.neumimto.config.blackjack.and.hookers.annotations.CustomAdapter;
 import ninja.leaping.configurate.objectmapping.Setting;
 import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable;
 import org.spongepowered.api.item.ItemType;
@@ -44,8 +46,9 @@ public class ItemBean {
     @Setting("enchants")
     private Map<String, ItemEnchant> enchants = new HashMap<>();
     /** IDs of the miner abilities associated **/
-    @Setting
-    private List<String> miners = new ArrayList<>();
+    @Setting("miners")
+    @CustomAdapter(MinerBeanAdapter.class)
+    private List<MinerBean> miners = new ArrayList<>();
     /** List of custom attribute of the item */
     @Setting("attributes")
     private List<AttributeBean> attributeList = new ArrayList<>();
@@ -143,10 +146,10 @@ public class ItemBean {
         this.enchants = enchants;
     }
 
-    public List<String> getMiners() {
+    public List<MinerBean> getMiners() {
         return miners;
     }
-    public void setMiners(List<String> miners) {
+    public void setMiners(List<MinerBean> miners) {
         this.miners = miners;
     }
 
