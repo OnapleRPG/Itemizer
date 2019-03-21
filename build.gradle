@@ -70,7 +70,7 @@ dependencies {
     compile 'org.spongepowered:spongeapi:7.2.0-SNAPSHOT'
     compile 'org.xerial:sqlite-jdbc:3.7.2'
     testCompile "junit:junit:4.11"
-    compile 'com.github.Sponge-RPG-dev:ConfigurateButWithBlackjackAndHookers:f86d75d298'
+    compile 'com.github.Sponge-RPG-dev:ConfigurateButWithBlackjackAndHookers:32b2abfee7'
 }
 
 sonarqube {
