@@ -51,8 +51,9 @@ public class ItemBuilder {
 
     /**
      * Add block traits to a future block
+     *
      * @param blockType Type of the block
-     * @param traits Map containing all the traits
+     * @param traits    Map containing all the traits
      * @return BlockState of the future block
      */
     private static BlockState addTraits(BlockType blockType, Map<String, String> traits) {
@@ -71,30 +72,31 @@ public class ItemBuilder {
 
     /**
      * Build an itemstack from an ItemBean
+     *
      * @param itemBean Data of the item to build
      * @return Optional of the itemstack
      */
     public Optional<ItemStack> buildItemStack(ItemBean itemBean) {
 
-            Optional<BlockType> potentialBlock = itemBean.getType().getBlock();
-            if (potentialBlock.isPresent()) {
-                BlockState blockState = addTraits(potentialBlock.get(), itemBean.getBlockTrait());
-                this.item = ItemStack.builder().fromBlockState(blockState).build();
-            } else {
-                this.item = ItemStack.builder().itemType(itemBean.getType()).build();
-            }
-            defineItemStack(itemBean, config.getHiddenFlags().get("Unbreakable"));
-            enchantItemStack(itemBean, config.getHiddenFlags().get("Enchantments"));
-            grantMining(itemBean, config.getHiddenFlags().get("CanDestroy"));
-            setAttribute(itemBean, config.getHiddenFlags().get("Attributes_modifiers"));
-            setCustomDatamanipulators(itemBean);
-            Itemizer.getLogger().info("Hide flag value : " + config.getHiddenFlagsValue());
-            this.item.offer(OnaKeys.HIDDEN_FLAGS, config.getHiddenFlagsValue());
-            //   Itemizer.getLogger().info("flagFrom manipulator : " + this.item.get(OnaKeys.HIDDEN_FLAGS));
+        Optional<BlockType> potentialBlock = itemBean.getType().getBlock();
+        if (potentialBlock.isPresent()) {
+            BlockState blockState = addTraits(potentialBlock.get(), itemBean.getBlockTrait());
+            this.item = ItemStack.builder().fromBlockState(blockState).build();
+        } else {
+            this.item = ItemStack.builder().itemType(itemBean.getType()).build();
+        }
+        defineItemStack(itemBean, config.getHiddenFlags().get("Unbreakable"));
+        enchantItemStack(itemBean, config.getHiddenFlags().get("Enchantments"));
+        grantMining(itemBean, config.getHiddenFlags().get("CanDestroy"));
+        setAttribute(itemBean, config.getHiddenFlags().get("Attributes_modifiers"));
+        setCustomDatamanipulators(itemBean);
+        Itemizer.getLogger().info("Hide flag value : " + config.getHiddenFlagsValue());
+        this.item.offer(OnaKeys.HIDDEN_FLAGS, config.getHiddenFlagsValue());
+        //   Itemizer.getLogger().info("flagFrom manipulator : " + this.item.get(OnaKeys.HIDDEN_FLAGS));
                /* this.item = ItemStack.builder()
                         .fromContainer(item.toContainer().set(DataQuery.of("UnsafeData","HideFlags"),config.getHiddenFlagsValue()))
                         .build();*/
-            addLore();
+        addLore();
            /* } else{
                 if (itemBean.getLore() != null) {
                     List<Text> loreData = new ArrayList<>();
@@ -110,8 +112,8 @@ public class ItemBuilder {
                 }
 
             }*/
-            setNbt(itemBean);
-            return Optional.ofNullable(this.item);
+        setNbt(itemBean);
+        return Optional.ofNullable(this.item);
 
     }
 
@@ -125,6 +127,7 @@ public class ItemBuilder {
 
     /**
      * Build an itemstack from this name
+     *
      * @param name Data of the item to build
      * @return Optional of the itemstack
      */
@@ -141,6 +144,7 @@ public class ItemBuilder {
 
     /**
      * Define the characteristics of an ItemStack from an ItemBean
+     *
      * @param itemBean Data of the item to define
      * @return ItemStack edited
      */
@@ -187,6 +191,7 @@ public class ItemBuilder {
 
     /**
      * Enchant an ItemStack with an ItemBean data
+     *
      * @param itemBean Data of the item to enchant
      * @return Enchanted (or not) ItemStack
      */
@@ -222,6 +227,7 @@ public class ItemBuilder {
 
     /**
      * Grant mining capabilities
+     *
      * @param itemBean Data of the item
      * @return Item with mining powers
      */
@@ -232,18 +238,15 @@ public class ItemBuilder {
             Text.Builder miningText = Text.builder(config.getCanMineRewrite().isEmpty() ? "" : config.getCanMineRewrite())
                     .color(config.getColorMap().get(GlobalConfig.RewriteFlagColorList.canDestroyMention))
                     .style(TextStyles.UNDERLINE);
-            for (String minerId : itemBean.getMiners()) {
-                for (MinerBean minerBean : minerList) {
-                    if (minerBean.getId().equals(minerId)) {
-                        minerBean.getMineTypes().forEach((blockName, blockType) -> {
-                            miningText.append(Text.builder(" " + blockName + " ")
-                                    .color(config.getColorMap().get(GlobalConfig.RewriteFlagColorList.canDestroyMention)).style(TextStyles.RESET)
-                                    .build());
-                            breakableData.set(breakableData.breakable().add(blockType));
-                        });
+            for (MinerBean minerBean : itemBean.getMiners()) {
+                minerBean.getMineTypes().forEach((blockName, blockType) -> {
+                    miningText.append(Text.builder(" " + blockName + " ")
+                            .color(config.getColorMap().get(GlobalConfig.RewriteFlagColorList.canDestroyMention)).style(TextStyles.RESET)
+                            .build());
+                    breakableData.set(breakableData.breakable().add(blockType));
+                });
 
-                    }
-                }
+
             }
             if (rewrite) {
                 if (!config.getCanMineRewrite().isEmpty() && config.getCanMineRewrite() != null) {
@@ -257,6 +260,7 @@ public class ItemBuilder {
 
     /**
      * Set attributes to an item
+     *
      * @param itemBean Data of the item
      * @return Item with attributes set
      */
@@ -296,6 +300,7 @@ public class ItemBuilder {
 
     /**
      * Create the datacontainer for an attribute's data
+     *
      * @param attribute Data of the attribute
      * @return DataContainer from which the item will be recreated
      */
