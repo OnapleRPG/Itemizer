@@ -25,8 +25,9 @@ import java.util.Optional;
 public class RetrieveCommand implements CommandExecutor {
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-            String itemId = args.<String>getOne("id").orElse("");
+            Optional<ItemBean> optionalItem = args.<ItemBean>getOne("id");
             Optional<Player> targetOptional = args.getOne("player");
+            Optional<Integer> amountOptional = args.getOne("quantity");
             Player target ;
             if (targetOptional.isPresent()){
                 target = targetOptional.get();
@@ -38,18 +39,16 @@ public class RetrieveCommand implements CommandExecutor {
                     return CommandResult.empty();
                 }
             }
-            Optional<ItemBean> optionalItem = ItemDAO.getItem(itemId);
             if (optionalItem.isPresent()) {
                 Optional<ItemStack> optionalItemStack = new ItemBuilder().buildItemStack(optionalItem.get());
                 if (optionalItemStack.isPresent()) {
-                    target.getInventory().offer(optionalItemStack.get());
+                    ItemStack itemStack = optionalItemStack.get();
+                    amountOptional.ifPresent(itemStack::setQuantity);
+                    target.getInventory().offer(itemStack);
                 } else {
-                    src.sendMessage(Text.of("Item " + itemId + " not valid."));
+                    src.sendMessage(Text.of("Item " + optionalItem.get().getId() + " not valid."));
                 }
-            } else {
-                src.sendMessage(Text.of("Item " + itemId + " not found."));
             }
-
         return CommandResult.empty();
     }
 }

@@ -28,6 +28,8 @@ public class GetItemInfos implements CommandExecutor {
             } else {
                 ItemStack objectToAnalyse = objectInHandOpt.get();
                 DataContainer itemData = objectToAnalyse .toContainer();
+
+                @SuppressWarnings("unchecked")
                 Optional<Map<?,?>> datamap = (Optional<Map<?, ?>>) itemData.getMap(DataQuery.of("UnsafeData"));
                 datamap.ifPresent(stringObjectMap -> stringObjectMap.forEach((s, o) -> ((Player) src).sendMessage(Text.builder(s + " : ").color(TextColors.GREEN).append(
                         Text.builder(o.toString()).color(TextColors.GOLD).build()

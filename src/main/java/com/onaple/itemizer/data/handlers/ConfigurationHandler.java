@@ -13,7 +13,11 @@ import com.onaple.itemizer.data.beans.PoolBean;
 import com.onaple.itemizer.data.serializers.CraftingSerializer;
 import com.onaple.itemizer.data.serializers.GlobalConfigurationSerializer;
 import com.onaple.itemizer.data.serializers.PoolSerializer;
+import com.onaple.itemizer.data.beans.*;
+import com.onaple.itemizer.data.serializers.*;
 import com.onaple.itemizer.utils.MinerUtil;
+
+import cz.neumimto.config.blackjack.and.hookers.NotSoStupidObjectMapper;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
@@ -90,9 +94,9 @@ public class ConfigurationHandler {
 
     /**
      * Read pools configuration and interpret it. Must be the last config file read.
-     * @param configurationNode ConfigurationNode to read from
+     * @param path
      */
-    public int readPoolsConfiguration(CommentedConfigurationNode configurationNode) throws ObjectMappingException {
+    public int readPoolsConfiguration(String path) throws ObjectMappingException, IOException {
         poolList = new ArrayList<>();
         TypeSerializers.getDefaultSerializers().registerType(TypeToken.of(PoolBean.class), new PoolSerializer());
         poolList = configurationNode.getNode("pools").getList(TypeToken.of(PoolBean.class));
@@ -100,77 +104,20 @@ public class ConfigurationHandler {
         return poolList.size();
     }
 
-    /**
-     * Load configuration from file
-     * @param configName Name of the configuration in the configuration folder
-     * @return Configuration ready to be used
-     */
-    public CommentedConfigurationNode loadConfiguration(String configName) throws Exception {
-        ConfigurationLoader<CommentedConfigurationNode> configLoader = getConfigurationLoader(configName);
-        CommentedConfigurationNode configNode = null;
+
+    public GlobalConfig readGlobalConfiguration(String path) {
         try {
-            configNode = configLoader.load();
-        } catch (IOException e) {
-            throw new Exception("Error while loading configuration '" + configName + "' : " + e.getMessage());
+            ObjectMapper<GlobalConfig> globalConfigObjectMapper = NotSoStupidObjectMapper.forClass(GlobalConfig.class);
+            HoconConfigurationLoader build = HoconConfigurationLoader.builder().setPath(Paths.get(path)).build();
+            return globalConfigObjectMapper.bind(new GlobalConfig()).populate(build.load());
+        } catch (Exception e) {
+            Itemizer.getLogger().error("Could not read " + path, e.toString());
+            throw new RuntimeException(e);
         }
-        return configNode;
-    }
-
-    private ConfigurationLoader<CommentedConfigurationNode> getConfigurationLoader(String filename){
-       return HoconConfigurationLoader.builder().setPath(Paths.get(filename)).build();
-    }
-
-    public GlobalConfig readGlobalConfiguration(CommentedConfigurationNode configurationNode) {
-    /*    boolean DescriptionRewrite = configurationNode.getNode("DescriptionRewrite").getBoolean();
-        Map<String,Boolean> hiddenFlags = new HashMap<>();
-        configurationNode.getNode("RewriteParts").getChildrenMap().forEach((o, o2) -> {
-            if(o instanceof String  && o2.getValue() instanceof Boolean){
-                hiddenFlags.put((String) o,(Boolean) o2.getValue());
-            }
-        });
-        Map<EnchantmentType,String> enchantMap = new HashMap<>();
-        configurationNode.getNode("EnchantRewrite").getChildrenMap().forEach((o, o2) -> {
-            if(o instanceof String  && o2.getValue() instanceof String){
-                Optional<EnchantmentType> enchant =  Sponge.getRegistry().getType(EnchantmentType.class,(String) o);
-                enchant.ifPresent(enchantmentType ->   enchantMap.put(enchantmentType,(String) o2.getValue()));
-            }
-        });
-        Map<String,String> modifierMap = new HashMap<>();
-        configurationNode.getNode("ModifierRewrite").getChildrenMap().forEach((o, o2) -> {
-            if(o instanceof String  && o2.getValue() instanceof String){
-                modifierMap.put((String) o,(String) o2.getValue());
-            }
-        });
-
-        String unbreakable = configurationNode.getNode("UnbreakableRewrite").getString();
-
-        String canMineRewrite = configurationNode.getNode("CanMineRewrite").getString();
-
-        Map<String,TextColor> colors = new HashMap<>();
-
-        configurationNode.getNode("DefaultColor").getChildrenMap().forEach((o, o2) -> {
-            if(o instanceof String  && o2.getValue() instanceof String){
-                Optional<TextColor> colorOptional = Sponge.getRegistry().getType(TextColor.class, o2.getString());
-
-                colorOptional.ifPresent(textColor -> {
-                    Itemizer.getLogger().info(textColor.toString());
-                    colors.put((String)o,textColor);
-                });
-
-            }
-        });*/
-
-        TypeSerializers.getDefaultSerializers().registerType(TypeToken.of(GlobalConfig.class), new GlobalConfigurationSerializer());
-        try {
-            return configurationNode.getValue(TypeToken.of(GlobalConfig.class));
-        } catch (ObjectMappingException e) {
-            Itemizer.getLogger().error(e.toString());
-        }
-        return null;
     }
 
     public void saveGlobalConfiguration(String filename){
-        ConfigurationLoader<CommentedConfigurationNode> config = getConfigurationLoader(filename);
+        ConfigurationLoader<CommentedConfigurationNode> config = HoconConfigurationLoader.builder().setPath(Paths.get(filename)).build();
         final TypeToken<GlobalConfig> token = new TypeToken<GlobalConfig>() {};
         try {
 
@@ -182,8 +129,9 @@ public class ConfigurationHandler {
         }
     }
 
+
     public void saveItemConfig(String filename){
-        ConfigurationLoader<CommentedConfigurationNode> configLoader = getConfigurationLoader(filename);
+        ConfigurationLoader<CommentedConfigurationNode> configLoader = HoconConfigurationLoader.builder().setPath(Paths.get(filename)).build();
         final TypeToken<List<ItemBean>> token = new TypeToken<List<ItemBean>>() {};
         try {
             CommentedConfigurationNode root =  configLoader.load();

@@ -24,6 +24,7 @@ public class FetchCommand implements CommandExecutor {
         if (src instanceof Player) {
             String poolId = args.<String>getOne("id").orElse("");
             Optional<Player> targetOptional = args.getOne("player");
+            Optional<Integer> amountOptional = args.getOne("quantity");
             Player target ;
             if (targetOptional.isPresent()){
                 target = targetOptional.get();
@@ -39,7 +40,9 @@ public class FetchCommand implements CommandExecutor {
             if (optionalItem.isPresent()) {
                 Optional<ItemStack> optionalItemStack = new ItemBuilder().buildItemStack(optionalItem.get());
                 if (optionalItemStack.isPresent()) {
-                    target.getInventory().offer(optionalItemStack.get());
+                    ItemStack itemStack = optionalItemStack.get();
+                    amountOptional.ifPresent(itemStack::setQuantity);
+                    target.getInventory().offer(itemStack);
                 } else {
                     src.sendMessage(Text.of("Item from pool " + poolId + " not valid."));
                 }

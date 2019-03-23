@@ -40,7 +40,7 @@ import javax.inject.Singleton;
 @Singleton
 public class ItemBuilder {
 
-    private GlobalConfig config = Itemizer.getItemizer().getGlobalConfig();
+    private GlobalConfig config = Itemizer.getGlobalConfig();
     private ItemStack item;
     private List<Text> lore;
     private Set<Key> usedKeys = new HashSet<>();
@@ -78,43 +78,28 @@ public class ItemBuilder {
      */
     public Optional<ItemStack> buildItemStack(ItemBean itemBean) {
 
-        Optional<BlockType> potentialBlock = itemBean.getType().getBlock();
-        if (potentialBlock.isPresent()) {
-            BlockState blockState = addTraits(potentialBlock.get(), itemBean.getBlockTrait());
-            this.item = ItemStack.builder().fromBlockState(blockState).build();
-        } else {
-            this.item = ItemStack.builder().itemType(itemBean.getType()).build();
-        }
-        defineItemStack(itemBean, config.getHiddenFlags().get("Unbreakable"));
-        enchantItemStack(itemBean, config.getHiddenFlags().get("Enchantments"));
-        grantMining(itemBean, config.getHiddenFlags().get("CanDestroy"));
-        setAttribute(itemBean, config.getHiddenFlags().get("Attributes_modifiers"));
-        setCustomDatamanipulators(itemBean);
-        Itemizer.getLogger().info("Hide flag value : " + config.getHiddenFlagsValue());
-        this.item.offer(OnaKeys.HIDDEN_FLAGS, config.getHiddenFlagsValue());
-        //   Itemizer.getLogger().info("flagFrom manipulator : " + this.item.get(OnaKeys.HIDDEN_FLAGS));
-               /* this.item = ItemStack.builder()
+            Optional<BlockType> potentialBlock = itemBean.getType().getBlock();
+            if (potentialBlock.isPresent()) {
+               BlockState blockState = addTraits(potentialBlock.get(),itemBean.getBlockTrait());
+             this.item = ItemStack.builder().fromBlockState(blockState).build();
+            } else {
+                this.item = ItemStack.builder().itemType(itemBean.getType()).build();
+            }
+               defineItemStack(itemBean,config.getHiddenFlags().get("Unbreakable"));
+               enchantItemStack(itemBean,config.getHiddenFlags().get("Enchantments"));
+               grantMining(itemBean,config.getHiddenFlags().get("CanDestroy"));
+               setAttribute(itemBean,config.getHiddenFlags().get("Attributes_modifiers"));
+
+               setCustomDatamanipulators(itemBean);
+             this.item = ItemStack.builder()
                         .fromContainer(item.toContainer().set(DataQuery.of("UnsafeData","HideFlags"),config.getHiddenFlagsValue()))
-                        .build();*/
-        addLore();
-           /* } else{
-                if (itemBean.getLore() != null) {
-                    List<Text> loreData = new ArrayList<>();
-                    for (String loreLine : itemBean.getLore().split("\n")) {
-                        loreData.add(Text.builder(loreLine).color(TextColors.GRAY).build());
-                    }
-
-                    Set<ItemLoreWriter> itemLoreAppenders = ItemService.INSTANCE.getItemLoreAppenders(usedKeys);
-                    for (ItemLoreWriter itemLoreAppender : itemLoreAppenders) {
-                        itemLoreAppender.apply(item, loreData);
-                    }
-                    item.offer(Keys.ITEM_LORE, loreData);
-                }
-
-            }*/
-        setNbt(itemBean);
-        return Optional.ofNullable(this.item);
-
+                        .build();
+                addLore();
+                return Optional.ofNullable(this.item);
+        } else {
+            Itemizer.getLogger().warn("Unknown item type : " + itemBean.getType());
+        }
+        return Optional.empty();
     }
 
     private void setCustomDatamanipulators(ItemBean itemBean) {
@@ -294,8 +279,13 @@ public class ItemBuilder {
             }
         }
 
+
         DataContainer container = this.item.toContainer();
-        container.set(DataQuery.of("UnsafeData", "AttributeModifiers"), containers);
+        container.set(DataQuery.of("UnsafeData","AttributeModifiers"),containers);
+        this.item = ItemStack.builder()
+                .fromContainer(container)
+                .build();
+
     }
 
     /**

@@ -42,7 +42,7 @@ versioning {
     // required (number)
     major = 1
     minor = 5
-    patch = 0
+    patch = 4
 
 }
 
@@ -85,6 +85,7 @@ test {
         exceptionFormat "short"
     }
 }
+
 allprojects {
     gradle.projectsEvaluated {
         tasks.withType(JavaCompile) {

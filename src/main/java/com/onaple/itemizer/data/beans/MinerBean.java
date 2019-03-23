@@ -7,6 +7,9 @@ import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable;
 import org.spongepowered.api.block.BlockType;
 
 import java.util.ArrayList;
+import ninja.leaping.configurate.objectmapping.Setting;
+import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

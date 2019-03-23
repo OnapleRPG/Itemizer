@@ -1,5 +1,6 @@
 package com.onaple.itemizer.service;
 
+import com.onaple.itemizer.Itemizer;
 import com.onaple.itemizer.data.access.ItemDAO;
 import com.onaple.itemizer.data.beans.ItemBean;
 import com.onaple.itemizer.data.beans.ItemLoreWriter;
@@ -58,7 +59,7 @@ public class ItemService implements IItemService {
 
     @Override
     public Optional<ItemStack> retrieve(String id) {
-        Optional<ItemBean> optionalItem = ItemDAO.getItem(id);
+        Optional<ItemBean> optionalItem = Itemizer.getItemDAO().getItem(id);
         if (optionalItem.isPresent()) {
             return new ItemBuilder().buildItemStack(optionalItem.get());
         }

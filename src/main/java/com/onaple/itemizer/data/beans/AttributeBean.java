@@ -10,31 +10,24 @@ public class AttributeBean {
      */
     @Setting("name")
     private String name;
+
     /**
     * Slot of the item
      */
     @Setting("slot")
     private String slot;
+
     /**
      * amount of the modifier
      */
     @Setting("amount")
     private float amount;
+
     /**
      * operation : 0 = addition ; 1 = % additive ; 2 = % multiplicative
      */
     @Setting("operation")
     private int operation;
-
-    public AttributeBean(String name, String slot, float amount, int operation) {
-        this.name = name;
-        this.slot = slot;
-        this.amount = amount;
-        this.operation = operation;
-    }
-
-    public AttributeBean() {
-    }
 
     public String getName() {
         return name;
@@ -68,3 +61,4 @@ public class AttributeBean {
         this.operation = operation;
     }
 }
+

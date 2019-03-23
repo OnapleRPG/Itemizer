@@ -6,6 +6,10 @@ import ninja.leaping.configurate.objectmapping.Setting;
 import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable;
 import org.spongepowered.api.item.ItemType;
 
+import cz.neumimto.config.blackjack.and.hookers.annotations.CustomAdapter;
+import ninja.leaping.configurate.objectmapping.Setting;
+import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -60,18 +64,13 @@ public class ItemBean {
         return blockTrait;
     }
 
-    public void setBlockTrait(Map<String, String> blockTrait) {
-        this.blockTrait = blockTrait;
-    }
-
     /** Map of block traits**/
     private Map<String,String> blockTrait = new HashMap<>();
 
+    @Setting("toolType")
     private String toolType;
 
-    public ItemBean() {
-    }
-
+    @Setting("toolLevel")
     private int toolLevel;
 
     public String getToolType() {
@@ -88,6 +87,14 @@ public class ItemBean {
 
     public void setToolLevel(int toolLevel) {
         this.toolLevel = toolLevel;
+    }
+
+    public ItemBean(ItemType type) {
+        this.type = type;
+        this.attributeList = new ArrayList<>();
+    }
+
+    public ItemBean() {
     }
 
     public int getDurability() {
