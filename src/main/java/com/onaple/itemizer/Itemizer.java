@@ -245,13 +245,15 @@ public class Itemizer {
     public int loadItems(){
         initDefaultConfig("items.conf");
         return configurationHandler.readItemsConfiguration(
-                Paths.get(configDir + "/itemizer/", "items.conf"));
+                Paths.get(configDir + "/itemizer/", "items.conf")
+        );
     }
 
     public int loadMiners() {
         initDefaultConfig("miners.conf");
         return configurationHandler.readMinerConfiguration(
-                Paths.get(configDir + "/itemizer/", "miners.conf"));
+                Paths.get(configDir + "/itemizer/", "miners.conf")
+        );
     }
 
     public int loadPools() throws Exception {
@@ -261,7 +263,9 @@ public class Itemizer {
 
     public int loadCrafts() throws Exception {
         initDefaultConfig("crafts.conf");
-        return configurationHandler.readCraftConfiguration(configurationHandler.loadConfiguration(configDir + "/itemizer/crafts.conf"));
+        return configurationHandler.readCraftConfiguration(
+                Paths.get(configDir + "/itemizer/", "crafts.conf")
+        );
     }
 
     private void initDefaultConfig(String path) {
