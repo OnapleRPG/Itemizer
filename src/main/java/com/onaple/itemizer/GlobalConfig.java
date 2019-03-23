@@ -7,8 +7,9 @@ import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable;
 import org.spongepowered.api.item.enchantment.EnchantmentType;
 import org.spongepowered.api.text.format.TextColor;
 
-import javax.inject.Singleton;
 import java.util.Map;
+
+import javax.inject.Singleton;
 
 @Singleton
 @ConfigSerializable

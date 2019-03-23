@@ -27,7 +27,7 @@ public class PoolSerializer implements TypeSerializer<PoolBean> {
             String itemType = itemNode.getNode("type").getString();
             Optional<ItemBean> item = Optional.empty();
             if (reference != null && !reference.equals("")) {
-                item = Itemizer.getItemDAO().getItem(reference);
+                item = ItemDAO.getItem(reference);
             }
             if (!item.isPresent() && itemType != null){
              //   item = Optional.of(new ItemBean(item.get()));

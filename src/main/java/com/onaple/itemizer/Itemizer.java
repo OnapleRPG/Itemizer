@@ -9,9 +9,6 @@ import com.onaple.itemizer.commands.globalConfiguration.ConfigureColorCommand;
 import com.onaple.itemizer.commands.globalConfiguration.ConfigureEnchantCommand;
 import com.onaple.itemizer.commands.globalConfiguration.ConfigureModifierCommand;
 import com.onaple.itemizer.commands.globalConfiguration.ConfigureRewriteCommand;
-import com.onaple.itemizer.data.access.ItemDAO;
-import com.onaple.itemizer.data.beans.AttributeBean;
-import com.onaple.itemizer.data.beans.ItemBean;
 import com.onaple.itemizer.data.handlers.ConfigurationHandler;
 import com.onaple.itemizer.service.IItemService;
 import com.onaple.itemizer.service.ItemService;
@@ -24,7 +21,6 @@ import org.spongepowered.api.asset.Asset;
 import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.config.ConfigDir;
-import org.spongepowered.api.data.DataManager;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameConstructionEvent;
 import org.spongepowered.api.event.game.state.GamePostInitializationEvent;
@@ -134,8 +130,7 @@ public class Itemizer {
 
         CommandSpec retrieve = CommandSpec.builder()
                 .description(Text.of("Retrieve an item from a configuration file with its id."))
-                .arguments(GenericArguments.onlyOne(GenericArguments.choices(Text.of("id"),itemDAO.getMap())),
-                        GenericArguments.optional(GenericArguments.integer(Text.of("quantity"))),
+                .arguments(GenericArguments.onlyOne(GenericArguments.string(Text.of("id"))),
                         GenericArguments.optional(GenericArguments.player(Text.of("player")))
                 )
                 .permission("itemizer.command.retrieve")
@@ -146,9 +141,7 @@ public class Itemizer {
                 .permission("itemizer.get")
                 .description(Text.of("Try to retrieve an item from a pool describes in a configuration file with its id."))
                 .arguments(GenericArguments.onlyOne(GenericArguments.string(Text.of("id"))),
-                        GenericArguments.optional(GenericArguments.integer(Text.of("quantity"))),
-                        GenericArguments.optional(GenericArguments.player(Text.of("player")))
-                )
+                        GenericArguments.optional(GenericArguments.player(Text.of("player"))))
                 .permission("itemizer.command.fetch")
                 .executor(new FetchCommand()).build();
         Sponge.getCommandManager().register(this, fetch, "fetch");
@@ -230,23 +223,24 @@ public class Itemizer {
 
     @Listener
     public void onServerStop(GameStoppedServerEvent event) {
-      //  getConfigurationHandler().saveItemConfig(configDir + "/itemizer/items.conf");
+        Itemizer.getConfigurationHandler().saveItemConfig(configDir + "/itemizer/items.conf");
     }
 
     public void saveGlobalConfig() {
-     //   getConfigurationHandler().saveGlobalConfiguration(configDir + "/itemizer/global.conf");
+        getConfigurationHandler().saveGlobalConfiguration(configDir + "/itemizer/global.conf");
     }
 
     private void loadGlobalConfig() {
         initDefaultConfig("global.conf");
         try {
-            setGlobalConfig(configurationHandler.readGlobalConfiguration(configDir + "/itemizer/global.conf"));
+            this.globalConfig = configurationHandler.readGlobalConfig(
+                    Paths.get(configDir + "/itemizer/", "global.conf"));
+
         } catch (Exception e) {
             logger.error(e.toString());
         }
 
     }
-
 
     public int loadItems(){
         initDefaultConfig("items.conf");
@@ -262,12 +256,12 @@ public class Itemizer {
 
     public int loadPools() throws Exception {
         initDefaultConfig("pools.conf");
-        return configurationHandler.readPoolsConfiguration(configDir + "/itemizer/pools.conf");
+        return configurationHandler.readPoolsConfiguration(configurationHandler.loadConfiguration(configDir + "/itemizer/pools.conf"));
     }
 
     public int loadCrafts() throws Exception {
         initDefaultConfig("crafts.conf");
-        return configurationHandler.readCraftConfiguration(configDir + "/itemizer/crafts.conf");
+        return configurationHandler.readCraftConfiguration(configurationHandler.loadConfiguration(configDir + "/itemizer/crafts.conf"));
     }
 
     private void initDefaultConfig(String path) {

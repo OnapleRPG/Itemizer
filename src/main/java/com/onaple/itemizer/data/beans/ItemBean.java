@@ -6,10 +6,6 @@ import ninja.leaping.configurate.objectmapping.Setting;
 import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable;
 import org.spongepowered.api.item.ItemType;
 
-import cz.neumimto.config.blackjack.and.hookers.annotations.CustomAdapter;
-import ninja.leaping.configurate.objectmapping.Setting;
-import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
