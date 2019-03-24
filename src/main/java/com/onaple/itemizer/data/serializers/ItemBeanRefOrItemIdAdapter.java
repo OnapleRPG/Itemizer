@@ -21,7 +21,7 @@ public class ItemBeanRefOrItemIdAdapter implements TypeSerializer<ItemStack> {
 
     @Override
     public ItemStack deserialize(TypeToken<?> type, ConfigurationNode value) throws ObjectMappingException {
-        String idvalue = value.getValue(TypeToken.of(String.class));
+        String idvalue = String.valueOf(value.getNode("item").getValue());
         Optional<ItemBean> item = ItemDAO.getItem(idvalue);
         if (item.isPresent()) {
             ItemBean itemBean = item.get();
