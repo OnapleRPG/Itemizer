@@ -9,6 +9,7 @@ import com.onaple.itemizer.commands.globalConfiguration.ConfigureColorCommand;
 import com.onaple.itemizer.commands.globalConfiguration.ConfigureEnchantCommand;
 import com.onaple.itemizer.commands.globalConfiguration.ConfigureModifierCommand;
 import com.onaple.itemizer.commands.globalConfiguration.ConfigureRewriteCommand;
+import com.onaple.itemizer.data.OnaKeys;
 import com.onaple.itemizer.data.handlers.ConfigurationHandler;
 import com.onaple.itemizer.service.IItemService;
 import com.onaple.itemizer.service.ItemService;
@@ -95,7 +96,7 @@ public class Itemizer {
         logger.info("Initalisation");
 
        // Sponge.getDataManager().registerTranslator(AttributeBean.class,new AttributeTranslator());
-
+        new OnaKeys();
         loadGlobalConfig();
         try {
             loadMiners();

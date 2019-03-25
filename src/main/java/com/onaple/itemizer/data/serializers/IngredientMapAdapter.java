@@ -1,6 +1,7 @@
 package com.onaple.itemizer.data.serializers;
 
 import com.google.common.reflect.TypeToken;
+import com.onaple.itemizer.Itemizer;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import ninja.leaping.configurate.objectmapping.serialize.TypeSerializer;
@@ -24,6 +25,10 @@ public class IngredientMapAdapter implements TypeSerializer<Map<Character, Ingre
             String s = entry.getKey().toString();
             ConfigurationNode node = entry.getValue();
             ItemStack item = new ItemBeanRefOrItemIdAdapter().deserialize(type, node.getNode("item"));
+            if (item == null) {
+                Itemizer.getLogger().warn("Unknown item " + node.getNode("item").toString());
+                continue;
+            }
             map.put(s.charAt(0), Ingredient.builder().with(item).build());
         }
         return map;
