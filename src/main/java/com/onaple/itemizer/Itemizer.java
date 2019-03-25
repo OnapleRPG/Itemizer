@@ -11,9 +11,9 @@ import com.onaple.itemizer.commands.globalConfiguration.ConfigureModifierCommand
 import com.onaple.itemizer.commands.globalConfiguration.ConfigureRewriteCommand;
 import com.onaple.itemizer.data.OnaKeys;
 import com.onaple.itemizer.data.handlers.ConfigurationHandler;
+import com.onaple.itemizer.recipes.Smelting;
 import com.onaple.itemizer.service.IItemService;
 import com.onaple.itemizer.service.ItemService;
-import com.onaple.itemizer.utils.CraftRegister;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import org.slf4j.Logger;
 import org.spongepowered.api.CatalogTypes;
@@ -23,10 +23,14 @@ import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.game.GameRegistryEvent;
 import org.spongepowered.api.event.game.state.GameConstructionEvent;
-import org.spongepowered.api.event.game.state.GamePostInitializationEvent;
+import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.event.game.state.GameStoppedServerEvent;
+import org.spongepowered.api.item.recipe.Recipe;
+import org.spongepowered.api.item.recipe.crafting.CraftingRecipe;
+import org.spongepowered.api.item.recipe.smelting.SmeltingRecipe;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.text.Text;
@@ -52,8 +56,6 @@ public class Itemizer {
     @ConfigDir(sharedRoot = true)
     private Path configDir;
     private GlobalConfig globalConfig;
-    @Inject
-    private CraftRegister craftRegister;
 
     public static Itemizer getItemizer() {
         return itemizer;
@@ -92,7 +94,26 @@ public class Itemizer {
     }
 
     @Listener
-    public void preInit(GamePostInitializationEvent event) {
+    public void preInit0(GameRegistryEvent.Register<CraftingRecipe> event) {
+        for (ICraftRecipes recipeRegister : configurationHandler.getCraftList()) {
+            if (!(recipeRegister instanceof Smelting)) {
+                recipeRegister.register(event);
+            }
+        }
+    }
+
+    @Listener
+    public void preInit1(GameRegistryEvent.Register<SmeltingRecipe> event) {
+        for (ICraftRecipes recipeRegister : configurationHandler.getCraftList()) {
+            if (recipeRegister instanceof Smelting) {
+                recipeRegister.register(event);
+            }
+        }
+    }
+
+    @Listener
+    public void preInit(GamePreInitializationEvent event) {
+
         logger.info("Initalisation");
 
        // Sponge.getDataManager().registerTranslator(AttributeBean.class,new AttributeTranslator());
@@ -123,7 +144,6 @@ public class Itemizer {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        craftRegister.register(configurationHandler.getCraftList());
     }
 
     @Listener

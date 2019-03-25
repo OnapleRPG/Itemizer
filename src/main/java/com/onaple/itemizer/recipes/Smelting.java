@@ -5,7 +5,10 @@ import cz.neumimto.config.blackjack.and.hookers.annotations.CustomAdapter;
 import ninja.leaping.configurate.objectmapping.Setting;
 import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.event.game.GameRegistryEvent;
 import org.spongepowered.api.item.inventory.ItemStack;
+import org.spongepowered.api.item.recipe.Recipe;
+import org.spongepowered.api.item.recipe.crafting.CraftingRecipe;
 import org.spongepowered.api.item.recipe.smelting.SmeltingRecipe;
 
 /**
@@ -14,16 +17,16 @@ import org.spongepowered.api.item.recipe.smelting.SmeltingRecipe;
 @ConfigSerializable
 public class Smelting extends AbstractCraftingRecipe {
 
-    @Setting("ingredient")
+    @Setting("recipe")
     @CustomAdapter(ItemBeanRefOrItemIdAdapter.class)
     private ItemStack ingredient;
 
     @Override
-    public void register() {
-        SmeltingRecipe r = SmeltingRecipe.builder().
+    public void register(GameRegistryEvent.Register event) {
+        Recipe r = SmeltingRecipe.builder().
                 ingredient(ingredient).
                 result(result).
                 build();
-        Sponge.getGame().getRegistry().getSmeltingRecipeRegistry().register(r);
+        event.register(r);
     }
 }

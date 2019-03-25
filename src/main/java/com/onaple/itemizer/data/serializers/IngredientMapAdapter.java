@@ -24,7 +24,7 @@ public class IngredientMapAdapter implements TypeSerializer<Map<Character, Ingre
         for (Map.Entry<Object, ? extends ConfigurationNode> entry : childrenMap.entrySet()) {
             String s = entry.getKey().toString();
             ConfigurationNode node = entry.getValue();
-            ItemStack item = new ItemBeanRefOrItemIdAdapter().deserialize(type, node.getNode("item"));
+            ItemStack item = new ItemBeanRefOrItemIdAdapter().deserialize(type, node);
             if (item == null) {
                 Itemizer.getLogger().warn("Unknown item " + node.getNode("item").toString());
                 continue;
