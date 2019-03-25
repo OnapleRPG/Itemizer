@@ -264,6 +264,9 @@ public class ItemBuilder {
      */
     private void setAttribute(ItemBean itemBean, Boolean rewrite) {
         List<DataContainer> containers = new ArrayList<>();
+        if(itemBean.getAttributeList().isEmpty()){
+            return;
+        }
         for (AttributeBean att : itemBean.getAttributeList()) {
             DataContainer dc = createAttributeModifier(att);
             containers.add(dc);
@@ -291,7 +294,6 @@ public class ItemBuilder {
                 lore.add(attributText.build());
             }
         }
-
 
         DataContainer container = this.item.toContainer();
         container.set(DataQuery.of("UnsafeData", "AttributeModifiers"), containers);
