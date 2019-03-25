@@ -18,7 +18,7 @@ addons:
 
 script:
   - ./gradlew build --info
-  - if [ "$TRAVIS_PULL_REQUEST" != "false" ]; ./gradlew sonarqube --info; fi
+  - 'if [ "$TRAVIS_PULL_REQUEST" != "false" ]; ./gradlew sonarqube --info; fi'
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
