@@ -2,15 +2,13 @@ package com.onaple.itemizer.utils;
 
 import com.onaple.itemizer.GlobalConfig;
 import com.onaple.itemizer.Itemizer;
-import com.onaple.itemizer.data.OnaKeys;
-import com.onaple.itemizer.data.beans.*;
-
-import com.onaple.itemizer.service.IItemService;
-import com.onaple.itemizer.service.ItemService;
+import com.onaple.itemizer.data.beans.AttributeBean;
+import com.onaple.itemizer.data.beans.IItemBeanConfiguration;
+import com.onaple.itemizer.data.beans.ItemBean;
+import com.onaple.itemizer.data.beans.MinerBean;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.block.BlockType;
-import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.block.trait.BlockTrait;
 import org.spongepowered.api.data.DataContainer;
 import org.spongepowered.api.data.DataQuery;
@@ -18,17 +16,21 @@ import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.manipulator.mutable.item.BreakableData;
 import org.spongepowered.api.data.manipulator.mutable.item.EnchantmentData;
-import org.spongepowered.api.data.type.SkullTypes;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.enchantment.Enchantment;
 import org.spongepowered.api.item.enchantment.EnchantmentType;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.format.*;
-import scala.tools.nsc.backend.icode.Opcodes;
+import org.spongepowered.api.text.format.TextStyles;
 
-import javax.inject.Singleton;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 
@@ -253,7 +255,6 @@ public class ItemBuilder {
                 lore.add(attributText.build());
             }
         }
-
 
         DataContainer container = this.item.toContainer();
         container.set(DataQuery.of("UnsafeData","AttributeModifiers"),containers);
