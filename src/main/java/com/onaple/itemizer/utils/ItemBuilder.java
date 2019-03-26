@@ -136,7 +136,7 @@ public class ItemBuilder {
             ItemStack itemStack = ItemStack.builder().itemType(optionalType.get()).build();
             return Optional.of(itemStack);
         } else {
-            Itemizer.getLogger().warn("Unknown item type : " + name);
+            Itemizer.getLogger().warn("Unknown item type : {} " , name);
         }
         return Optional.empty();
     }
@@ -206,7 +206,6 @@ public class ItemBuilder {
                             level(enchant.getValue().getLevel()).build()));
                     if (rewrite) {
                         if (config.getEnchantRewrite().size() > 0) {
-                            Itemizer.getLogger().info(config.getEnchantRewrite().get(optionalEnchant.get()));
                             lore.add(Text
                                     .builder(config.getEnchantRewrite().get(optionalEnchant.get()) + " " + enchant.getValue())
                                     .style(TextStyles.ITALIC)
@@ -215,7 +214,7 @@ public class ItemBuilder {
                         }
                     }
                 } else {
-                    Itemizer.getLogger().warn("Unknown enchant : " + enchant.getKey());
+                    Itemizer.getLogger().warn("Unknown enchant : {}", enchant.getKey());
                 }
             }
 
@@ -336,7 +335,6 @@ public class ItemBuilder {
         List<String> queryList;
         if (queryPath.contains(".")) {
             String[] queries = queryPath.split(".");
-            Itemizer.getLogger().info(("length" + queries.length));
             queryList = Arrays.stream(queries).collect(Collectors.toList());
         } else {
             queryList = new ArrayList<>();

@@ -84,7 +84,7 @@ public class ReloadCommand implements CommandExecutor {
             src.sendMessage(Text.builder()
                     .append(Text.builder("Crafts configuration reload failed. ").color(TextColors.DARK_RED).build())
                     .build());
-            Itemizer.getLogger().error(e.getCause().getMessage());
+            Itemizer.getLogger().error("Crafts configuration reload failed {}", e.getCause().getMessage());
         } catch (Exception e){
             src.sendMessage(Text.builder()
                     .append(Text.builder("crafts configuration reload failed. ").color(TextColors.DARK_RED).build())

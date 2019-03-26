@@ -19,13 +19,12 @@ import ninja.leaping.configurate.loader.ConfigurationLoader;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import ninja.leaping.configurate.objectmapping.serialize.TypeSerializers;
 
+import javax.inject.Singleton;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.inject.Singleton;
 
 @Singleton
 public class ConfigurationHandler {
@@ -60,7 +59,7 @@ public class ConfigurationHandler {
     public int readItemsConfiguration(Path path) {
         Items itemRoot = ConfigUtils.load(Items.class, path);
         itemList = itemRoot.getItems();
-        Itemizer.getLogger().info(itemList.size() + " items loaded from configuration.");
+        Itemizer.getLogger().info("{} items loaded from configuration.", itemList.size());
         return itemList.size();
     }
 
@@ -71,7 +70,7 @@ public class ConfigurationHandler {
     public int readMinerConfiguration(Path path) {
         Mining load = ConfigUtils.load(Mining.class, path);
         minerList = new MinerUtil(load.getMiners()).getExpandedMiners();
-        Itemizer.getLogger().info(minerList.size() + " miners loaded from configuration.");
+        Itemizer.getLogger().info("{} miners loaded from configuration.",minerList.size());
         return minerList.size();
     }
 
@@ -82,7 +81,7 @@ public class ConfigurationHandler {
     public int readCraftConfiguration(Path path) throws ObjectMappingException {
         Crafts load = ConfigUtils.load(Crafts.class, path);
         craftList = load.getCraftingRecipes();
-        Itemizer.getLogger().info(craftList.size() + " crafting recipes loaded from configuration.");
+        Itemizer.getLogger().info("{} crafting recipes loaded from configuration.",craftList.size() );
         return craftList.size();
     }
 
@@ -94,7 +93,7 @@ public class ConfigurationHandler {
         poolList = new ArrayList<>();
         TypeSerializers.getDefaultSerializers().registerType(TypeToken.of(PoolBean.class), new PoolSerializer());
         poolList = configurationNode.getNode("pools").getList(TypeToken.of(PoolBean.class));
-        Itemizer.getLogger().info(poolList.size() + " pools loaded from configuration.");
+        Itemizer.getLogger().info("{} pools loaded from configuration.",poolList.size() );
         return poolList.size();
     }
 
@@ -127,7 +126,7 @@ public class ConfigurationHandler {
                   node.setValue(token,Itemizer.getItemizer().getGlobalConfig());
                   config.save(node);
         } catch (Exception e) {
-            Itemizer.getLogger().error(e.toString());
+            Itemizer.getLogger().error("{}", e.toString());
         }
     }
 
@@ -137,11 +136,11 @@ public class ConfigurationHandler {
         final TypeToken<List<ItemBean>> token = new TypeToken<List<ItemBean>>() {};
         try {
             CommentedConfigurationNode root =  configLoader.load();
-            Itemizer.getLogger().info(itemList.size()+ " items");
+            Itemizer.getLogger().info("{} items to save in configuration : [{}]", itemList.size(), itemList);
                     root.getNode("items").setValue(token, itemList);
             configLoader.save(root);
         } catch (IOException | ObjectMappingException e) {
-            Itemizer.getLogger().error(e.toString());
+            Itemizer.getLogger().error("Error while save item in config {}", e);
         }
     }
 

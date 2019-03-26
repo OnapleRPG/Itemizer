@@ -28,20 +28,18 @@ import org.spongepowered.api.event.game.state.GameConstructionEvent;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.event.game.state.GameStoppedServerEvent;
-import org.spongepowered.api.item.recipe.Recipe;
 import org.spongepowered.api.item.recipe.crafting.CraftingRecipe;
 import org.spongepowered.api.item.recipe.smelting.SmeltingRecipe;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.text.Text;
 
+import javax.inject.Inject;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
-
-import javax.inject.Inject;
 
 @Plugin(id = "itemizer", name = "Itemizer improuved items", version = "1.5.2",
         description = "Plugin to manage custom items and crafts",
@@ -49,12 +47,21 @@ import javax.inject.Inject;
         authors = {"Zessirb", "Selki"})
 public class Itemizer {
 
+    private static final String RETRIEVE_PERMISSION = "itemizer.command.retrieve";
+    private static final String FETCH_PERMISSION = "itemizer.command.fetch";
+    private static final String ANALYSE_PERMISSION = "itemizer.command.analyse";
+    private static final String RELOAD_PERMISSION = "itemizer.command.reload";
+    private static final String REGISTER_PERMISSION = "itemizer.command.register";
+    private static final String REWRITE_PERMISSION = "itemizer.command.rewrite";
+
+
     private static Itemizer itemizer;
     private static Logger logger;
     private static ConfigurationHandler configurationHandler;
     @Inject
     @ConfigDir(sharedRoot = true)
     private Path configDir;
+
     private GlobalConfig globalConfig;
 
     public static Itemizer getItemizer() {
@@ -122,67 +129,66 @@ public class Itemizer {
         try {
             loadMiners();
         } catch (Exception e) {
-            Itemizer.getLogger().error("Error while reading configuration 'miners' : " + e.getMessage());
+            Itemizer.getLogger().error("Error while reading configuration 'miners' : {}", e.getMessage());
         }
         try {
             loadItems();
         } catch (Exception e) {
-            Itemizer.getLogger().error("Error while reading configuration 'items' : " + e.getMessage());
+            Itemizer.getLogger().error("Error while reading configuration 'items' : {}", e.getMessage());
         }
 
         try {
             loadPools();
         } catch (ObjectMappingException e) {
-            Itemizer.getLogger().error("Error while reading configuration 'pools' : " + e.getMessage());
+            Itemizer.getLogger().error("Error while reading configuration 'pools' : {}", e.getMessage());
         } catch (Exception e) {
-            Itemizer.getLogger().error(e.getMessage());
+            Itemizer.getLogger().error("{}", e.getMessage());
         }
         try {
             loadCrafts();
         } catch (ObjectMappingException e) {
-            Itemizer.getLogger().error("Error while reading configuration 'crafts' : " + e.getMessage());
+            Itemizer.getLogger().error("Error while reading configuration 'crafts' : {}", e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @Listener
-    public void onServerStart(GameStartedServerEvent event) throws Exception {
+    public void onServerStart(GameStartedServerEvent event) {
 
         CommandSpec retrieve = CommandSpec.builder()
                 .description(Text.of("Retrieve an item from a configuration file with its id."))
                 .arguments(GenericArguments.onlyOne(GenericArguments.string(Text.of("id"))),
                         GenericArguments.optional(GenericArguments.player(Text.of("player")))
                 )
-                .permission("itemizer.command.retrieve")
+                .permission(RETRIEVE_PERMISSION)
                 .executor(new RetrieveCommand()).build();
         Sponge.getCommandManager().register(this, retrieve, "retrieve");
 
         CommandSpec fetch = CommandSpec.builder()
-                .permission("itemizer.get")
                 .description(Text.of("Try to retrieve an item from a pool describes in a configuration file with its id."))
                 .arguments(GenericArguments.onlyOne(GenericArguments.string(Text.of("id"))),
                         GenericArguments.optional(GenericArguments.player(Text.of("player"))))
-                .permission("itemizer.command.fetch")
+                .permission(FETCH_PERMISSION)
                 .executor(new FetchCommand()).build();
         Sponge.getCommandManager().register(this, fetch, "fetch");
 
         CommandSpec reload = CommandSpec.builder()
                 .description(Text.of("Reaload Itemizer configuration from files."))
-                .permission("itemizer.command.reload")
+                .permission(RELOAD_PERMISSION)
                 .executor(new ReloadCommand()).build();
         Sponge.getCommandManager().register(this, reload, "reload-itemizer");
 
         CommandSpec getInfo = CommandSpec.builder()
                 .description(Text.of("get information about item in main hand"))
-                .permission("itemizer.command.analyse")
+                .permission(ANALYSE_PERMISSION)
                 .executor(new GetItemInfos()).build();
         Sponge.getCommandManager().register(this, getInfo, "analyse");
 
         CommandSpec register = CommandSpec.builder()
                 .description(Text.of("Register an new itemizer item from main hand."))
                 .arguments(GenericArguments.onlyOne(GenericArguments.string(Text.of("id"))))
-                .permission("itemizer.command.register")
+                .permission(REGISTER_PERMISSION)
                 .executor(new RegisterCommand()).build();
         Sponge.getCommandManager().register(this, register, "register");
 
@@ -194,7 +200,7 @@ public class Itemizer {
                                 globalConfig.getRewriteChoice()::keySet, globalConfig.getRewriteChoice()::get)*/)),
                         GenericArguments.optional(GenericArguments.string(Text.of("Name")))
                 )
-                .permission("itemizer.command.rewrite")
+                .permission(REWRITE_PERMISSION)
                 .executor(new ConfigureRewriteCommand()).build();
 
         CommandSpec enchantRewrite = CommandSpec.builder()
@@ -205,7 +211,7 @@ public class Itemizer {
                         GenericArguments.optional(GenericArguments.string(Text.of("Name"))
                         )
                 )
-                .permission("itemizer.command.rewrite")
+                .permission(REWRITE_PERMISSION)
                 .executor(new ConfigureEnchantCommand()).build();
 
         CommandSpec colorRewrite = CommandSpec.builder()
@@ -215,7 +221,7 @@ public class Itemizer {
                                 GenericArguments.enumValue(Text.of("Key"), GlobalConfig.RewriteFlagColorList.class)),
                         GenericArguments.optional(
                                 GenericArguments.catalogedElement(Text.of("Color"), CatalogTypes.TEXT_COLOR))
-                ).permission("itemizer.command.rewrite")
+                ).permission(REWRITE_PERMISSION)
                 .executor(new ConfigureColorCommand()).build();
 
 
@@ -227,7 +233,7 @@ public class Itemizer {
                         GenericArguments.optional(
                                 GenericArguments.string(Text.of("Name")))
                 )
-                .permission("itemizer.command.rewrite")
+                .permission(REWRITE_PERMISSION)
                 .executor(new ConfigureModifierCommand()).build();
 
         CommandSpec configurationUpdate = CommandSpec.builder()
@@ -235,7 +241,7 @@ public class Itemizer {
                 .child(enchantRewrite, "enchantment")
                 .child(modifierRewrite, "modifier")
                 .child(colorRewrite, "color")
-                .permission("itemizer.command.rewrite")
+                .permission(REWRITE_PERMISSION)
                 .build();
         Sponge.getCommandManager().register(this, configurationUpdate, "configure");
 
@@ -294,12 +300,12 @@ public class Itemizer {
             PluginContainer pluginInstance = getInstance();
             if (pluginInstance != null) {
                 Optional<Asset> itemsDefaultConfigFile = pluginInstance.getAsset(path);
-                getLogger().info("No config file set for " + path + " default config will be loaded");
+                getLogger().info("No config file set for {} default config will be loaded",path);
                 if (itemsDefaultConfigFile.isPresent()) {
                     try {
                         itemsDefaultConfigFile.get().copyToDirectory(Paths.get(configDir + "/itemizer/"));
                     } catch (IOException e) {
-                        Itemizer.getLogger().error("Error while setting default configuration : " + e.getMessage());
+                        Itemizer.getLogger().error("Error while setting default configuration : {}", e.getMessage());
                     }
                 } else {
                     logger.warn("Item default config not found");

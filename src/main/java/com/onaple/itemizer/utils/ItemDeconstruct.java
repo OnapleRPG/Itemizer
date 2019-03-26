@@ -10,7 +10,12 @@ import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.text.Text;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ItemDeconstruct {
@@ -77,14 +82,14 @@ public class ItemDeconstruct {
                     }
 
                     else {
-                        Itemizer.getLogger().info(o.getClass().getName() + "is not instance of DataContainer");
+                        Itemizer.getLogger().info(" {} is not instance of DataContainer", o.getClass().getName());
 
                     }
 
                 }
                 itemRegistred.setAttributeList(attributeBeanList);
             } else {
-                Itemizer.getLogger().info(atributes.getClass().getName() + "is not instance of List");
+                Itemizer.getLogger().info("{} is not instance of List", atributes.getClass().getName());
             }
         }
     }
@@ -93,7 +98,6 @@ public class ItemDeconstruct {
 
         if(queryPath.contains(".")) {
             String[] queries = queryPath.split(".");
-            Itemizer.getLogger().info(("length" + queries.length));
             queryList = Arrays.stream(queries).collect(Collectors.toList());
         }
         else {
