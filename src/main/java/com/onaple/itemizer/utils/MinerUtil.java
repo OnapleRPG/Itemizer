@@ -1,6 +1,7 @@
 package com.onaple.itemizer.utils;
 
 import com.onaple.itemizer.data.beans.MinerBean;
+import org.spongepowered.api.block.BlockType;
 
 import java.util.*;
 
@@ -38,13 +39,15 @@ public class MinerUtil {
     private void resolveDependencies(String minerKey) {
         keysProcessed.add(minerKey);
         MinerBean miner = miners.get(minerKey);
-        for (String inheritKey : miner.getInheritances()) {
-            if (!keysProcessed.contains(inheritKey)) {
-                resolveDependencies(inheritKey);
+        if (miner.getInheritances() != null) {
+            for (String inheritKey : miner.getInheritances()) {
+                if (!keysProcessed.contains(inheritKey)) {
+                    resolveDependencies(inheritKey);
+                }
+                Map<String,BlockType> inheritValues = new HashMap<>();
+                inheritValues.putAll(miners.get(inheritKey).getMineTypes());
+                miner.setMineTypes(inheritValues);
             }
-            Map<String,String> inheritValues = new HashMap<>();
-            inheritValues.putAll(miners.get(inheritKey).getMineTypes());
-            miner.setMineTypes(inheritValues);
         }
         miners.put(minerKey, miner);
     }

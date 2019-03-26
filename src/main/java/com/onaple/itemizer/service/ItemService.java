@@ -1,15 +1,18 @@
 package com.onaple.itemizer.service;
 
-import com.onaple.itemizer.Itemizer;
 import com.onaple.itemizer.data.access.ItemDAO;
 import com.onaple.itemizer.data.beans.ItemBean;
 import com.onaple.itemizer.data.beans.ItemLoreWriter;
 import com.onaple.itemizer.utils.ItemBuilder;
 import com.onaple.itemizer.utils.PoolFetcher;
-import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.data.key.Key;
+import org.spongepowered.api.item.inventory.ItemStack;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
 public class ItemService implements IItemService {
 
@@ -19,7 +22,7 @@ public class ItemService implements IItemService {
         INSTANCE = this;
     }
 
-    private Map<String, IItemBeanFactory> thirdPartyConfigs = new HashMap<>();
+    private Map<String, ItemNBTModule> thirdPartyConfigs = new HashMap<>();
 
     private Map<Key, ItemLoreWriter> customLoreAppenders = new HashMap<>();
 
@@ -39,12 +42,12 @@ public class ItemService implements IItemService {
     }
 
     @Override
-    public void addThirdpartyConfig(IItemBeanFactory factory) {
+    public void addThirdpartyConfig(ItemNBTModule factory) {
         thirdPartyConfigs.put(factory.getKeyId(), factory);
     }
 
     @Override
-    public Optional<IItemBeanFactory> getFactoryByKeyId(String keyId) {
+    public Optional<ItemNBTModule> getFactoryByKeyId(String keyId) {
         return Optional.ofNullable(thirdPartyConfigs.get(keyId));
     }
 
@@ -59,7 +62,7 @@ public class ItemService implements IItemService {
 
     @Override
     public Optional<ItemStack> retrieve(String id) {
-        Optional<ItemBean> optionalItem = Itemizer.getItemDAO().getItem(id);
+        Optional<ItemBean> optionalItem = ItemDAO.getItem(id);
         if (optionalItem.isPresent()) {
             return new ItemBuilder().buildItemStack(optionalItem.get());
         }

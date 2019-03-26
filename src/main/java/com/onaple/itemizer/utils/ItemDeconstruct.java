@@ -3,6 +3,7 @@ package com.onaple.itemizer.utils;
 import com.onaple.itemizer.Itemizer;
 import com.onaple.itemizer.data.beans.AttributeBean;
 import com.onaple.itemizer.data.beans.ItemBean;
+import com.onaple.itemizer.data.beans.ItemEnchant;
 import org.spongepowered.api.data.DataContainer;
 import org.spongepowered.api.data.DataQuery;
 import org.spongepowered.api.data.key.Keys;
@@ -23,7 +24,7 @@ public class ItemDeconstruct {
     public ItemBean register(String itemId) {
         this.itemRegistred.setId(itemId);
         //item type
-        itemRegistred.setType(itemToRegister.getType().getName());
+        itemRegistred.setType(itemToRegister.getType());
         //item name
         itemToRegister.get(Keys.DISPLAY_NAME).ifPresent(text -> itemRegistred.setName(text.toPlain()));
         //item lore
@@ -38,9 +39,9 @@ public class ItemDeconstruct {
         //item durability
         itemToRegister.get(Keys.ITEM_DURABILITY).ifPresent(itemRegistred::setMaxDurability);
         //item enchants
-        Map<String, Integer> enchants = new HashMap<>();
+        Map<String, ItemEnchant> enchants = new HashMap<>();
         itemToRegister.get(Keys.ITEM_ENCHANTMENTS).ifPresent(enchantments -> enchantments
-                .forEach(enchantment -> enchants.put(enchantment.getType().getId(), enchantment.getLevel())));
+                .forEach(enchantment -> enchants.put(enchantment.getType().getId(), new ItemEnchant().setLevel(enchantment.getLevel()))));
         itemRegistred.setEnchants(enchants);
         getAttribute();
         return itemRegistred;

@@ -1,44 +1,47 @@
 package com.onaple.itemizer;
 
-import com.onaple.itemizer.commands.*;
-
+import com.onaple.itemizer.commands.FetchCommand;
+import com.onaple.itemizer.commands.GetItemInfos;
+import com.onaple.itemizer.commands.RegisterCommand;
+import com.onaple.itemizer.commands.ReloadCommand;
+import com.onaple.itemizer.commands.RetrieveCommand;
 import com.onaple.itemizer.commands.globalConfiguration.ConfigureColorCommand;
 import com.onaple.itemizer.commands.globalConfiguration.ConfigureEnchantCommand;
 import com.onaple.itemizer.commands.globalConfiguration.ConfigureModifierCommand;
 import com.onaple.itemizer.commands.globalConfiguration.ConfigureRewriteCommand;
-import com.onaple.itemizer.data.access.ItemDAO;
-import com.onaple.itemizer.data.beans.AttributeBean;
-import com.onaple.itemizer.data.beans.ItemBean;
+import com.onaple.itemizer.data.OnaKeys;
 import com.onaple.itemizer.data.handlers.ConfigurationHandler;
-import com.onaple.itemizer.events.ItemizerPreLoadEvent;
-import com.onaple.itemizer.service.ItemService;
+import com.onaple.itemizer.recipes.Smelting;
 import com.onaple.itemizer.service.IItemService;
-import com.onaple.itemizer.utils.CraftRegister;
-
+import com.onaple.itemizer.service.ItemService;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import org.slf4j.Logger;
-import org.spongepowered.api.CatalogType;
 import org.spongepowered.api.CatalogTypes;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.asset.Asset;
 import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.config.ConfigDir;
-import org.spongepowered.api.data.DataManager;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.game.GameRegistryEvent;
+import org.spongepowered.api.event.game.state.GameConstructionEvent;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.event.game.state.GameStoppedServerEvent;
+import org.spongepowered.api.item.recipe.Recipe;
+import org.spongepowered.api.item.recipe.crafting.CraftingRecipe;
+import org.spongepowered.api.item.recipe.smelting.SmeltingRecipe;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.text.Text;
 
-import javax.inject.Inject;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
+
+import javax.inject.Inject;
 
 @Plugin(id = "itemizer", name = "Itemizer improuved items", version = "1.5.2",
         description = "Plugin to manage custom items and crafts",
@@ -47,32 +50,15 @@ import java.util.Optional;
 public class Itemizer {
 
     private static Itemizer itemizer;
-
-    public static Itemizer getItemizer() {
-        return itemizer;
-    }
-
-
+    private static Logger logger;
+    private static ConfigurationHandler configurationHandler;
     @Inject
     @ConfigDir(sharedRoot = true)
     private Path configDir;
+    private GlobalConfig globalConfig;
 
-    private static GlobalConfig globalConfig;
-
-    @Inject
-    private void setGlobalConfig(GlobalConfig globalConfig){
-        this.globalConfig = globalConfig;
-    }
-
-    public static GlobalConfig getGlobalConfig() {
-        return globalConfig;
-    }
-
-    private static Logger logger;
-
-    @Inject
-    private void setLogger(Logger logger) {
-        this.logger = logger;
+    public static Itemizer getItemizer() {
+        return itemizer;
     }
 
     public static Logger getLogger() {
@@ -80,52 +66,68 @@ public class Itemizer {
     }
 
     @Inject
-    private CraftRegister craftRegister;
-
-
-    private  static  ItemDAO itemDAO;
-    @Inject
-    private void setItemDAO(ItemDAO itemDAO) {
-        this.itemDAO = itemDAO;
-    }
-
-    public static ItemDAO getItemDAO(){
-        return itemDAO;
-    }
-
-
-    private static ConfigurationHandler configurationHandler;
-
-    @Inject
-    public void setConfigurationHandler(ConfigurationHandler configurationHandler) {
-        this.configurationHandler = configurationHandler;
+    private void setLogger(Logger logger) {
+        this.logger = logger;
     }
 
     public static ConfigurationHandler getConfigurationHandler() {
         return configurationHandler;
     }
 
+    @Inject
+    public void setConfigurationHandler(ConfigurationHandler configurationHandler) {
+        this.configurationHandler = configurationHandler;
+    }
+
+    public static PluginContainer getInstance() {
+        return Sponge.getPluginManager().getPlugin("itemizer").orElse(null);
+    }
+
+    public GlobalConfig getGlobalConfig() {
+        return globalConfig;
+    }
+
+    @Listener
+    public void gameConstruct(GameConstructionEvent event) {
+        itemizer = this;
+        Sponge.getServiceManager().setProvider(getInstance(), IItemService.class, new ItemService());
+    }
+
+    @Listener
+    public void preInit0(GameRegistryEvent.Register<CraftingRecipe> event) {
+        for (ICraftRecipes recipeRegister : configurationHandler.getCraftList()) {
+            if (!(recipeRegister instanceof Smelting)) {
+                recipeRegister.register(event);
+            }
+        }
+    }
+
+    @Listener
+    public void preInit1(GameRegistryEvent.Register<SmeltingRecipe> event) {
+        for (ICraftRecipes recipeRegister : configurationHandler.getCraftList()) {
+            if (recipeRegister instanceof Smelting) {
+                recipeRegister.register(event);
+            }
+        }
+    }
+
     @Listener
     public void preInit(GamePreInitializationEvent event) {
+
         logger.info("Initalisation");
 
        // Sponge.getDataManager().registerTranslator(AttributeBean.class,new AttributeTranslator());
-
+        new OnaKeys();
         loadGlobalConfig();
-        Sponge.getEventManager().post(new ItemizerPreLoadEvent());
-        try {
-            loadItems();
-        } catch (ObjectMappingException e) {
-            Itemizer.getLogger().error("Error while reading configuration 'items' : " + e.getMessage());
-        } catch (Exception e) {
-            Itemizer.getLogger().error(e.getMessage());
-        }
         try {
             loadMiners();
-        } catch (ObjectMappingException e) {
-            Itemizer.getLogger().error("Error while reading configuration 'miners' : " + e.getMessage());
         } catch (Exception e) {
-            Itemizer.getLogger().error(e.getMessage());
+            Itemizer.getLogger().error("Error while reading configuration 'miners' : " + e.getMessage());
+        }
+        try {
+            loadItems();
+        } catch (Exception e) {
+            Itemizer.getLogger().error("Error while reading configuration 'items' : " + e.getMessage());
         }
 
         try {
@@ -142,10 +144,6 @@ public class Itemizer {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        craftRegister.register(configurationHandler.getCraftList());
-
-        itemizer = this;
-        Sponge.getServiceManager().setProvider(getInstance(), IItemService.class, new ItemService());
     }
 
     @Listener
@@ -153,8 +151,7 @@ public class Itemizer {
 
         CommandSpec retrieve = CommandSpec.builder()
                 .description(Text.of("Retrieve an item from a configuration file with its id."))
-                .arguments(GenericArguments.onlyOne(GenericArguments.choices(Text.of("id"),itemDAO.getMap())),
-                        GenericArguments.optional(GenericArguments.integer(Text.of("quantity"))),
+                .arguments(GenericArguments.onlyOne(GenericArguments.string(Text.of("id"))),
                         GenericArguments.optional(GenericArguments.player(Text.of("player")))
                 )
                 .permission("itemizer.command.retrieve")
@@ -165,9 +162,7 @@ public class Itemizer {
                 .permission("itemizer.get")
                 .description(Text.of("Try to retrieve an item from a pool describes in a configuration file with its id."))
                 .arguments(GenericArguments.onlyOne(GenericArguments.string(Text.of("id"))),
-                        GenericArguments.optional(GenericArguments.integer(Text.of("quantity"))),
-                        GenericArguments.optional(GenericArguments.player(Text.of("player")))
-                )
+                        GenericArguments.optional(GenericArguments.player(Text.of("player"))))
                 .permission("itemizer.command.fetch")
                 .executor(new FetchCommand()).build();
         Sponge.getCommandManager().register(this, fetch, "fetch");
@@ -217,7 +212,7 @@ public class Itemizer {
                 .description(Text.of("Update global color configuration."))
                 .arguments(
                         GenericArguments.onlyOne(
-                                GenericArguments.enumValue(Text.of("Key"),GlobalConfig.RewriteFlagColorList.class)),
+                                GenericArguments.enumValue(Text.of("Key"), GlobalConfig.RewriteFlagColorList.class)),
                         GenericArguments.optional(
                                 GenericArguments.catalogedElement(Text.of("Color"), CatalogTypes.TEXT_COLOR))
                 ).permission("itemizer.command.rewrite")
@@ -236,10 +231,10 @@ public class Itemizer {
                 .executor(new ConfigureModifierCommand()).build();
 
         CommandSpec configurationUpdate = CommandSpec.builder()
-                .child(rewrite,"description" )
-                .child(enchantRewrite,"enchantment")
+                .child(rewrite, "description")
+                .child(enchantRewrite, "enchantment")
                 .child(modifierRewrite, "modifier")
-                .child(colorRewrite,"color")
+                .child(colorRewrite, "color")
                 .permission("itemizer.command.rewrite")
                 .build();
         Sponge.getCommandManager().register(this, configurationUpdate, "configure");
@@ -249,38 +244,37 @@ public class Itemizer {
 
     @Listener
     public void onServerStop(GameStoppedServerEvent event) {
-        getConfigurationHandler().saveItemConfig(configDir + "/itemizer/items.conf");
+        Itemizer.getConfigurationHandler().saveItemConfig(configDir + "/itemizer/items.conf");
     }
 
     public void saveGlobalConfig() {
         getConfigurationHandler().saveGlobalConfiguration(configDir + "/itemizer/global.conf");
     }
 
-    public static PluginContainer getInstance() {
-        return Sponge.getPluginManager().getPlugin("itemizer").orElse(null);
-    }
-
     private void loadGlobalConfig() {
         initDefaultConfig("global.conf");
         try {
-            setGlobalConfig(configurationHandler.readGlobalConfiguration(
-                    configurationHandler.loadConfiguration(configDir + "/itemizer/global.conf")));
+            this.globalConfig = configurationHandler.readGlobalConfig(
+                    Paths.get(configDir + "/itemizer/", "global.conf"));
+
         } catch (Exception e) {
             logger.error(e.toString());
         }
 
     }
 
-
-    public int loadItems() throws Exception {
+    public int loadItems(){
         initDefaultConfig("items.conf");
         return configurationHandler.readItemsConfiguration(
-                configurationHandler.loadConfiguration(configDir + "/itemizer/items.conf"));
+                Paths.get(configDir + "/itemizer/", "items.conf")
+        );
     }
 
-    public int loadMiners() throws Exception {
+    public int loadMiners() {
         initDefaultConfig("miners.conf");
-        return configurationHandler.readMinerConfiguration(configurationHandler.loadConfiguration(configDir + "/itemizer/miners.conf"));
+        return configurationHandler.readMinerConfiguration(
+                Paths.get(configDir + "/itemizer/", "miners.conf")
+        );
     }
 
     public int loadPools() throws Exception {
@@ -290,7 +284,9 @@ public class Itemizer {
 
     public int loadCrafts() throws Exception {
         initDefaultConfig("crafts.conf");
-        return configurationHandler.readCraftConfiguration(configurationHandler.loadConfiguration(configDir + "/itemizer/crafts.conf"));
+        return configurationHandler.readCraftConfiguration(
+                Paths.get(configDir + "/itemizer/", "crafts.conf")
+        );
     }
 
     private void initDefaultConfig(String path) {
