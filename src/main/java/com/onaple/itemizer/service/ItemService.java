@@ -8,18 +8,17 @@ import com.onaple.itemizer.utils.PoolFetcher;
 import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.item.inventory.ItemStack;
 
+import javax.inject.Singleton;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+@Singleton
 public class ItemService implements IItemService {
 
-    public static ItemService INSTANCE;
-
     public ItemService() {
-        INSTANCE = this;
     }
 
     private Map<String, ItemNBTModule> thirdPartyConfigs = new HashMap<>();

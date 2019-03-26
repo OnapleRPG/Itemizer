@@ -9,12 +9,10 @@ import com.onaple.itemizer.commands.globalConfiguration.ConfigureColorCommand;
 import com.onaple.itemizer.commands.globalConfiguration.ConfigureEnchantCommand;
 import com.onaple.itemizer.commands.globalConfiguration.ConfigureModifierCommand;
 import com.onaple.itemizer.commands.globalConfiguration.ConfigureRewriteCommand;
-import com.onaple.itemizer.data.OnaKeys;
 import com.onaple.itemizer.data.handlers.ConfigurationHandler;
 import com.onaple.itemizer.recipes.Smelting;
 import com.onaple.itemizer.service.IItemService;
 import com.onaple.itemizer.service.ItemService;
-import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import org.slf4j.Logger;
 import org.spongepowered.api.CatalogTypes;
 import org.spongepowered.api.Sponge;
@@ -123,8 +121,6 @@ public class Itemizer {
 
         logger.info("Initalisation");
 
-       // Sponge.getDataManager().registerTranslator(AttributeBean.class,new AttributeTranslator());
-        new OnaKeys();
         loadGlobalConfig();
         try {
             loadMiners();
@@ -136,20 +132,15 @@ public class Itemizer {
         } catch (Exception e) {
             Itemizer.getLogger().error("Error while reading configuration 'items' : {}", e.getMessage());
         }
-
         try {
             loadPools();
-        } catch (ObjectMappingException e) {
-            Itemizer.getLogger().error("Error while reading configuration 'pools' : {}", e.getMessage());
         } catch (Exception e) {
-            Itemizer.getLogger().error("{}", e.getMessage());
+            Itemizer.getLogger().error("Error while reading configuration 'pools' : {}", e.getMessage());
         }
         try {
             loadCrafts();
-        } catch (ObjectMappingException e) {
-            Itemizer.getLogger().error("Error while reading configuration 'crafts' : {}", e.getMessage());
         } catch (Exception e) {
-            e.printStackTrace();
+            Itemizer.getLogger().error("Error while reading configuration 'crafts' : {}", e.getMessage());
         }
     }
 

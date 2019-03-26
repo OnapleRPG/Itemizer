@@ -10,7 +10,6 @@ import ninja.leaping.configurate.objectmapping.Setting;
 import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable;
 import ninja.leaping.configurate.objectmapping.serialize.TypeSerializer;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.spongepowered.api.Sponge;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.inventory.ItemStack;
 
@@ -46,10 +45,7 @@ public class ItemBeanRefOrItemIdAdapter implements TypeSerializer<ItemStack> {
                 return ItemStack.of(type);
             }
             Optional<ItemBean> item = ItemDAO.getItem(ref);
-            if (item.isPresent()) {
-                return new ItemBuilder().buildItemStack(item.get()).get();
-            }
-            return null;
+            return item.map(itemBean -> new ItemBuilder().buildItemStack(itemBean).orElse(null)).orElse(null);
         }
     }
 }

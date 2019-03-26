@@ -2,7 +2,6 @@ package com.onaple.itemizer.utils;
 
 import com.onaple.itemizer.GlobalConfig;
 import com.onaple.itemizer.Itemizer;
-import com.onaple.itemizer.data.OnaKeys;
 import com.onaple.itemizer.data.beans.AttributeBean;
 import com.onaple.itemizer.data.beans.ItemBean;
 import com.onaple.itemizer.data.beans.ItemEnchant;
@@ -89,31 +88,9 @@ public class ItemBuilder {
         grantMining(itemBean, config.getHiddenFlags().get("CanDestroy"));
         setAttribute(itemBean, config.getHiddenFlags().get("Attributes_modifiers"));
         setCustomDatamanipulators(itemBean);
-        Itemizer.getLogger().info("Hide flag value : " + config.getHiddenFlagsValue());
-        this.item.offer(OnaKeys.HIDDEN_FLAGS, config.getHiddenFlagsValue());
-        //   Itemizer.getLogger().info("flagFrom manipulator : " + this.item.get(OnaKeys.HIDDEN_FLAGS));
-               /* this.item = ItemStack.builder()
-                        .fromContainer(item.toContainer().set(DataQuery.of("UnsafeData","HideFlags"),config.getHiddenFlagsValue()))
-                        .build();*/
         addLore();
-           /* } else{
-                if (itemBean.getLore() != null) {
-                    List<Text> loreData = new ArrayList<>();
-                    for (String loreLine : itemBean.getLore().split("\n")) {
-                        loreData.add(Text.builder(loreLine).color(TextColors.GRAY).build());
-                    }
-
-                    Set<ItemLoreWriter> itemLoreAppenders = ItemService.INSTANCE.getItemLoreAppenders(usedKeys);
-                    for (ItemLoreWriter itemLoreAppender : itemLoreAppenders) {
-                        itemLoreAppender.apply(item, loreData);
-                    }
-                    item.offer(Keys.ITEM_LORE, loreData);
-                }
-
-            }*/
         setNbt(itemBean);
         return Optional.ofNullable(this.item);
-
     }
 
     private void setCustomDatamanipulators(ItemBean itemBean) {
@@ -168,6 +145,7 @@ public class ItemBuilder {
 
         // Item attributes
         item.offer(Keys.UNBREAKABLE, itemBean.isUnbreakable());
+        item.offer(Keys.HIDE_UNBREAKABLE,rewrite);
         if (itemBean.isUnbreakable()) {
             if (rewrite && config.getUnbreakableRewrite() != null) {
 
@@ -219,6 +197,7 @@ public class ItemBuilder {
             }
 
             item.offer(enchantmentData);
+            item.offer(Keys.HIDE_ENCHANTMENTS,rewrite);
 
         }
     }
@@ -253,6 +232,7 @@ public class ItemBuilder {
             }
         }
         item.offer(breakableData);
+        item.offer(Keys.HIDE_CAN_DESTROY,rewrite);
     }
 
     /**
@@ -299,7 +279,7 @@ public class ItemBuilder {
         this.item = ItemStack.builder()
                 .fromContainer(container)
                 .build();
-
+        this.item.offer(Keys.HIDE_ATTRIBUTES,rewrite);
     }
 
     /**

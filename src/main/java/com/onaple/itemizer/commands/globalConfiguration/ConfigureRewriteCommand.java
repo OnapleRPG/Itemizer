@@ -2,20 +2,16 @@ package com.onaple.itemizer.commands.globalConfiguration;
 
 import com.onaple.itemizer.GlobalConfig;
 import com.onaple.itemizer.Itemizer;
-import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.spec.CommandExecutor;
-import org.spongepowered.api.item.enchantment.EnchantmentType;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Map;
 import java.util.Optional;
 
 public class ConfigureRewriteCommand implements CommandExecutor {
@@ -43,7 +39,7 @@ public class ConfigureRewriteCommand implements CommandExecutor {
                     src.sendMessage(Text.builder(value.toString()).color(TextColors.GOLD).build());
                 }
             } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-                e.printStackTrace();
+               Itemizer.getLogger().error("{}",e);
             }
         } else {
             src.sendMessage(Text.builder("Specify a key").color(TextColors.RED).build());

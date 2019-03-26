@@ -25,7 +25,7 @@ public class RegisterCommand implements CommandExecutor {
                     () -> new CommandException(Text.of("You must specify an id")));
             if(Itemizer.getConfigurationHandler().getItemList()
                     .stream()
-                    .anyMatch(itemBean -> itemBean.getId() == itemId)){
+                    .anyMatch(itemBean -> itemBean.getId().equals(itemId))){
                 throw new CommandException(Text.of("Id already exist"));
             }
             Optional<ItemStack> itemStackOptional = ((Player) src).getItemInHand(HandTypes.MAIN_HAND);
