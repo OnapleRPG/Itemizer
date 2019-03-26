@@ -1,4 +1,4 @@
-# Itemizer  [![Build Status](https://travis-ci.org/OnapleRPG/Itemizer.svg?branch=master)](https://travis-ci.org/OnapleRPG/Itemizer) ![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=Itemizer&metric=alert_status)   [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+# Itemizer  [![Build Status](https://travis-ci.org/OnapleRPG/Itemizer.svg?branch=master)](https://travis-ci.org/OnapleRPG/Itemizer) ![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=Itemizer&metric=alert_status)   [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) [![sponge version](https://img.shields.io/badge/sponge-7.2.0-yellow.svg)](https://www.spongepowered.org/)
 
 
 Itemizer is a Sponge Minecraft plugin that allow custom item creation as described in configuration files, as well as random item generation.
@@ -42,7 +42,7 @@ Permission : *itemizer.command.analyse*
 All configuration files use HOCON format. When you first install the plugin a default configuration with example is loaded in your `config/itemizer/` folder.
 
 ### Global  configuration
-In the global configuration file you can change plugin settings :
+In the global configuration file you can change plugin settings : 
 * __RewriteParts__ instead of using default Minecraft notation for _enchantments_, _modifiers_ , _undreakable_ , _canMine_ .
 You can chose to rewrite them manually. set `False` to let default look or `True` to rewrite It.
 * __DefaulColor__ if you decide to rewrite a part you can chose the color of each elements.
