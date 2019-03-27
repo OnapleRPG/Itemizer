@@ -78,7 +78,6 @@ public class ItemBuilder {
         grantMining(itemBean, config.getHiddenFlags().get("CanDestroy"));
         setAttribute(itemBean, config.getHiddenFlags().get("Attributes_modifiers"));
         setCustomDatamanipulators(itemBean);
-        Itemizer.getLogger().info("Hide flag value : " + config.getHiddenFlagsValue());
         setNbt(itemBean);
         applyCustomLoreAppender();
         addLore();

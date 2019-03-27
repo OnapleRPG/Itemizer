@@ -10,10 +10,6 @@ public interface IItemService {
 
     void addItemLoreAppender(ItemLoreWriter writer);
 
-    void addThirdpartyConfig(ItemNBTModule factory);
-
-    Optional<ItemNBTModule> getFactoryByKeyId(String keyId);
-
     Optional<ItemStack> fetch(String id);
 
     Optional<ItemStack> retrieve(String id);
