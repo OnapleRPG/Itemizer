@@ -1,8 +1,8 @@
 # Itemizer  [![Build Status](https://travis-ci.org/OnapleRPG/Itemizer.svg?branch=master)](https://travis-ci.org/OnapleRPG/Itemizer) ![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=Itemizer&metric=alert_status)   [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) [![sponge version](https://img.shields.io/badge/sponge-7.2.0-yellow.svg)](https://www.spongepowered.org/)
 
 
-Itemizer is a Sponge Minecraft plugin that allow custom item creation as described in configuration files, as well as random item generation.
-you can edit most of item's informations like :
+Itemizer is a Sponge Minecraft plugin that allows custom item creation as described in configuration files, as well as random item generation.  
+You can edit most of the item's informations like :  
 
 * Item name
 * Item lore
@@ -23,9 +23,9 @@ If you want more details about *AttributeModifiers* check the Minecraft [wiki](h
 
 
 ## Installation
-To install this plugin you must have a sponge server 1.12. Download the [latest release](https://github.com/OnapleRPG/Itemizer/releases) and drag and drop it into your server's `mods/` folder. Then restart your server.
+To install this plugin, you must have a sponge server 1.12. Download the [latest release](https://github.com/OnapleRPG/Itemizer/releases) and drag and drop it into your server's `mods/` folder. Then restart your server.
 
-##Minecraft Commands
+## Minecraft Commands
 
 * `/retrieve <itemId> [quantity] [player]` : Obtain an item specified in the configuration file for the given id.  
 Permission : *itemizer.command.rerieve*
@@ -78,8 +78,8 @@ For each item configured, the following data can be provided :
     * The __slot__ is where the item must be for applying the attribute. It can be `head` ,`mainhand`
     `offhand`, `chest`, `legs` or `feet`. 
     
-    You can also add any NBT you want to your item. with his path and his value.
-#### example
+    You can also add any NBT you want to your item, with its path and its value.
+#### Example
 ```
 items = [
     {
@@ -219,15 +219,15 @@ _The first craft requires a stone axe to craft the item referenced "1", the seco
 and the third one is used to craft the item referenced "2" with three sticks aligned in a vertical centered line (notice the whitespaces before and after the "a")_
 
 ## For developer
- if you are want to use **Itemizer** in you development, we provide services to ease interactions 
+If you are willing to use **Itemizer** in your plugin development, we provide services to ease interactions.  
  
 ### Services
 * **IItemService** : Give access to the object getters functions to a plugin.
     * ```Optional<ItemStack retrieve(String id)``` : Try to retrieve a configured item.
     * ```Optional<ItemStack> fetch(String id)``` : Try to fetch an item from a configured item pool.
- ### Instalation with Gradle
+ ### Installation with Gradle
  
- * Add [Jitpack](https://jitpack.io/) in your repositories
+ * Add [Jitpack](https://jitpack.io/) into your repositories
  ```
    repositories {
      mavenCentral()
@@ -237,14 +237,14 @@ and the third one is used to craft the item referenced "2" with three sticks ali
      }
  }  
  ```
- * and add **Itemizer** to your dependencies
+ * Add **Itemizer** to your dependencies
  ```
  dependencies {
       compile 'org.spongepowered:spongeapi:7.0.0'
       implementation 'com.github.OnapleRPG:Itemizer:V1.1.0'
   }
  ```
- * use Services 
+ * Use services 
  ```java
 Optional<IItemService> optionalIItemService = Sponge.getServiceManager().provide(IItemService.class);
             if (optionalIItemService.isPresent()) {
