@@ -9,11 +9,7 @@ import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.item.inventory.ItemStack;
 
 import javax.inject.Singleton;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Singleton
 public class ItemService implements IItemService {
@@ -26,7 +22,7 @@ public class ItemService implements IItemService {
     private Map<Key, ItemLoreWriter> customLoreAppenders = new HashMap<>();
 
     public Set<ItemLoreWriter> getItemLoreAppenders(Set<Key> keys) {
-        Set<ItemLoreWriter> writers = new HashSet<>();
+        Set<ItemLoreWriter> writers = new TreeSet<>();
         for (Map.Entry<Key, ItemLoreWriter> entry : customLoreAppenders.entrySet()) {
             if (keys.contains(entry.getKey())) {
                 writers.add(entry.getValue());

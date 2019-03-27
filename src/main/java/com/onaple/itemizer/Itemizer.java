@@ -1,10 +1,6 @@
 package com.onaple.itemizer;
 
-import com.onaple.itemizer.commands.FetchCommand;
-import com.onaple.itemizer.commands.GetItemInfos;
-import com.onaple.itemizer.commands.RegisterCommand;
-import com.onaple.itemizer.commands.ReloadCommand;
-import com.onaple.itemizer.commands.RetrieveCommand;
+import com.onaple.itemizer.commands.*;
 import com.onaple.itemizer.commands.globalConfiguration.ConfigureColorCommand;
 import com.onaple.itemizer.commands.globalConfiguration.ConfigureEnchantCommand;
 import com.onaple.itemizer.commands.globalConfiguration.ConfigureModifierCommand;
