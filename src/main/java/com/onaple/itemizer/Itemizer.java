@@ -50,11 +50,17 @@ public class Itemizer {
 
 
     private static Itemizer itemizer;
+
     private static Logger logger;
+
     private static ConfigurationHandler configurationHandler;
+
     @Inject
     @ConfigDir(sharedRoot = true)
     private Path configDir;
+
+    @Inject
+    private ItemService itemService;
 
     private GlobalConfig globalConfig;
 
@@ -299,5 +305,9 @@ public class Itemizer {
                 }
             }
         }
+    }
+
+    public ItemService getItemService() {
+        return itemService;
     }
 }

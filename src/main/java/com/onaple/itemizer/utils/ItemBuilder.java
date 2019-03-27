@@ -86,7 +86,8 @@ public class ItemBuilder {
     }
 
     private void applyCustomLoreAppender() {
-        Set<ItemLoreWriter> appenders = ItemService.INSTANCE.getItemLoreAppenders(usedKeys);
+
+        Set<ItemLoreWriter> appenders = Itemizer.getItemizer().getItemService().getItemLoreAppenders(usedKeys);
 
         for (ItemLoreWriter appender : appenders) {
             appender.apply(item, lore);
