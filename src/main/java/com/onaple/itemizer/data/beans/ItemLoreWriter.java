@@ -7,7 +7,7 @@ import org.spongepowered.api.text.Text;
 import java.util.List;
 import java.util.Set;
 
-public interface ItemLoreWriter {
+public interface ItemLoreWriter extends Comparable<ItemLoreWriter> {
 
     Set<Key> getKeys();
 

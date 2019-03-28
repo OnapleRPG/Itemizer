@@ -1,10 +1,6 @@
 package com.onaple.itemizer;
 
-import com.onaple.itemizer.commands.FetchCommand;
-import com.onaple.itemizer.commands.GetItemInfos;
-import com.onaple.itemizer.commands.RegisterCommand;
-import com.onaple.itemizer.commands.ReloadCommand;
-import com.onaple.itemizer.commands.RetrieveCommand;
+import com.onaple.itemizer.commands.*;
 import com.onaple.itemizer.commands.globalConfiguration.ConfigureColorCommand;
 import com.onaple.itemizer.commands.globalConfiguration.ConfigureEnchantCommand;
 import com.onaple.itemizer.commands.globalConfiguration.ConfigureModifierCommand;
@@ -54,11 +50,17 @@ public class Itemizer {
 
 
     private static Itemizer itemizer;
+
     private static Logger logger;
+
     private static ConfigurationHandler configurationHandler;
+
     @Inject
     @ConfigDir(sharedRoot = true)
     private Path configDir;
+
+    @Inject
+    private ItemService itemService;
 
     private GlobalConfig globalConfig;
 
@@ -303,5 +305,9 @@ public class Itemizer {
                 }
             }
         }
+    }
+
+    public ItemService getItemService() {
+        return itemService;
     }
 }

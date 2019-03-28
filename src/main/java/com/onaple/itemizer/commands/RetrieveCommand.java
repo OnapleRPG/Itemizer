@@ -1,6 +1,5 @@
 package com.onaple.itemizer.commands;
 
-import com.onaple.itemizer.Itemizer;
 import com.onaple.itemizer.data.access.ItemDAO;
 import com.onaple.itemizer.data.beans.ItemBean;
 import com.onaple.itemizer.utils.ItemBuilder;
@@ -9,13 +8,9 @@ import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.spec.CommandExecutor;
-import org.spongepowered.api.data.type.HandTypes;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.TextTemplate;
-import org.spongepowered.api.text.chat.ChatType;
-import org.spongepowered.api.text.chat.ChatTypes;
 
 import java.util.Optional;
 
@@ -25,7 +20,7 @@ import java.util.Optional;
 public class RetrieveCommand implements CommandExecutor {
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-            Optional<ItemBean> optionalItem = args.<ItemBean>getOne("id");
+            Optional<String> optionalItem = args.<String>getOne("id");
             Optional<Player> targetOptional = args.getOne("player");
             Optional<Integer> amountOptional = args.getOne("quantity");
             Player target ;
@@ -40,14 +35,17 @@ public class RetrieveCommand implements CommandExecutor {
                 }
             }
             if (optionalItem.isPresent()) {
-                Optional<ItemStack> optionalItemStack = new ItemBuilder().buildItemStack(optionalItem.get());
-                if (optionalItemStack.isPresent()) {
-                    ItemStack itemStack = optionalItemStack.get();
-                    amountOptional.ifPresent(itemStack::setQuantity);
-                    target.getInventory().offer(itemStack);
-                } else {
-                    src.sendMessage(Text.of("Item " + optionalItem.get().getId() + " not valid."));
-                }
+                Optional<ItemBean> item = ItemDAO.getItem(optionalItem.get());
+                item.ifPresent(itemBean -> {
+                    Optional<ItemStack> optionalItemStack = new ItemBuilder().buildItemStack(itemBean);
+                    if (optionalItemStack.isPresent()) {
+                        ItemStack itemStack = optionalItemStack.get();
+                        amountOptional.ifPresent(itemStack::setQuantity);
+                        target.getInventory().offer(itemStack);
+                    } else {
+                        src.sendMessage(Text.of("Item " + optionalItem.get() + " not valid."));
+                    }
+                });
             }
         return CommandResult.empty();
     }
