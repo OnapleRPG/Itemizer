@@ -33,6 +33,9 @@ public interface ItemNbtFactory extends Comparable<ItemNbtFactory> {
      */
     default void apply(ItemStack itemStack,List<Text> lore) {
        itemStack.offer(constructDataManipulator());
+       if (this.getLore().isEmpty()){
+           return;
+       }
        lore.add(Text.join(
                 Text.builder("--==#|| ").color(TextColors.GOLD).build(),
                 Text.builder(this.getName()).color(TextColors.GREEN).build(),
