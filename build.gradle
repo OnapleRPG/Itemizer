@@ -42,9 +42,9 @@ targetCompatibility = 1.8
 
 versioning {
     // required (number)
-    major = 1
-    minor = 5
-    patch = 4
+    major = 2
+    minor = 0
+    patch = 0
 }
 
 version = versioning.name+'-'+versioning.build
