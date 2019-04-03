@@ -23,7 +23,6 @@ import org.spongepowered.api.item.enchantment.Enchantment;
 import org.spongepowered.api.item.enchantment.EnchantmentType;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.text.format.TextStyles;
 
 import java.util.ArrayList;
@@ -89,10 +88,10 @@ public class ItemBuilder {
         enchantItemStack(itemBean, config.getHiddenFlags().get("Enchantments"));
         grantMining(itemBean, config.getHiddenFlags().get("CanDestroy"));
         setAttribute(itemBean, config.getHiddenFlags().get("Attributes_modifiers"));
+        addLore();
         setCustomDatamanipulators(itemBean);
         setNbt(itemBean);
         applyCustomLoreAppender();
-        addLore(itemBean);
         return Optional.ofNullable(this.item);
     }
 
@@ -315,16 +314,7 @@ public class ItemBuilder {
         return dataContainer;
     }
 
-    private void addLore(ItemBean itemBean) {
-
-        itemBean.getNbt().forEach(nbt -> {
-            lore.add(Text.join(
-                    Text.builder("--==#|| ").color(TextColors.GOLD).build(),
-                    Text.builder(nbt.getName()).color(TextColors.GREEN).build(),
-                    Text.builder(" ||#==--").color(TextColors.GOLD).build())
-            );
-            lore.addAll(nbt.getLore());
-        });
+    private void addLore() {
         item.offer(Keys.ITEM_LORE, lore);
     }
 
