@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 @ConfigSerializable
 public class ItemBean {
@@ -54,7 +56,7 @@ public class ItemBean {
     private List<AttributeBean> attributeList = new ArrayList<>();
 
     @Setting("nbt")
-    private List<ItemNbtFactory> nbt = new ArrayList<>();
+    private Set<ItemNbtFactory> nbt = new TreeSet<>();
 
     public Map<String, String> getBlockTrait() {
         return blockTrait;
@@ -164,11 +166,11 @@ public class ItemBean {
         this.attributeList = attributeList;
     }
 
-    public List<ItemNbtFactory> getNbt() {
+    public Set<ItemNbtFactory> getNbt() {
         return nbt;
     }
 
-    public void setNbt(List<ItemNbtFactory> nbt) {
+    public void setNbt(Set<ItemNbtFactory> nbt) {
         this.nbt = nbt;
     }
 

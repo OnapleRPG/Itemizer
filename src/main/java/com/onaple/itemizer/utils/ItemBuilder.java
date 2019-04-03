@@ -23,7 +23,6 @@ import org.spongepowered.api.item.enchantment.Enchantment;
 import org.spongepowered.api.item.enchantment.EnchantmentType;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.text.format.TextStyles;
 
 import java.util.ArrayList;
@@ -92,7 +91,7 @@ public class ItemBuilder {
         setCustomDatamanipulators(itemBean);
         setNbt(itemBean);
         applyCustomLoreAppender();
-        addLore(itemBean);
+        addLore();
         return Optional.ofNullable(this.item);
     }
 
@@ -108,9 +107,9 @@ public class ItemBuilder {
 
 
     private void setCustomDatamanipulators(ItemBean itemBean) {
-        List<ItemNbtFactory> thirdpartyConfigs = itemBean.getNbt();
+        Set<ItemNbtFactory> thirdpartyConfigs = itemBean.getNbt();
         for (ItemNbtFactory cfg : thirdpartyConfigs) {
-            cfg.apply(item);
+            cfg.apply(item,lore);
             usedKeys.add(cfg.getKey());
         }
     }
@@ -315,22 +314,13 @@ public class ItemBuilder {
         return dataContainer;
     }
 
-    private void addLore(ItemBean itemBean) {
-
-        itemBean.getNbt().forEach(nbt -> {
-            lore.add(Text.join(
-                    Text.builder("--==#|| ").color(TextColors.GOLD).build(),
-                    Text.builder(nbt.getName()).color(TextColors.GREEN).build(),
-                    Text.builder(" ||#==--").color(TextColors.GOLD).build())
-            );
-            lore.addAll(nbt.getLore());
-        });
+    private void addLore() {
         item.offer(Keys.ITEM_LORE, lore);
     }
 
     private void setNbt(ItemBean itemBean) {
         for (ItemNbtFactory itemNbtFactory : itemBean.getNbt()) {
-            itemNbtFactory.apply(this.item);
+            itemNbtFactory.apply(this.item,this.lore);
         }
     }
 
