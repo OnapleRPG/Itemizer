@@ -7,7 +7,6 @@ import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -34,8 +33,7 @@ public interface ItemNbtFactory extends Comparable<ItemNbtFactory> {
      */
     default void apply(ItemStack itemStack,List<Text> lore) {
        itemStack.offer(constructDataManipulator());
-       lore= new ArrayList<>();
-        lore.add(Text.join(
+       lore.add(Text.join(
                 Text.builder("--==#|| ").color(TextColors.GOLD).build(),
                 Text.builder(this.getName()).color(TextColors.GREEN).build(),
                 Text.builder(" ||#==--").color(TextColors.GOLD).build())
