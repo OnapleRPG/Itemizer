@@ -88,7 +88,6 @@ public class ItemBuilder {
         grantMining(itemBean, config.getHiddenFlags().get("CanDestroy"));
         setAttribute(itemBean, config.getHiddenFlags().get("Attributes_modifiers"));
         setCustomDatamanipulators(itemBean);
-        setNbt(itemBean);
         addLore();
         return Optional.ofNullable(this.item);
     }
@@ -187,7 +186,7 @@ public class ItemBuilder {
                     if (rewrite) {
                         if (config.getEnchantRewrite().size() > 0) {
                             lore.add(Text
-                                    .builder(config.getEnchantRewrite().get(optionalEnchant.get()) + " " + enchant.getValue())
+                                    .builder(config.getEnchantRewrite().get(optionalEnchant.get()) + " " + enchant.getValue().getLevel())
                                     .style(TextStyles.ITALIC)
                                     .color(config.getColorMap().get(GlobalConfig.RewriteFlagColorList.enchantments))
                                     .build());
@@ -305,12 +304,6 @@ public class ItemBuilder {
 
     private void addLore() {
         item.offer(Keys.ITEM_LORE, lore);
-    }
-
-    private void setNbt(ItemBean itemBean) {
-        for (ItemNbtFactory itemNbtFactory : itemBean.getNbt()) {
-            itemNbtFactory.apply(this.item,this.lore);
-        }
     }
 
     private void setCustomData(String queryPath, Object value) {
