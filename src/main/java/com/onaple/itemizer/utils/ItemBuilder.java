@@ -2,8 +2,12 @@ package com.onaple.itemizer.utils;
 
 import com.onaple.itemizer.GlobalConfig;
 import com.onaple.itemizer.Itemizer;
-import com.onaple.itemizer.data.beans.*;
-import com.onaple.itemizer.service.ItemService;
+import com.onaple.itemizer.data.beans.AttributeBean;
+import com.onaple.itemizer.data.beans.ItemBean;
+import com.onaple.itemizer.data.beans.ItemEnchant;
+import com.onaple.itemizer.data.beans.ItemLoreWriter;
+import com.onaple.itemizer.data.beans.ItemNbtFactory;
+import com.onaple.itemizer.data.beans.MinerBean;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.block.BlockType;
@@ -19,9 +23,17 @@ import org.spongepowered.api.item.enchantment.Enchantment;
 import org.spongepowered.api.item.enchantment.EnchantmentType;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.text.format.TextStyles;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class ItemBuilder {
@@ -80,7 +92,7 @@ public class ItemBuilder {
         setCustomDatamanipulators(itemBean);
         setNbt(itemBean);
         applyCustomLoreAppender();
-        addLore();
+        addLore(itemBean);
         return Optional.ofNullable(this.item);
     }
 
@@ -303,7 +315,16 @@ public class ItemBuilder {
         return dataContainer;
     }
 
-    private void addLore() {
+    private void addLore(ItemBean itemBean) {
+
+        itemBean.getNbt().forEach(nbt -> {
+            lore.add(Text.join(
+                    Text.builder("--==#|| ").color(TextColors.GOLD).build(),
+                    Text.builder(nbt.getName()).color(TextColors.GREEN).build(),
+                    Text.builder(" ||#==--").color(TextColors.GOLD).build())
+            );
+            lore.addAll(nbt.getLore());
+        });
         item.offer(Keys.ITEM_LORE, lore);
     }
 
