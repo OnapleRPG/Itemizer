@@ -1,6 +1,11 @@
 package com.onaple.itemizer;
 
-import com.onaple.itemizer.commands.*;
+import com.onaple.itemizer.commands.FetchCommand;
+import com.onaple.itemizer.commands.GetItemInfos;
+import com.onaple.itemizer.commands.HasItemCommand;
+import com.onaple.itemizer.commands.RegisterCommand;
+import com.onaple.itemizer.commands.ReloadCommand;
+import com.onaple.itemizer.commands.RetrieveCommand;
 import com.onaple.itemizer.commands.globalConfiguration.ConfigureColorCommand;
 import com.onaple.itemizer.commands.globalConfiguration.ConfigureEnchantCommand;
 import com.onaple.itemizer.commands.globalConfiguration.ConfigureModifierCommand;
@@ -35,8 +40,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 
-@Plugin(id = "itemizer", name = "Itemizer improuved items", version = "1.5.2",
-        description = "Plugin to manage custom items and crafts",
+@Plugin(id = "itemizer", name = "Itemizer", version = "2.0",
+        description = "Custom item generation with crafting and pool system",
         url = "http://onaple.fr",
         authors = {"Zessirb", "Selki"})
 public class Itemizer {
@@ -47,6 +52,7 @@ public class Itemizer {
     private static final String RELOAD_PERMISSION = "itemizer.command.reload";
     private static final String REGISTER_PERMISSION = "itemizer.command.register";
     private static final String REWRITE_PERMISSION = "itemizer.command.rewrite";
+    private static final String HAS_ITEM_PERMISSION = "itemizer.command.hasitem";
 
 
     private static Itemizer itemizer;
@@ -59,8 +65,17 @@ public class Itemizer {
     @ConfigDir(sharedRoot = true)
     private Path configDir;
 
+
+    private static ItemService itemService;
+
     @Inject
-    private ItemService itemService;
+    private void setItemService(ItemService itemService){
+        itemService = itemService;
+    }
+
+    public static ItemService getItemService(){
+        return itemService;
+    }
 
     private GlobalConfig globalConfig;
 
@@ -238,6 +253,21 @@ public class Itemizer {
                 .build();
         Sponge.getCommandManager().register(this, configurationUpdate, "configure");
 
+        CommandSpec hasItemCommand = CommandSpec.builder()
+                .description(Text.of("Display if a player have an Item."))
+                .arguments(
+                        GenericArguments.onlyOne(
+                                GenericArguments.player(Text.of("Player"))),
+                        GenericArguments.onlyOne(
+                                GenericArguments.string(Text.of("Ref"))),
+                        GenericArguments.optional(
+                                GenericArguments.integer(Text.of("Quantity")))
+                )
+                .permission(HAS_ITEM_PERMISSION)
+                .executor(new HasItemCommand()).build();
+
+        Sponge.getCommandManager().register(this, hasItemCommand, "hasitem");
+
         logger.info("ITEMIZER initialized.");
     }
 
@@ -305,9 +335,5 @@ public class Itemizer {
                 }
             }
         }
-    }
-
-    public ItemService getItemService() {
-        return itemService;
     }
 }

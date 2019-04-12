@@ -5,7 +5,6 @@ import com.onaple.itemizer.Itemizer;
 import com.onaple.itemizer.data.beans.AttributeBean;
 import com.onaple.itemizer.data.beans.ItemBean;
 import com.onaple.itemizer.data.beans.ItemEnchant;
-import com.onaple.itemizer.data.beans.ItemLoreWriter;
 import com.onaple.itemizer.data.beans.ItemNbtFactory;
 import com.onaple.itemizer.data.beans.MinerBean;
 import org.spongepowered.api.Sponge;
@@ -89,20 +88,10 @@ public class ItemBuilder {
         grantMining(itemBean, config.getHiddenFlags().get("CanDestroy"));
         setAttribute(itemBean, config.getHiddenFlags().get("Attributes_modifiers"));
         setCustomDatamanipulators(itemBean);
-        applyCustomLoreAppender();
         addLore();
         return Optional.ofNullable(this.item);
     }
 
-    private void applyCustomLoreAppender() {
-
-        Set<ItemLoreWriter> appenders = Itemizer.getItemizer().getItemService().getItemLoreAppenders(usedKeys);
-
-        for (ItemLoreWriter appender : appenders) {
-            appender.apply(item, lore);
-        }
-
-    }
 
 
     private void setCustomDatamanipulators(ItemBean itemBean) {
