@@ -1,9 +1,11 @@
 package com.onaple.itemizer.data.beans;
 
+import cz.neumimto.config.blackjack.and.hookers.annotations.AsCollectionImpl;
 import ninja.leaping.configurate.objectmapping.Setting;
 import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable;
 
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 @ConfigSerializable
 public class PoolBean {
@@ -12,11 +14,12 @@ public class PoolBean {
     @Setting("id")
     private String id;
 
-    /** Map of items with linked probability **/
+    /** List of items & quantity with linked probability **/
     @Setting("items")
-    private Map<Double, ItemBean> items;
+    @AsCollectionImpl(ArrayList.class)
+    private List<PoolItemBean> items;
 
-    public PoolBean(String id, Map<Double, ItemBean> items) {
+    public PoolBean(String id, List<PoolItemBean> items) {
         this.id = id;
         this.items = items;
     }
@@ -31,10 +34,11 @@ public class PoolBean {
         this.id = id;
     }
 
-    public Map<Double, ItemBean> getItems() {
+    public List<PoolItemBean> getItems() {
         return items;
     }
-    public void setItems(Map<Double, ItemBean> items) {
+
+    public void setItems(List<PoolItemBean> items) {
         this.items = items;
     }
 }
