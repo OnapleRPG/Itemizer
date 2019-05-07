@@ -1,8 +1,6 @@
 package com.onaple.itemizer.commands;
 
 import com.onaple.itemizer.Itemizer;
-import com.onaple.itemizer.data.beans.ItemBean;
-import com.onaple.itemizer.utils.ItemBuilder;
 import com.onaple.itemizer.utils.PoolFetcher;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
@@ -24,31 +22,24 @@ public class FetchCommand implements CommandExecutor {
         if (src instanceof Player) {
             String poolId = args.<String>getOne("id").orElse("");
             Optional<Player> targetOptional = args.getOne("player");
-            Optional<Integer> amountOptional = args.getOne("quantity");
-            Player target ;
-            if (targetOptional.isPresent()){
+            Player target;
+            if (targetOptional.isPresent()) {
                 target = targetOptional.get();
             } else {
-                if(src instanceof Player){
+                if (src instanceof Player) {
                     target = (Player) src;
-                } else{
+                } else {
                     src.sendMessage(Text.of("Target must be a player."));
                     return CommandResult.empty();
                 }
             }
-            Optional<ItemBean> optionalItem = PoolFetcher.fetchItemFromPool(poolId);
-            if (optionalItem.isPresent()) {
-                Optional<ItemStack> optionalItemStack = new ItemBuilder().buildItemStack(optionalItem.get());
-                if (optionalItemStack.isPresent()) {
-                    ItemStack itemStack = optionalItemStack.get();
-                    amountOptional.ifPresent(itemStack::setQuantity);
-                    target.getInventory().offer(itemStack);
+                Optional<ItemStack> optionalItem = PoolFetcher.fetchItemFromPool(poolId);
+                if (optionalItem.isPresent()) {
+                    target.getInventory().offer(optionalItem.get());
+                    return CommandResult.success();
                 } else {
-                    src.sendMessage(Text.of("Item from pool " + poolId + " not valid."));
+                    src.sendMessage(Text.of("Bad luck! Pool " + poolId + " returned nothing."));
                 }
-            } else {
-                src.sendMessage(Text.of("Pool " + poolId + " returned nothing."));
-            }
         } else {
             Itemizer.getLogger().warn("Fetch command can only be executed by a player.");
         }
