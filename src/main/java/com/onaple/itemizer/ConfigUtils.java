@@ -1,12 +1,12 @@
 package com.onaple.itemizer;
 
-import static org.checkerframework.checker.units.UnitsTools.s;
-
 import cz.neumimto.config.blackjack.and.hookers.NotSoStupidObjectMapper;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.objectmapping.ObjectMapper;
 
 import java.nio.file.Path;
+
+import static org.checkerframework.checker.units.UnitsTools.s;
 
 public class ConfigUtils {
 

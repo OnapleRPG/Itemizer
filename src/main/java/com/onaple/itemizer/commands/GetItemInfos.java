@@ -5,15 +5,12 @@ import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.spec.CommandExecutor;
-import org.spongepowered.api.data.DataContainer;
-import org.spongepowered.api.data.DataQuery;
 import org.spongepowered.api.data.type.HandTypes;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
-import java.util.Map;
 import java.util.Optional;
 
 @SuppressWarnings("unchecked")
@@ -27,13 +24,9 @@ public class GetItemInfos implements CommandExecutor {
                 return CommandResult.empty();
             } else {
                 ItemStack objectToAnalyse = objectInHandOpt.get();
-                DataContainer itemData = objectToAnalyse .toContainer();
+                Text.builder("You have in your hand ")
+                        .append(Text.builder(objectToAnalyse.getType().getName()).color(TextColors.GREEN).toText()).build();
 
-                @SuppressWarnings("unchecked")
-                Optional<Map<?,?>> datamap = (Optional<Map<?, ?>>) itemData.getMap(DataQuery.of("UnsafeData"));
-                datamap.ifPresent(stringObjectMap -> stringObjectMap.forEach((s, o) -> ((Player) src).sendMessage(Text.builder(s + " : ").color(TextColors.GREEN).append(
-                        Text.builder(o.toString()).color(TextColors.GOLD).build()
-                ).build())));
                return CommandResult.success();
             }
         }

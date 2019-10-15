@@ -10,5 +10,3 @@ scripts
 gradlew
 gradlew.bat
 gradle.properties
-logs
-.mixin.out
