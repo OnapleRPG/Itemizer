@@ -15,6 +15,7 @@ import com.onaple.itemizer.data.handlers.ConfigurationHandler;
 import com.onaple.itemizer.recipes.Smelting;
 import com.onaple.itemizer.service.IItemService;
 import com.onaple.itemizer.service.ItemService;
+import com.onaple.itemizer.utils.ItemManager;
 import org.slf4j.Logger;
 import org.spongepowered.api.CatalogTypes;
 import org.spongepowered.api.Sponge;
@@ -62,6 +63,17 @@ public class Itemizer {
     private static Logger logger;
 
     private static ConfigurationHandler configurationHandler;
+
+    private static ItemManager itemManager;
+
+    @Inject
+    private void setItemManager(ItemManager itemManager){
+        this.itemManager = itemManager;
+    }
+
+    public static ItemManager getItemManager(){
+        return itemManager;
+    }
 
     @Inject
     @ConfigDir(sharedRoot = true)
