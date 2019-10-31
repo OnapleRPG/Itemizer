@@ -12,6 +12,8 @@ import org.spongepowered.api.data.type.HandTypes;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.format.TextColors;
+import org.spongepowered.api.text.format.TextStyles;
 
 import java.util.Optional;
 
@@ -31,11 +33,12 @@ public class RegisterCommand implements CommandExecutor {
             Optional<ItemStack> itemStackOptional = ((Player) src).getItemInHand(HandTypes.MAIN_HAND);
             if(itemStackOptional.isPresent()){
                 ItemStack itemToRegister = itemStackOptional.get();
-                ItemBean itemRegistred = Itemizer.getItemManager().register(itemId,itemToRegister);
+                ItemBean itemRegistred = ItemBean.from(itemId,itemToRegister);
                 Itemizer.getConfigurationHandler().getItemList().add(itemRegistred);
-
-                ((Player) src).sendMessage(Text.of( "Object succesfully added to the database with the index "
-                        + itemRegistred.getId()));
+                ((Player) src).setItemInHand(HandTypes.MAIN_HAND,itemRegistred.getItemStackSnapshot().createStack());
+                src.sendMessage(Text.builder( "Object succesfully added to the database with the index ")
+                        .append(Text.of(TextColors.GOLD, TextStyles.BOLD,itemRegistred.getId()))
+                        .build());
             }
         }
         return CommandResult.success();

@@ -1,7 +1,7 @@
 package com.onaple.itemizer.data.serializers;
 
 import com.google.common.reflect.TypeToken;
-import com.onaple.itemizer.data.access.ItemDAO;
+import com.onaple.itemizer.Itemizer;
 import com.onaple.itemizer.data.beans.ItemBean;
 import com.onaple.itemizer.utils.ItemBuilder;
 import ninja.leaping.configurate.ConfigurationNode;
@@ -44,7 +44,7 @@ public class ItemBeanRefOrItemIdAdapter implements TypeSerializer<ItemStack> {
             if (type != null) {
                 return ItemStack.of(type);
             }
-            Optional<ItemBean> item = ItemDAO.getItem(ref);
+            Optional<ItemBean> item = Itemizer.getItemDAO().getItem(ref);
             return item.map(itemBean -> new ItemBuilder().buildItemStack(itemBean).orElse(null)).orElse(null);
         }
     }

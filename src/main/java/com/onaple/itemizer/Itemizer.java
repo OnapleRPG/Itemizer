@@ -3,26 +3,27 @@ package com.onaple.itemizer;
 import com.onaple.itemizer.commands.FetchCommand;
 import com.onaple.itemizer.commands.GetItemInfos;
 import com.onaple.itemizer.commands.HasItemCommand;
-import com.onaple.itemizer.commands.MigrateCommand;
 import com.onaple.itemizer.commands.RegisterCommand;
 import com.onaple.itemizer.commands.ReloadCommand;
 import com.onaple.itemizer.commands.RetrieveCommand;
+import com.onaple.itemizer.commands.elements.IdElement;
 import com.onaple.itemizer.commands.globalConfiguration.ConfigureColorCommand;
 import com.onaple.itemizer.commands.globalConfiguration.ConfigureEnchantCommand;
 import com.onaple.itemizer.commands.globalConfiguration.ConfigureModifierCommand;
 import com.onaple.itemizer.commands.globalConfiguration.ConfigureRewriteCommand;
+import com.onaple.itemizer.commands.manager.LoreManagerCommand;
+import com.onaple.itemizer.data.access.ItemDAO;
+import com.onaple.itemizer.data.beans.ICraftRecipes;
 import com.onaple.itemizer.data.handlers.ConfigurationHandler;
 import com.onaple.itemizer.recipes.Smelting;
 import com.onaple.itemizer.service.IItemService;
 import com.onaple.itemizer.service.ItemService;
-import com.onaple.itemizer.utils.ItemManager;
+import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import org.slf4j.Logger;
 import org.spongepowered.api.CatalogTypes;
 import org.spongepowered.api.Sponge;
-import org.spongepowered.api.asset.Asset;
 import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandSpec;
-import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.GameRegistryEvent;
 import org.spongepowered.api.event.game.state.GameConstructionEvent;
@@ -38,10 +39,6 @@ import org.spongepowered.api.text.format.TextColors;
 
 import javax.inject.Inject;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Optional;
 
 @Plugin(id = "itemizer", name = "Itemizer", version = "2.1",
         description = "Custom item generation with crafting and pool system",
@@ -64,23 +61,18 @@ public class Itemizer {
 
     private static ConfigurationHandler configurationHandler;
 
-    private static ItemManager itemManager;
-
-    @Inject
-    private void setItemManager(ItemManager itemManager){
-        this.itemManager = itemManager;
-    }
-
-    public static ItemManager getItemManager(){
-        return itemManager;
-    }
-
-    @Inject
-    @ConfigDir(sharedRoot = true)
-    private Path configDir;
-
-
     private static ItemService itemService;
+
+    private static ItemDAO itemDAO;
+
+    public static ItemDAO getItemDAO() {
+        return itemDAO;
+    }
+
+    @Inject
+    public  void setItemDAO(ItemDAO itemDAO) {
+        this.itemDAO = itemDAO;
+    }
 
     @Inject
     private void setItemService(ItemService itemService){
@@ -154,11 +146,6 @@ public class Itemizer {
 
         loadGlobalConfig();
         try {
-            loadMiners();
-        } catch (Exception e) {
-            Itemizer.getLogger().error("Error while reading configuration 'miners' : {}", e.getMessage());
-        }
-        try {
             loadItems();
         } catch (Exception e) {
             Itemizer.getLogger().error("Error while reading configuration 'items' ", e);
@@ -180,7 +167,7 @@ public class Itemizer {
 
         CommandSpec retrieve = CommandSpec.builder()
                 .description(Text.of("Retrieve an item from a configuration file with its id."))
-                .arguments(GenericArguments.onlyOne(GenericArguments.string(Text.of("id"))),
+                .arguments(new IdElement(Text.of("id")),
                         GenericArguments.optional(GenericArguments.player(Text.of("player")))
                 )
                 .permission(RETRIEVE_PERMISSION)
@@ -206,6 +193,12 @@ public class Itemizer {
                 .permission(ANALYSE_PERMISSION)
                 .executor(new GetItemInfos()).build();
         Sponge.getCommandManager().register(this, getInfo, "analyse");
+
+        CommandSpec changeLore = CommandSpec.builder()
+                .description(Text.of("set or update Item lore"))
+                .permission(ANALYSE_PERMISSION)
+                .executor(new LoreManagerCommand()).build();
+        Sponge.getCommandManager().register(this, changeLore, "set-lore");
 
         CommandSpec register = CommandSpec.builder()
                 .description(Text.of("Register an new itemizer item from main hand."))
@@ -282,36 +275,21 @@ public class Itemizer {
 
         Sponge.getCommandManager().register(this, hasItemCommand, "hasitem");
 
-        CommandSpec migrationSpec = CommandSpec.builder()
-                .description(Text.of("Migrate Itemizer configuration v2 to v3")
-                        .concat(Text.of(TextColors.RED,"Backup your old item.conf before")))
-                .permission(REGISTER_PERMISSION)
-                .executor(new MigrateCommand())
-                .build();
-
-        Sponge.getCommandManager().register(this,migrationSpec,"migrate");
-
-
-
-
-
         logger.info("ITEMIZER initialized.");
     }
 
     @Listener
     public void onServerStop(GameStoppedServerEvent event) {
-        Itemizer.getConfigurationHandler().saveItemConfig(configDir + "/itemizer/items.conf");
+        Itemizer.getConfigurationHandler().saveItemConfig();
     }
 
     public void saveGlobalConfig() {
-        getConfigurationHandler().saveGlobalConfiguration(configDir + "/itemizer/global.conf");
+        getConfigurationHandler().saveGlobalConfiguration();
     }
 
     private void loadGlobalConfig() {
-        initDefaultConfig("global.conf");
         try {
-            this.globalConfig = configurationHandler.readGlobalConfig(
-                    Paths.get(configDir + "/itemizer/", "global.conf"));
+            this.globalConfig = configurationHandler.readGlobalConfig();
 
         } catch (Exception e) {
             logger.error(e.toString());
@@ -319,48 +297,15 @@ public class Itemizer {
 
     }
 
-    public int loadItems(){
-        initDefaultConfig("items.conf");
-        return configurationHandler.readItemsConfiguration(
-                Paths.get(configDir + "/itemizer/", "items.conf")
-        );
-    }
-
-    public int loadMiners() {
-        initDefaultConfig("miners.conf");
-        return configurationHandler.readMinerConfiguration(
-                Paths.get(configDir + "/itemizer/", "miners.conf")
-        );
+    public int loadItems() throws IOException, ObjectMappingException {
+        return configurationHandler.readItemsConfiguration();
     }
 
     public int loadPools() throws Exception {
-        initDefaultConfig("pools.conf");
-        return configurationHandler.readPoolsConfiguration(configurationHandler.loadConfiguration(configDir + "/itemizer/pools.conf"));
+        return configurationHandler.readPoolsConfiguration();
     }
 
     public int loadCrafts() throws Exception {
-        initDefaultConfig("crafts.conf");
-        return configurationHandler.readCraftConfiguration(
-                Paths.get(configDir + "/itemizer/", "crafts.conf")
-        );
-    }
-
-    private void initDefaultConfig(String path) {
-        if (Files.notExists(Paths.get(configDir + "/itemizer/" + path))) {
-            PluginContainer pluginInstance = getInstance();
-            if (pluginInstance != null) {
-                Optional<Asset> itemsDefaultConfigFile = pluginInstance.getAsset(path);
-                getLogger().info("No config file set for {} default config will be loaded",path);
-                if (itemsDefaultConfigFile.isPresent()) {
-                    try {
-                        itemsDefaultConfigFile.get().copyToDirectory(Paths.get(configDir + "/itemizer/"));
-                    } catch (IOException e) {
-                        Itemizer.getLogger().error("Error while setting default configuration ", e);
-                    }
-                } else {
-                    logger.warn("Item default config not found");
-                }
-            }
-        }
+        return configurationHandler.readCraftConfiguration();
     }
 }

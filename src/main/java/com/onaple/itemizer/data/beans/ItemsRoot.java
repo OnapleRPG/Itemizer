@@ -14,9 +14,9 @@ import java.util.List;
 @ConfigSerializable
 @Data
 @NoArgsConstructor
-public class Items {
+public class ItemsRoot {
 
     @Setting("items")
-    private List<ItemBean> items  = new ArrayList<>();;
+    private List<ItemBean> items  = new ArrayList<>();
 
 }

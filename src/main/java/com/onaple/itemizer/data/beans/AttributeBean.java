@@ -1,9 +1,13 @@
 package com.onaple.itemizer.data.beans;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import ninja.leaping.configurate.objectmapping.Setting;
 import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable;
 
 @ConfigSerializable
+@Data
+@NoArgsConstructor
 public class AttributeBean {
     /**
      * Name of the Attribute
@@ -29,36 +33,16 @@ public class AttributeBean {
     @Setting("operation")
     private int operation;
 
-    public String getName() {
-        return name;
+public String getCompiledAmount(){
+    if(operation ==0){
+        return "+" + amount;
+    } else if( operation == 1){
+        return"+"+ amount + "%";
+    } else if(operation == 2){
+        return  "x" + amount +"%";
+    } else {
+        return "";
     }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSlot() {
-        return slot;
-    }
-
-    public void setSlot(String slot) {
-        this.slot = slot;
-    }
-
-    public float getAmount() {
-        return amount;
-    }
-
-    public void setAmount(float amount) {
-        this.amount = amount;
-    }
-
-    public int getOperation() {
-        return operation;
-    }
-
-    public void setOperation(int operation) {
-        this.operation = operation;
-    }
+}
 }
 
