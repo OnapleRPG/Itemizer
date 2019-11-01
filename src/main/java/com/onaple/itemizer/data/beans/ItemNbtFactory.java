@@ -3,12 +3,14 @@ package com.onaple.itemizer.data.beans;
 import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable;
 import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.data.manipulator.DataManipulator;
+import org.spongepowered.api.data.manipulator.mutable.item.LoreData;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 /**
  *
@@ -31,17 +33,22 @@ public interface ItemNbtFactory extends Comparable<ItemNbtFactory> {
      * Apply the data to the item and update the lore
      * @param itemStack The item you want to apply the data
      */
-    default void apply(ItemStack itemStack,List<Text> lore) {
+    default void apply(ItemStack itemStack) {
        itemStack.offer(constructDataManipulator());
        if (this.getLore().isEmpty()){
            return;
        }
-       lore.add(Text.join(
-                Text.builder("--==#|| ").color(TextColors.GOLD).build(),
-                Text.builder(this.getName()).color(TextColors.GREEN).build(),
-                Text.builder(" ||#==--").color(TextColors.GOLD).build())
-        );
-        lore.addAll(this.getLore());
+       Optional<LoreData> dataOptional = itemStack.get(LoreData.class);
+       if(dataOptional.isPresent()) {
+        LoreData data= dataOptional.get();
+           data.addElement(Text.join(
+                   Text.builder("--==#|| ").color(TextColors.GOLD).build(),
+                   Text.builder(this.getName()).color(TextColors.GREEN).build(),
+                   Text.builder(" ||#==--").color(TextColors.GOLD).build())
+           );
+           data.addElements(this.getLore());
+           itemStack.offer(data);
+       }
     }
 
     /**

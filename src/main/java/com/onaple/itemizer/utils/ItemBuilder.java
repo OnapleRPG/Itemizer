@@ -1,56 +1,12 @@
 package com.onaple.itemizer.utils;
 
-import com.onaple.itemizer.GlobalConfig;
-import com.onaple.itemizer.Itemizer;
 import com.onaple.itemizer.data.beans.ItemBean;
 import com.onaple.itemizer.data.beans.ItemNbtFactory;
-import org.spongepowered.api.block.BlockState;
-import org.spongepowered.api.block.BlockType;
-import org.spongepowered.api.block.trait.BlockTrait;
-import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.item.inventory.ItemStack;
-import org.spongepowered.api.text.Text;
 
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 
 public class ItemBuilder {
-
-    private GlobalConfig config;
-    private ItemStack item;
-    private List<Text> lore;
-    private Set<Key> usedKeys;
-
-    public ItemBuilder() {
-        lore = new ArrayList<>();
-        usedKeys =  new LinkedHashSet<>();
-        config = Itemizer.getItemizer().getGlobalConfig();
-    }
-
-    /**
-     * Add block traits to a future block
-     *
-     * @param blockType Type of the block
-     * @param traits    Map containing all the traits
-     * @return BlockState of the future block
-     */
-    private static BlockState addTraits(BlockType blockType, Map<String, String> traits) {
-        BlockState blockState = blockType.getDefaultState();
-        for (Map.Entry<String, String> trait : traits.entrySet()) {
-            Optional<BlockTrait<?>> optTrait = blockState.getTrait(trait.getKey());
-            if (optTrait.isPresent()) {
-                Optional<BlockState> newBlockState = blockState.withTrait(optTrait.get(), trait.getValue());
-                if (newBlockState.isPresent()) {
-                    blockState = newBlockState.get();
-                }
-            }
-        }
-        return blockState;
-    }
 
     /**
      * Build an itemstack from an ItemBean
@@ -58,17 +14,17 @@ public class ItemBuilder {
      * @param itemBean Data of the item to build
      * @return Optional of the itemstack
      */
-    public Optional<ItemStack> buildItemStack(ItemBean itemBean) {
+    public ItemStack buildItemStack(ItemBean itemBean) {
 
-        return Optional.ofNullable(ItemStack.builder().fromSnapshot(itemBean.getItemStackSnapshot()).build());
+        ItemStack item = itemBean.getItemStackSnapshot().createStack();
+        setCustomDatamanipulators( item, itemBean.getThirdParties());
+        return item;
     }
 
 
-    private void setCustomDatamanipulators(ItemBean itemBean) {
-        Set<ItemNbtFactory> thirdpartyConfigs = itemBean.getThirdParties();
-        for (ItemNbtFactory cfg : thirdpartyConfigs) {
-            cfg.apply(item,lore);
-            usedKeys.add(cfg.getKey());
+    private void setCustomDatamanipulators(ItemStack item, Set<ItemNbtFactory> thirdpartyConfigs ) {
+        for (ItemNbtFactory nbtFactory : thirdpartyConfigs) {
+            nbtFactory.apply(item);
         }
     }
 
