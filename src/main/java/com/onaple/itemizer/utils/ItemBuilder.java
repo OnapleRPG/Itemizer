@@ -4,8 +4,10 @@ import com.onaple.itemizer.data.beans.ItemBean;
 import com.onaple.itemizer.data.beans.ItemNbtFactory;
 import org.spongepowered.api.item.inventory.ItemStack;
 
+import javax.inject.Singleton;
 import java.util.Set;
 
+@Singleton
 public class ItemBuilder {
 
     /**

@@ -182,7 +182,7 @@ public class ConfigurationHandler {
                 getLogger().info("No config file set for {} default config will be loaded",path);
                 if (itemsDefaultConfigFile.isPresent()) {
                     try {
-                        itemsDefaultConfigFile.get().copyToDirectory(path);
+                        itemsDefaultConfigFile.get().copyToFile(path);
                     } catch (IOException e) {
                         getLogger().error("Error while setting default configuration : {}", e.getMessage());
                     }

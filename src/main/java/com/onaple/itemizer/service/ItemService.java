@@ -19,6 +19,9 @@ import java.util.Optional;
 public class ItemService implements IItemService {
 
     @Inject
+    private ItemBuilder itemBuilder;
+
+    @Inject
     private ItemDAO itemDAO;
 
     @Override
@@ -30,7 +33,7 @@ public class ItemService implements IItemService {
     public Optional<ItemStack> retrieve(String id) {
         Optional<ItemBean> optionalItem = itemDAO.getItem(id);
         if (optionalItem.isPresent()) {
-            return new ItemBuilder().buildItemStack(optionalItem.get());
+            return Optional.ofNullable(itemBuilder.buildItemStack(optionalItem.get()));
         }
         return Optional.empty();
     }
