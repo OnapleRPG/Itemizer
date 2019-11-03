@@ -1,5 +1,6 @@
 package com.onaple.itemizer.commands;
 
+import com.onaple.itemizer.Itemizer;
 import com.onaple.itemizer.data.beans.ItemBean;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
@@ -34,7 +35,7 @@ public class RetrieveCommand implements CommandExecutor {
         }
         if (optionalItem.isPresent()) {
             ItemBean item = optionalItem.get();
-            ItemStack itemStack = item.getItemStackSnapshot().createStack();
+            ItemStack itemStack = Itemizer.getItemService().construct(item);
             amountOptional.ifPresent(itemStack::setQuantity);
             target.getInventory().offer(itemStack);
         }

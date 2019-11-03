@@ -18,7 +18,6 @@ import com.onaple.itemizer.data.handlers.ConfigurationHandler;
 import com.onaple.itemizer.recipes.Smelting;
 import com.onaple.itemizer.service.IItemService;
 import com.onaple.itemizer.service.ItemService;
-import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import org.slf4j.Logger;
 import org.spongepowered.api.CatalogTypes;
 import org.spongepowered.api.Sponge;
@@ -35,12 +34,10 @@ import org.spongepowered.api.item.recipe.smelting.SmeltingRecipe;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.format.TextColors;
 
 import javax.inject.Inject;
-import java.io.IOException;
 
-@Plugin(id = "itemizer", name = "Itemizer", version = "2.1",
+@Plugin(id = "itemizer", name = "Itemizer", version = "3.0",
         description = "Custom item generation with crafting and pool system",
         url = "http://onaple.fr",
         authors = {"Zessirb", "Selki"})
@@ -146,9 +143,14 @@ public class Itemizer {
 
         loadGlobalConfig();
         try {
+            loadMiners();
+        } catch (Exception e) {
+            Itemizer.getLogger().error("Error while reading configuration 'miners' : {}", e.getMessage());
+        }
+        try {
             loadItems();
         } catch (Exception e) {
-            Itemizer.getLogger().error("Error while reading configuration 'items' ", e);
+            Itemizer.getLogger().error("Error while reading configuration 'items' : {}", e.getMessage());
         }
         try {
             loadPools();
@@ -297,8 +299,12 @@ public class Itemizer {
 
     }
 
-    public int loadItems() throws IOException, ObjectMappingException {
+    public int loadItems(){
         return configurationHandler.readItemsConfiguration();
+    }
+
+    public int loadMiners() {
+        return configurationHandler.readMinerConfiguration();
     }
 
     public int loadPools() throws Exception {

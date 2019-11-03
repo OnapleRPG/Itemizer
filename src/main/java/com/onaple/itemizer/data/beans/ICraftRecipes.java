@@ -1,8 +1,7 @@
-package com.onaple.itemizer;
+package com.onaple.itemizer.data.beans;
 
 import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable;
 import org.spongepowered.api.event.game.GameRegistryEvent;
-import org.spongepowered.api.item.recipe.Recipe;
 
 @ConfigSerializable
 public interface ICraftRecipes {

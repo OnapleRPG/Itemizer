@@ -1,5 +1,6 @@
 package com.onaple.itemizer.service;
 
+import com.onaple.itemizer.data.beans.ItemBean;
 import com.onaple.itemizer.exception.ItemNotPresentException;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.item.inventory.ItemStack;
@@ -12,6 +13,8 @@ public interface IItemService {
     Optional<ItemStack> fetch(String id);
 
     Optional<ItemStack> retrieve(String id);
+
+    ItemStack construct(ItemBean item);
 
     boolean hasItem(Player player, String id, int quantity) throws ItemNotPresentException;
 

@@ -39,6 +39,11 @@ public class ItemService implements IItemService {
     }
 
     @Override
+    public ItemStack construct(ItemBean item) {
+        return itemBuilder.buildItemStack(item);
+    }
+
+    @Override
     public boolean hasItem(Player player, String id, int quantity) throws ItemNotPresentException {
         ItemStack itemStack = retrieve(id).orElseThrow(() -> new ItemNotPresentException(id));
         itemStack.setQuantity(quantity);

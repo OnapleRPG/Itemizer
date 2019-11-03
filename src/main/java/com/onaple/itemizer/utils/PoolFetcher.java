@@ -10,14 +10,15 @@ import java.util.Optional;
 import java.util.Random;
 
 public class PoolFetcher {
+    private static Random random = new Random();
+
+
     /**
      * Retrieve an optional random item from a pool
      *
      * @param poolId Id of the pool
      * @return Random item, or nothing
      */
-    private static Random random = new Random();
-
     public static Optional<ItemStack> fetchItemFromPool(String poolId) {
         Optional<ItemStack> item = Optional.empty();
         Optional<PoolBean> optionalPool = PoolDAO.getPool(poolId);

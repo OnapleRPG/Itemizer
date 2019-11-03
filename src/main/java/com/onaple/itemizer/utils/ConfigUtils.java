@@ -1,4 +1,4 @@
-package com.onaple.itemizer;
+package com.onaple.itemizer.utils;
 
 import cz.neumimto.config.blackjack.and.hookers.NotSoStupidObjectMapper;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;

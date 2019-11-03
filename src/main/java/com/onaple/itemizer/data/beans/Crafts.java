@@ -1,6 +1,5 @@
 package com.onaple.itemizer.data.beans;
 
-import com.onaple.itemizer.ICraftRecipes;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ninja.leaping.configurate.objectmapping.Setting;

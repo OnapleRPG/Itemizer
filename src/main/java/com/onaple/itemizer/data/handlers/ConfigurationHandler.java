@@ -1,11 +1,10 @@
 package com.onaple.itemizer.data.handlers;
 
 import com.google.common.reflect.TypeToken;
-import com.onaple.itemizer.ConfigUtils;
 import com.onaple.itemizer.GlobalConfig;
-import com.onaple.itemizer.ICraftRecipes;
 import com.onaple.itemizer.Itemizer;
 import com.onaple.itemizer.data.beans.Crafts;
+import com.onaple.itemizer.data.beans.ICraftRecipes;
 import com.onaple.itemizer.data.beans.ItemBean;
 import com.onaple.itemizer.data.beans.ItemsRoot;
 import com.onaple.itemizer.data.beans.MinerBean;
@@ -14,6 +13,7 @@ import com.onaple.itemizer.data.beans.PoolBean;
 import com.onaple.itemizer.data.beans.PoolBeanRoot;
 import com.onaple.itemizer.data.serializers.ItemBeanRefOrItemIdAdapter;
 import com.onaple.itemizer.data.serializers.PoolSerializer;
+import com.onaple.itemizer.utils.ConfigUtils;
 import com.onaple.itemizer.utils.MinerUtil;
 import lombok.NoArgsConstructor;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;

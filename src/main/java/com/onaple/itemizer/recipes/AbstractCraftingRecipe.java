@@ -1,6 +1,6 @@
 package com.onaple.itemizer.recipes;
 
-import com.onaple.itemizer.ICraftRecipes;
+import com.onaple.itemizer.data.beans.ICraftRecipes;
 import com.onaple.itemizer.data.serializers.ItemBeanRefOrItemIdAdapter;
 import cz.neumimto.config.blackjack.and.hookers.annotations.CustomAdapter;
 import ninja.leaping.configurate.objectmapping.Setting;

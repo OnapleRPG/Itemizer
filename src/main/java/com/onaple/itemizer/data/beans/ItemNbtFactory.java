@@ -1,5 +1,6 @@
 package com.onaple.itemizer.data.beans;
 
+import com.onaple.itemizer.Itemizer;
 import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable;
 import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.data.manipulator.DataManipulator;
@@ -38,6 +39,7 @@ public interface ItemNbtFactory extends Comparable<ItemNbtFactory> {
        if (this.getLore().isEmpty()){
            return;
        }
+        Itemizer.getLogger().info("set data {} from key {} and lore [{}] in the class {} , " ,this.getKey(),this.getName(),this.getLore() ,this.getClass().getName());
        Optional<LoreData> dataOptional = itemStack.get(LoreData.class);
        if(dataOptional.isPresent()) {
         LoreData data= dataOptional.get();
