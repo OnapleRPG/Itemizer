@@ -1,5 +1,6 @@
 package com.onaple.itemizer;
 
+import com.google.common.reflect.TypeToken;
 import com.onaple.itemizer.commands.FetchCommand;
 import com.onaple.itemizer.commands.GetItemInfos;
 import com.onaple.itemizer.commands.HasItemCommand;
@@ -10,10 +11,15 @@ import com.onaple.itemizer.commands.globalConfiguration.ConfigureColorCommand;
 import com.onaple.itemizer.commands.globalConfiguration.ConfigureEnchantCommand;
 import com.onaple.itemizer.commands.globalConfiguration.ConfigureModifierCommand;
 import com.onaple.itemizer.commands.globalConfiguration.ConfigureRewriteCommand;
+import com.onaple.itemizer.data.beans.NewItemBean;
 import com.onaple.itemizer.data.handlers.ConfigurationHandler;
 import com.onaple.itemizer.recipes.Smelting;
 import com.onaple.itemizer.service.IItemService;
 import com.onaple.itemizer.service.ItemService;
+import com.onaple.itemizer.utils.ItemBuilder;
+import ninja.leaping.configurate.commented.CommentedConfigurationNode;
+import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
+import ninja.leaping.configurate.loader.ConfigurationLoader;
 import org.slf4j.Logger;
 import org.spongepowered.api.CatalogTypes;
 import org.spongepowered.api.Sponge;
@@ -27,6 +33,7 @@ import org.spongepowered.api.event.game.state.GameConstructionEvent;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.event.game.state.GameStoppedServerEvent;
+import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.item.recipe.crafting.CraftingRecipe;
 import org.spongepowered.api.item.recipe.smelting.SmeltingRecipe;
 import org.spongepowered.api.plugin.Plugin;
@@ -38,7 +45,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Plugin(id = "itemizer", name = "Itemizer", version = "2.0",
         description = "Custom item generation with crafting and pool system",
@@ -147,7 +156,7 @@ public class Itemizer {
         try {
             loadItems();
         } catch (Exception e) {
-            Itemizer.getLogger().error("Error while reading configuration 'items' : {}", e.getMessage());
+            Itemizer.getLogger().error("Error while reading configuration 'items' ", e);
         }
         try {
             loadPools();
@@ -273,6 +282,25 @@ public class Itemizer {
 
     @Listener
     public void onServerStop(GameStoppedServerEvent event) {
+        try {
+            List<NewItemBean> itemBeanList = configurationHandler.getItemList().stream().map(itemBean -> {
+                Optional<ItemStack> snap= new ItemBuilder().buildItemStack(itemBean);
+                String id = itemBean.getId();
+                if(snap.isPresent()) {
+                    return new NewItemBean(id, snap.get().createSnapshot());
+                } else {return new NewItemBean();}
+            }).collect(Collectors.toList());
+            Itemizer.getLogger().info("new item to  import [{}]",itemBeanList);
+            ConfigurationLoader<CommentedConfigurationNode> config = HoconConfigurationLoader.builder().setPath(Paths.get("newItems.conf")).build();
+            final TypeToken<List<NewItemBean>> token = new TypeToken<List<NewItemBean>>() {};
+
+            CommentedConfigurationNode root = config.createEmptyNode();
+            root.getNode("items").setValue(token, itemBeanList);
+            config.save(root);
+        } catch (Exception e) {
+            Itemizer.getLogger().error("", e);
+        }
+
         Itemizer.getConfigurationHandler().saveItemConfig(configDir + "/itemizer/items.conf");
     }
 
@@ -328,7 +356,7 @@ public class Itemizer {
                     try {
                         itemsDefaultConfigFile.get().copyToDirectory(Paths.get(configDir + "/itemizer/"));
                     } catch (IOException e) {
-                        Itemizer.getLogger().error("Error while setting default configuration : {}", e.getMessage());
+                        Itemizer.getLogger().error("Error while setting default configuration ", e);
                     }
                 } else {
                     logger.warn("Item default config not found");
