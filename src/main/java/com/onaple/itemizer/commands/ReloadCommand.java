@@ -25,7 +25,7 @@ public class ReloadCommand implements CommandExecutor {
         Itemizer.getLogger().info("Reloading Itemizer configuration...");
         src.sendMessage(Text.builder("-----------------------------").color(TextColors.RED).build());
         try {
-            int itemCount = Itemizer.getItemizer().loadItems();
+            int itemCount = Itemizer.getConfigurationHandler().readItemsConfiguration();
             src.sendMessage(Text.builder()
                     .append(Text.builder("Items configuration successfully reloaded. ").color(TextColors.GREEN).build())
                     .append(Text.builder("" + itemCount).color(TextColors.GOLD).build())
@@ -39,7 +39,7 @@ public class ReloadCommand implements CommandExecutor {
         }
 
         try {
-            int minersCount = Itemizer.getItemizer().loadMiners();
+            int minersCount = Itemizer.getConfigurationHandler().readMinerConfiguration();
             src.sendMessage(Text.builder()
                     .append(Text.builder("Miners configuration successfully reloaded. ").color(TextColors.GREEN).build())
                     .append(Text.builder("" + minersCount).color(TextColors.GOLD).build())
@@ -53,7 +53,7 @@ public class ReloadCommand implements CommandExecutor {
         }
 
         try {
-            int poolCount = Itemizer.getItemizer().loadPools();
+            int poolCount = Itemizer.getConfigurationHandler().readPoolsConfiguration();
             src.sendMessage(Text.builder()
                     .append(Text.builder("Pools configuration successfully reloaded. ").color(TextColors.GREEN).build())
                     .append(Text.builder("" + poolCount).color(TextColors.GOLD).build())
@@ -72,7 +72,7 @@ public class ReloadCommand implements CommandExecutor {
         }
 
         try {
-            int craftCount = Itemizer.getItemizer().loadCrafts();
+            int craftCount = Itemizer.getConfigurationHandler().readCraftConfiguration();
             src.sendMessage(Text.builder()
                     .append(Text.builder("Crafts configuration successfully reloaded. ").color(TextColors.GREEN).build())
                     .append(Text.builder("" + craftCount).color(TextColors.GOLD).build())

@@ -18,6 +18,7 @@ import com.onaple.itemizer.data.handlers.ConfigurationHandler;
 import com.onaple.itemizer.recipes.Smelting;
 import com.onaple.itemizer.service.IItemService;
 import com.onaple.itemizer.service.ItemService;
+import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import org.slf4j.Logger;
 import org.spongepowered.api.CatalogTypes;
 import org.spongepowered.api.Sponge;
@@ -36,6 +37,7 @@ import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.text.Text;
 
 import javax.inject.Inject;
+import java.io.IOException;
 
 @Plugin(id = "itemizer", name = "Itemizer", version = "3.0",
         description = "Custom item generation with crafting and pool system",
@@ -143,24 +145,28 @@ public class Itemizer {
 
         loadGlobalConfig();
         try {
-            loadMiners();
-        } catch (Exception e) {
-            Itemizer.getLogger().error("Error while reading configuration 'miners' : {}", e.getMessage());
+            int size = configurationHandler.readMinerConfiguration();
+            getLogger().info("{} miners loaded from configuration.", size);
+        } catch (ObjectMappingException | IOException e) {
+            Itemizer.getLogger().warn("Error while reading configuration 'miners'.", e);
         }
         try {
-            loadItems();
-        } catch (Exception e) {
-            Itemizer.getLogger().error("Error while reading configuration 'items' : {}", e.getMessage());
+            int size = configurationHandler.readItemsConfiguration();
+            getLogger().info("{} items loaded from configuration.", size);
+        } catch (ObjectMappingException | IOException e) {
+            Itemizer.getLogger().warn("Error while reading configuration 'items'.", e);
         }
         try {
-            loadPools();
-        } catch (Exception e) {
-            Itemizer.getLogger().error("Error while reading configuration 'pools' : {}", e);
+            int size = configurationHandler.readPoolsConfiguration();
+            getLogger().info("{} pools loaded from configuration.", size);
+        } catch (ObjectMappingException | IOException e) {
+            Itemizer.getLogger().warn("Error while reading configuration 'pools'.", e);
         }
         try {
-            loadCrafts();
-        } catch (Exception e) {
-            Itemizer.getLogger().error("Error while reading configuration 'crafts' : {}", e);
+            int size = configurationHandler.readCraftConfiguration();
+            getLogger().info("{} crafting recipes loaded from configuration.", size);
+        } catch (ObjectMappingException | IOException e) {
+            Itemizer.getLogger().warn("Error while reading configuration 'crafts'.", e);
         }
     }
 
@@ -170,7 +176,8 @@ public class Itemizer {
         CommandSpec retrieve = CommandSpec.builder()
                 .description(Text.of("Retrieve an item from a configuration file with its id."))
                 .arguments(new IdElement(Text.of("id")),
-                        GenericArguments.optional(GenericArguments.player(Text.of("player")))
+                        GenericArguments.optional(GenericArguments.player(Text.of("player"))),
+                        GenericArguments.optional(GenericArguments.integer(Text.of("quatity")))
                 )
                 .permission(RETRIEVE_PERMISSION)
                 .executor(new RetrieveCommand()).build();
@@ -297,21 +304,5 @@ public class Itemizer {
             logger.error(e.toString());
         }
 
-    }
-
-    public int loadItems(){
-        return configurationHandler.readItemsConfiguration();
-    }
-
-    public int loadMiners() {
-        return configurationHandler.readMinerConfiguration();
-    }
-
-    public int loadPools() throws Exception {
-        return configurationHandler.readPoolsConfiguration();
-    }
-
-    public int loadCrafts() throws Exception {
-        return configurationHandler.readCraftConfiguration();
     }
 }

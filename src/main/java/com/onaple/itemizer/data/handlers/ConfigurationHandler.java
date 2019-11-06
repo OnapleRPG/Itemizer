@@ -74,14 +74,14 @@ public class ConfigurationHandler {
     /**
      * Read items configuration and interpret it
      */
-    public int readItemsConfiguration() {
+    public int readItemsConfiguration() throws IOException, ObjectMappingException {
         Path path =Paths.get(configDir + "/itemizer/", "items.conf");
         getLogger().info("path to file", path);
         initDefaultConfig(path);
         ItemsRoot itemRoot = ConfigUtils.load(ItemsRoot.class, path);
         if(itemRoot != null) {
+            itemList.clear();
             itemList.addAll(itemRoot.getItems());
-            getLogger().info("{} items loaded from configuration.", itemList.size());
         } else {
             getLogger().warn("Empty config file");
         }
@@ -92,14 +92,14 @@ public class ConfigurationHandler {
     /**
      * Read miners configuration and interpret it
      */
-    public int readMinerConfiguration() {
+    public int readMinerConfiguration() throws IOException, ObjectMappingException {
         Path path =Paths.get(configDir + "/itemizer/", "miners.conf");
         initDefaultConfig(path);
 
         Mining mining = ConfigUtils.load(Mining.class, path);
         if(mining != null) {
+            minerList.clear();
             minerList.addAll(new MinerUtil(mining.getMiners()).getExpandedMiners());
-            getLogger().info("{} miners loaded from configuration.", minerList.size());
         }else {
             getLogger().warn("Miner config file is empty");
         }
@@ -109,13 +109,13 @@ public class ConfigurationHandler {
     /**
      * Read Craft configuration and interpret it
      */
-    public int readCraftConfiguration() throws ObjectMappingException {
+    public int readCraftConfiguration() throws ObjectMappingException, IOException {
         Path path =Paths.get(configDir + "/itemizer/", "crafts.conf");
         initDefaultConfig(path);
         Crafts crafts = ConfigUtils.load(Crafts.class, path);
         if(crafts != null) {
+            craftList.clear();
             craftList.addAll(crafts.getCraftingRecipes());
-            getLogger().info("{} crafting recipes loaded from configuration.", craftList.size());
         } else {
             getLogger().warn("Crafing config is empty");
         }
@@ -125,20 +125,20 @@ public class ConfigurationHandler {
     /**
      * Read pools configuration and interpret it. Must be the last config file read.
      */
-    public int readPoolsConfiguration() throws ObjectMappingException {
+    public int readPoolsConfiguration() throws ObjectMappingException, IOException {
         Path path =Paths.get(configDir + "/itemizer/", "pools.conf");
         initDefaultConfig(path);
         TypeSerializers.getDefaultSerializers().registerType(TypeToken.of(PoolBean.class), new PoolSerializer());
         TypeSerializers.getDefaultSerializers().registerType(TypeToken.of(ItemStack.class), new ItemBeanRefOrItemIdAdapter());
         PoolBeanRoot pools = ConfigUtils.load(PoolBeanRoot.class, path);
         if (pools != null) {
-            poolList.addAll(poolList);
+            poolList.clear();
+            poolList.addAll(pools.getPoolList());
         }
-        getLogger().info("{} pools loaded from configuration. [{}]", poolList.size(), poolList);
         return poolList.size();
     }
 
-    public GlobalConfig readGlobalConfig() {
+    public GlobalConfig readGlobalConfig() throws IOException, ObjectMappingException {
         Path path =Paths.get(configDir + "/itemizer/", "global.conf");
         initDefaultConfig(path);
         return ConfigUtils.load(GlobalConfig.class,path );
