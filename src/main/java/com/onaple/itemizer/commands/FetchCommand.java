@@ -1,6 +1,7 @@
 package com.onaple.itemizer.commands;
 
 import com.onaple.itemizer.Itemizer;
+import com.onaple.itemizer.data.beans.PoolBean;
 import com.onaple.itemizer.utils.PoolFetcher;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
@@ -19,30 +20,27 @@ import java.util.Optional;
 public class FetchCommand implements CommandExecutor {
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-        if (src instanceof Player) {
-            String poolId = args.<String>getOne("id").orElse("");
-            Optional<Player> targetOptional = args.getOne("player");
-            Player target;
-            if (targetOptional.isPresent()) {
-                target = targetOptional.get();
-            } else {
-                if (src instanceof Player) {
-                    target = (Player) src;
-                } else {
-                    src.sendMessage(Text.of("Target must be a player."));
-                    return CommandResult.empty();
-                }
-            }
-                Optional<ItemStack> optionalItem = PoolFetcher.fetchItemFromPool(poolId);
-                if (optionalItem.isPresent()) {
-                    target.getInventory().offer(optionalItem.get());
-                    return CommandResult.success();
-                } else {
-                    src.sendMessage(Text.of("Bad luck! Pool " + poolId + " returned nothing."));
-                }
+        Optional<PoolBean> pool = args.<PoolBean>getOne("pool");
+        Optional<Player> targetOptional = args.getOne("player");
+        Player target;
+        if (targetOptional.isPresent()) {
+            target = targetOptional.get();
+        } else if (src instanceof Player) {
+            target = (Player) src;
         } else {
-            Itemizer.getLogger().warn("Fetch command can only be executed by a player.");
+            throw new CommandException(Text.builder(src.getName() + "is not a valid player").toText());
         }
-        return CommandResult.empty();
+        if(pool.isPresent()){
+        Optional<ItemStack> optionalItem = PoolFetcher.fetchItemFromPool(pool.get().getId());
+        if (optionalItem.isPresent()) {
+            target.getInventory().offer(optionalItem.get());
+        } else {
+            src.sendMessage(Text.of("Bad luck! Pool " + pool.get().getId() + " returned nothing."));
+        }
+            return CommandResult.success();
+    } else {
+        Itemizer.getLogger().warn("This item pool does not exist.");
     }
+        return CommandResult.empty();
+}
 }

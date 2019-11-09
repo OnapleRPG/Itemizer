@@ -7,6 +7,7 @@ import com.onaple.itemizer.commands.RegisterCommand;
 import com.onaple.itemizer.commands.ReloadCommand;
 import com.onaple.itemizer.commands.RetrieveCommand;
 import com.onaple.itemizer.commands.elements.IdElement;
+import com.onaple.itemizer.commands.elements.PoolIdElement;
 import com.onaple.itemizer.commands.globalConfiguration.ConfigureColorCommand;
 import com.onaple.itemizer.commands.globalConfiguration.ConfigureEnchantCommand;
 import com.onaple.itemizer.commands.globalConfiguration.ConfigureModifierCommand;
@@ -185,7 +186,7 @@ public class Itemizer {
 
         CommandSpec fetch = CommandSpec.builder()
                 .description(Text.of("Try to retrieve an item from a pool describes in a configuration file with its id."))
-                .arguments(GenericArguments.onlyOne(GenericArguments.string(Text.of("id"))),
+                .arguments(GenericArguments.onlyOne(new PoolIdElement(Text.of("id"))),
                         GenericArguments.optional(GenericArguments.player(Text.of("player"))))
                 .permission(FETCH_PERMISSION)
                 .executor(new FetchCommand()).build();
