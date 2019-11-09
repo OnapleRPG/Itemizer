@@ -5,6 +5,8 @@ import com.onaple.itemizer.exception.ItemNotPresentException;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.item.inventory.ItemStackSnapshot;
+import org.spongepowered.api.world.Location;
+import org.spongepowered.api.world.World;
 
 import java.util.Optional;
 
@@ -21,4 +23,6 @@ public interface IItemService {
     void register(String id, ItemStackSnapshot snapshot);
 
     void update(String id, ItemStackSnapshot snapshot);
+
+    void instantiate(String Id, Location<World> location) throws ItemNotPresentException;
 }

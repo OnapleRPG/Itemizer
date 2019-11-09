@@ -6,9 +6,15 @@ import com.onaple.itemizer.exception.ItemNotPresentException;
 import com.onaple.itemizer.utils.ItemBuilder;
 import com.onaple.itemizer.utils.PoolFetcher;
 import lombok.NoArgsConstructor;
+import org.spongepowered.api.data.key.Keys;
+import org.spongepowered.api.entity.Entity;
+import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.item.inventory.ItemStackSnapshot;
+import org.spongepowered.api.world.Location;
+import org.spongepowered.api.world.World;
+import org.spongepowered.api.world.extent.Extent;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -58,5 +64,14 @@ public class ItemService implements IItemService {
 
     @Override
     public void update(String id, ItemStackSnapshot snapshot) {
+    }
+
+    @Override
+    public void instantiate(String id, Location<World> location) throws ItemNotPresentException {
+        ItemStack itemStack = retrieve(id).orElseThrow(() -> new ItemNotPresentException(id));
+        Extent extent = location.getExtent();
+        Entity itemEntity = extent.createEntity(EntityTypes.ITEM, location.getPosition());
+        itemEntity.offer(Keys.REPRESENTED_ITEM, itemStack.createSnapshot());
+        location.spawnEntity(itemEntity);
     }
 }
