@@ -19,11 +19,7 @@ public class ItemService implements IItemService {
 
     @Override
     public Optional<ItemStack> fetch(String id) {
-        Optional<ItemBean> optionalItem = PoolFetcher.fetchItemFromPool(id);
-        if (optionalItem.isPresent()) {
-            return new ItemBuilder().buildItemStack(optionalItem.get());
-        }
-        return Optional.empty();
+        return PoolFetcher.fetchItemFromPool(id);
     }
 
     @Override

@@ -79,7 +79,7 @@ public class Itemizer {
 
     @Inject
     private void setItemService(ItemService itemService){
-        itemService = itemService;
+        this.itemService = itemService;
     }
 
     public static ItemService getItemService(){
@@ -161,12 +161,12 @@ public class Itemizer {
         try {
             loadPools();
         } catch (Exception e) {
-            Itemizer.getLogger().error("Error while reading configuration 'pools' : {}", e.getMessage());
+            Itemizer.getLogger().error("Error while reading configuration 'pools' : {}", e);
         }
         try {
             loadCrafts();
         } catch (Exception e) {
-            Itemizer.getLogger().error("Error while reading configuration 'crafts' : {}", e.getMessage());
+            Itemizer.getLogger().error("Error while reading configuration 'crafts' : {}", e);
         }
     }
 

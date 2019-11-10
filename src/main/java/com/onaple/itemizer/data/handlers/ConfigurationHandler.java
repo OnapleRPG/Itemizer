@@ -11,6 +11,7 @@ import com.onaple.itemizer.data.beans.Items;
 import com.onaple.itemizer.data.beans.MinerBean;
 import com.onaple.itemizer.data.beans.Mining;
 import com.onaple.itemizer.data.beans.PoolBean;
+import com.onaple.itemizer.data.serializers.ItemBeanRefOrItemIdAdapter;
 import com.onaple.itemizer.data.serializers.PoolSerializer;
 import com.onaple.itemizer.utils.MinerUtil;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
@@ -18,6 +19,7 @@ import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import ninja.leaping.configurate.objectmapping.serialize.TypeSerializers;
+import org.spongepowered.api.item.inventory.ItemStack;
 
 import javax.inject.Singleton;
 import java.io.IOException;
@@ -92,7 +94,11 @@ public class ConfigurationHandler {
     public int readPoolsConfiguration(CommentedConfigurationNode configurationNode) throws ObjectMappingException {
         poolList = new ArrayList<>();
         TypeSerializers.getDefaultSerializers().registerType(TypeToken.of(PoolBean.class), new PoolSerializer());
+        TypeSerializers.getDefaultSerializers().registerType(TypeToken.of(ItemStack.class), new ItemBeanRefOrItemIdAdapter());
         poolList = configurationNode.getNode("pools").getList(TypeToken.of(PoolBean.class));
+        poolList.forEach(poolBean -> poolBean.getItems().forEach(poolItemBean ->
+                Itemizer.getLogger().info("pool item bean loaded = {},{},{}",poolItemBean.getItem(),poolItemBean.getProbability(),poolItemBean.getQuantity())
+        ));
         Itemizer.getLogger().info("{} pools loaded from configuration.",poolList.size() );
         return poolList.size();
     }
