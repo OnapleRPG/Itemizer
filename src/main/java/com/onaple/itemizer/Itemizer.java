@@ -177,8 +177,8 @@ public class Itemizer {
         CommandSpec retrieve = CommandSpec.builder()
                 .description(Text.of("Retrieve an item from a configuration file with its id."))
                 .arguments(new IdElement(Text.of("id")),
-                        GenericArguments.optional(GenericArguments.player(Text.of("player"))),
-                        GenericArguments.optional(GenericArguments.integer(Text.of("quatity")))
+                        GenericArguments.optional(GenericArguments.integer(Text.of("quantity"))),
+                        GenericArguments.optional(GenericArguments.player(Text.of("player")))
                 )
                 .permission(RETRIEVE_PERMISSION)
                 .executor(new RetrieveCommand()).build();
@@ -186,7 +186,7 @@ public class Itemizer {
 
         CommandSpec fetch = CommandSpec.builder()
                 .description(Text.of("Try to retrieve an item from a pool describes in a configuration file with its id."))
-                .arguments(GenericArguments.onlyOne(new PoolIdElement(Text.of("id"))),
+                .arguments(new PoolIdElement(Text.of("pool")),
                         GenericArguments.optional(GenericArguments.player(Text.of("player"))))
                 .permission(FETCH_PERMISSION)
                 .executor(new FetchCommand()).build();

@@ -24,5 +24,5 @@ public interface IItemService {
 
     void update(String id, ItemStackSnapshot snapshot);
 
-    void instantiate(String Id, Location<World> location) throws ItemNotPresentException;
+    void instantiate(ItemStack itemStack, Location<World> location) throws ItemNotPresentException;
 }

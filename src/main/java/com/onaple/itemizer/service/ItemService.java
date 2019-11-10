@@ -67,8 +67,7 @@ public class ItemService implements IItemService {
     }
 
     @Override
-    public void instantiate(String id, Location<World> location) throws ItemNotPresentException {
-        ItemStack itemStack = retrieve(id).orElseThrow(() -> new ItemNotPresentException(id));
+    public void instantiate(ItemStack itemStack, Location<World> location) throws ItemNotPresentException {
         Extent extent = location.getExtent();
         Entity itemEntity = extent.createEntity(EntityTypes.ITEM, location.getPosition());
         itemEntity.offer(Keys.REPRESENTED_ITEM, itemStack.createSnapshot());
