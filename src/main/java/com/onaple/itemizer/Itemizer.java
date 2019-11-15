@@ -1,9 +1,9 @@
 package com.onaple.itemizer;
 
-import com.google.common.reflect.TypeToken;
 import com.onaple.itemizer.commands.FetchCommand;
 import com.onaple.itemizer.commands.GetItemInfos;
 import com.onaple.itemizer.commands.HasItemCommand;
+import com.onaple.itemizer.commands.MigrateCommand;
 import com.onaple.itemizer.commands.RegisterCommand;
 import com.onaple.itemizer.commands.ReloadCommand;
 import com.onaple.itemizer.commands.RetrieveCommand;
@@ -11,15 +11,10 @@ import com.onaple.itemizer.commands.globalConfiguration.ConfigureColorCommand;
 import com.onaple.itemizer.commands.globalConfiguration.ConfigureEnchantCommand;
 import com.onaple.itemizer.commands.globalConfiguration.ConfigureModifierCommand;
 import com.onaple.itemizer.commands.globalConfiguration.ConfigureRewriteCommand;
-import com.onaple.itemizer.data.beans.NewItemBean;
 import com.onaple.itemizer.data.handlers.ConfigurationHandler;
 import com.onaple.itemizer.recipes.Smelting;
 import com.onaple.itemizer.service.IItemService;
 import com.onaple.itemizer.service.ItemService;
-import com.onaple.itemizer.utils.ItemBuilder;
-import ninja.leaping.configurate.commented.CommentedConfigurationNode;
-import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
-import ninja.leaping.configurate.loader.ConfigurationLoader;
 import org.slf4j.Logger;
 import org.spongepowered.api.CatalogTypes;
 import org.spongepowered.api.Sponge;
@@ -33,21 +28,19 @@ import org.spongepowered.api.event.game.state.GameConstructionEvent;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.event.game.state.GameStoppedServerEvent;
-import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.item.recipe.crafting.CraftingRecipe;
 import org.spongepowered.api.item.recipe.smelting.SmeltingRecipe;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.format.TextColors;
 
 import javax.inject.Inject;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Plugin(id = "itemizer", name = "Itemizer", version = "2.0",
         description = "Custom item generation with crafting and pool system",
@@ -277,30 +270,24 @@ public class Itemizer {
 
         Sponge.getCommandManager().register(this, hasItemCommand, "hasitem");
 
+        CommandSpec migrationSpec = CommandSpec.builder()
+                .description(Text.of("Migrate Itemizer configuration v2 to v3")
+                        .concat(Text.of(TextColors.RED,"Backup your old item.conf before")))
+                .permission(REGISTER_PERMISSION)
+                .executor(new MigrateCommand())
+                .build();
+
+        Sponge.getCommandManager().register(this,migrationSpec,"migrate");
+
+
+
+
+
         logger.info("ITEMIZER initialized.");
     }
 
     @Listener
     public void onServerStop(GameStoppedServerEvent event) {
-        try {
-            List<NewItemBean> itemBeanList = configurationHandler.getItemList().stream().map(itemBean -> {
-                Optional<ItemStack> snap= new ItemBuilder().buildItemStack(itemBean);
-                String id = itemBean.getId();
-                if(snap.isPresent()) {
-                    return new NewItemBean(id, snap.get().createSnapshot());
-                } else {return new NewItemBean();}
-            }).collect(Collectors.toList());
-            Itemizer.getLogger().info("new item to  import [{}]",itemBeanList);
-            ConfigurationLoader<CommentedConfigurationNode> config = HoconConfigurationLoader.builder().setPath(Paths.get("newItems.conf")).build();
-            final TypeToken<List<NewItemBean>> token = new TypeToken<List<NewItemBean>>() {};
-
-            CommentedConfigurationNode root = config.createEmptyNode();
-            root.getNode("items").setValue(token, itemBeanList);
-            config.save(root);
-        } catch (Exception e) {
-            Itemizer.getLogger().error("", e);
-        }
-
         Itemizer.getConfigurationHandler().saveItemConfig(configDir + "/itemizer/items.conf");
     }
 
