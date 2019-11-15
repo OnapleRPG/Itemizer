@@ -8,13 +8,11 @@ import com.onaple.itemizer.data.beans.ICraftRecipes;
 import com.onaple.itemizer.data.beans.ItemBean;
 import com.onaple.itemizer.data.beans.ItemsRoot;
 import com.onaple.itemizer.data.beans.MinerBean;
-import com.onaple.itemizer.data.beans.Mining;
 import com.onaple.itemizer.data.beans.PoolBean;
 import com.onaple.itemizer.data.beans.PoolBeanRoot;
 import com.onaple.itemizer.data.serializers.ItemBeanRefOrItemIdAdapter;
 import com.onaple.itemizer.data.serializers.PoolSerializer;
 import com.onaple.itemizer.utils.ConfigUtils;
-import com.onaple.itemizer.utils.MinerUtil;
 import lombok.NoArgsConstructor;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
@@ -87,23 +85,6 @@ public class ConfigurationHandler {
         }
 
         return itemList.size();
-    }
-
-    /**
-     * Read miners configuration and interpret it
-     */
-    public int readMinerConfiguration() throws IOException, ObjectMappingException {
-        Path path =Paths.get(configDir + "/itemizer/", "miners.conf");
-        initDefaultConfig(path);
-
-        Mining mining = ConfigUtils.load(Mining.class, path);
-        if(mining != null) {
-            minerList.clear();
-            minerList.addAll(new MinerUtil(mining.getMiners()).getExpandedMiners());
-        }else {
-            getLogger().warn("Miner config file is empty");
-        }
-        return minerList.size();
     }
 
     /**

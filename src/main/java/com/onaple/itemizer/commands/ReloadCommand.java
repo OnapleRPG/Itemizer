@@ -11,8 +11,6 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
 public class ReloadCommand implements CommandExecutor {
-    public ReloadCommand() {
-    }
 
     /**
      * Command that reloads configuration
@@ -39,30 +37,11 @@ public class ReloadCommand implements CommandExecutor {
         }
 
         try {
-            int minersCount = Itemizer.getConfigurationHandler().readMinerConfiguration();
-            src.sendMessage(Text.builder()
-                    .append(Text.builder("Miners configuration successfully reloaded. ").color(TextColors.GREEN).build())
-                    .append(Text.builder("" + minersCount).color(TextColors.GOLD).build())
-                    .append(Text.builder(" miners are loaded.").color(TextColors.GREEN).build())
-                    .build());
-        } catch (Exception e){
-            src.sendMessage(Text.builder()
-                    .append(Text.builder("Miners configuration reload failed. ").color(TextColors.DARK_RED).build())
-                    .append(Text.builder(e.getMessage()).color(TextColors.RED).build())
-                    .build());
-        }
-
-        try {
             int poolCount = Itemizer.getConfigurationHandler().readPoolsConfiguration();
             src.sendMessage(Text.builder()
                     .append(Text.builder("Pools configuration successfully reloaded. ").color(TextColors.GREEN).build())
                     .append(Text.builder("" + poolCount).color(TextColors.GOLD).build())
                     .append(Text.builder(" pools are loaded.").color(TextColors.GREEN).build())
-                    .build());
-        } catch (ObjectMappingException e) {
-            src.sendMessage(Text.builder()
-                    .append(Text.builder("Pools configuration reload failed. ").color(TextColors.DARK_RED).build())
-                    .append(Text.builder(e.getMessage()).color(TextColors.RED).build())
                     .build());
         } catch (Exception e){
             src.sendMessage(Text.builder()

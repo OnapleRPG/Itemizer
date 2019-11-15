@@ -146,12 +146,6 @@ public class Itemizer {
 
         loadGlobalConfig();
         try {
-            int size = configurationHandler.readMinerConfiguration();
-            getLogger().info("{} miners loaded from configuration.", size);
-        } catch (ObjectMappingException | IOException e) {
-            Itemizer.getLogger().warn("Error while reading configuration 'miners'.", e);
-        }
-        try {
             int size = configurationHandler.readItemsConfiguration();
             getLogger().info("{} items loaded from configuration.", size);
         } catch (ObjectMappingException | IOException e) {
