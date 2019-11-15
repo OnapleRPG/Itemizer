@@ -43,7 +43,7 @@ targetCompatibility = 1.8
 versioning {
     // required (number)
     major = 2
-    minor = 0
+    minor = 1
     patch = 0
 }
 

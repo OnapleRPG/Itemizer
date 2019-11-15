@@ -42,7 +42,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 
-@Plugin(id = "itemizer", name = "Itemizer", version = "2.0",
+@Plugin(id = "itemizer", name = "Itemizer", version = "2.1",
         description = "Custom item generation with crafting and pool system",
         url = "http://onaple.fr",
         authors = {"Zessirb", "Selki"})
