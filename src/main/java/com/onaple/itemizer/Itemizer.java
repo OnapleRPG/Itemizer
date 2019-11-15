@@ -142,7 +142,7 @@ public class Itemizer {
     @Listener
     public void preInit(GamePreInitializationEvent event) {
 
-        logger.info("Initalisation");
+        logger.warn("This version use a new config file format for items.");
 
         loadGlobalConfig();
         try {
