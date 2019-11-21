@@ -1,10 +1,11 @@
 package com.onaple.itemizer.service;
 
 import com.onaple.itemizer.data.access.ItemDAO;
+import com.onaple.itemizer.data.access.PoolDAO;
 import com.onaple.itemizer.data.beans.ItemBean;
+import com.onaple.itemizer.data.beans.PoolBean;
 import com.onaple.itemizer.exception.ItemNotPresentException;
 import com.onaple.itemizer.utils.ItemBuilder;
-import com.onaple.itemizer.utils.PoolFetcher;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.NotImplementedException;
 import org.spongepowered.api.data.key.Keys;
@@ -32,11 +33,11 @@ public class ItemService implements IItemService {
     private ItemDAO itemDAO;
 
     @Inject
-    private PoolFetcher poolFetcher;
+    private PoolDAO poolDAO;
 
     @Override
     public Optional<ItemStack> fetch(String id) {
-        return poolFetcher.fetchItemFromPool(id);
+        return poolDAO.getPool(id).map(PoolBean::fetch);
     }
 
     @Override

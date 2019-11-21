@@ -1,6 +1,7 @@
 package com.onaple.itemizer.commands.elements;
 
 import com.onaple.itemizer.Itemizer;
+import com.onaple.itemizer.data.access.PoolDAO;
 import com.onaple.itemizer.data.beans.PoolBean;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.ArgumentParseException;
@@ -14,8 +15,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class PoolIdElement extends CommandElement {
-    public PoolIdElement(@Nullable Text key) {
+
+    private PoolDAO poolDAO;
+    public PoolIdElement(@Nullable Text key, PoolDAO poolDAO) {
         super(key);
+        this.poolDAO = poolDAO;
     }
 
     @Nullable

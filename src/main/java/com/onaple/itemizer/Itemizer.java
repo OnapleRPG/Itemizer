@@ -14,6 +14,7 @@ import com.onaple.itemizer.commands.globalConfiguration.ConfigureModifierCommand
 import com.onaple.itemizer.commands.globalConfiguration.ConfigureRewriteCommand;
 import com.onaple.itemizer.commands.manager.LoreManagerCommand;
 import com.onaple.itemizer.data.access.ItemDAO;
+import com.onaple.itemizer.data.access.PoolDAO;
 import com.onaple.itemizer.data.beans.ICraftRecipes;
 import com.onaple.itemizer.data.handlers.ConfigurationHandler;
 import com.onaple.itemizer.recipes.Smelting;
@@ -107,6 +108,9 @@ public class Itemizer {
         this.configurationHandler = configurationHandler;
     }
 
+    @Inject
+    private PoolDAO poolDAO;
+
     public static PluginContainer getInstance() {
         return Sponge.getPluginManager().getPlugin("itemizer").orElse(null);
     }
@@ -180,7 +184,7 @@ public class Itemizer {
 
         CommandSpec fetch = CommandSpec.builder()
                 .description(Text.of("Try to retrieve an item from a pool describes in a configuration file with its id."))
-                .arguments(new PoolIdElement(Text.of("pool")),
+                .arguments(new PoolIdElement(Text.of("pool"),poolDAO),
                         GenericArguments.optional(GenericArguments.player(Text.of("player"))))
                 .permission(FETCH_PERMISSION)
                 .executor(new FetchCommand()).build();

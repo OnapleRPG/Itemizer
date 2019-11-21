@@ -17,6 +17,7 @@ import java.util.Optional;
  * Player command to retrieve an item from a configuration file
  */
 public class RetrieveCommand implements CommandExecutor {
+
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
         Optional<ItemBean> optionalItem = args.getOne("id");
