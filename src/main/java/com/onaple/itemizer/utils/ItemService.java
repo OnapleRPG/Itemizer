@@ -2,6 +2,7 @@ package com.onaple.itemizer.utils;
 
 import com.flowpowered.math.vector.Vector3d;
 import com.onaple.itemizer.Itemizer;
+import com.onaple.itemizer.exception.BadWorldNameException;
 import com.onaple.itemizer.exception.ItemNotPresentException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -37,7 +38,7 @@ public class ItemService {
      * @return The itemStack or <b>null</b> if he you are unlucky.
      */
     public static ItemStack fetch(String poolId) {
-        return Itemizer.getItemService().fetch(poolId).orElse(null);
+        return Itemizer.getItemService().fetch(poolId).orElse(ItemStack.empty());
     }
 
     /**
@@ -62,10 +63,10 @@ public class ItemService {
      * @param x the x ordinate
      * @param y the y ordinate
      * @param z the z ordinate
-     * @throws Exception if the world with the given name does not exist
+     * @throws BadWorldNameException if the world with the given name does not exist
      */
-    public static void instanciate(ItemStack itemStack, String worldName, double x, double y, double z) throws Exception {
-        World world = Sponge.getServer().getWorld(worldName).orElseThrow(Exception::new);
+    public static void instanciate(ItemStack itemStack, String worldName, double x, double y, double z) throws BadWorldNameException {
+        World world = Sponge.getServer().getWorld(worldName).orElseThrow(BadWorldNameException::new);
         Location<World> location = world.getLocation(new Vector3d(x, y, z));
         Itemizer.getItemService().instantiate(itemStack, location);
     }
