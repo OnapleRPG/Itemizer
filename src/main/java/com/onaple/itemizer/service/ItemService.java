@@ -6,6 +6,7 @@ import com.onaple.itemizer.exception.ItemNotPresentException;
 import com.onaple.itemizer.utils.ItemBuilder;
 import com.onaple.itemizer.utils.PoolFetcher;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.NotImplementedException;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.EntityTypes;
@@ -30,18 +31,18 @@ public class ItemService implements IItemService {
     @Inject
     private ItemDAO itemDAO;
 
+    @Inject
+    private PoolFetcher poolFetcher;
+
     @Override
     public Optional<ItemStack> fetch(String id) {
-        return PoolFetcher.fetchItemFromPool(id);
+        return poolFetcher.fetchItemFromPool(id);
     }
 
     @Override
     public Optional<ItemStack> retrieve(String id) {
         Optional<ItemBean> optionalItem = itemDAO.getItem(id);
-        if (optionalItem.isPresent()) {
-            return Optional.ofNullable(itemBuilder.buildItemStack(optionalItem.get()));
-        }
-        return Optional.empty();
+        return optionalItem.map(itemBean -> itemBuilder.buildItemStack(itemBean));
     }
 
     @Override
@@ -64,10 +65,12 @@ public class ItemService implements IItemService {
 
     @Override
     public void update(String id, ItemStackSnapshot snapshot) {
+        //TODO implement update
+        throw new NotImplementedException("sorry guys, I have not implemented this yet");
     }
 
     @Override
-    public void instantiate(ItemStack itemStack, Location<World> location) throws ItemNotPresentException {
+    public void instantiate(ItemStack itemStack, Location<World> location) {
         Extent extent = location.getExtent();
         Entity itemEntity = extent.createEntity(EntityTypes.ITEM, location.getPosition());
         itemEntity.offer(Keys.REPRESENTED_ITEM, itemStack.createSnapshot());
