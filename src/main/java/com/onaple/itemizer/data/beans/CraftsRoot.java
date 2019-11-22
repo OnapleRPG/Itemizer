@@ -14,7 +14,7 @@ import java.util.List;
 @ConfigSerializable
 @Data
 @NoArgsConstructor
-public class Crafts {
+public class CraftsRoot {
 
     @Setting("crafts")
     private List<ICraftRecipes> craftingRecipes = new ArrayList<>();

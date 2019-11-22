@@ -3,15 +3,13 @@ package com.onaple.itemizer.data.handlers;
 import com.google.common.reflect.TypeToken;
 import com.onaple.itemizer.GlobalConfig;
 import com.onaple.itemizer.Itemizer;
-import com.onaple.itemizer.data.beans.Crafts;
+import com.onaple.itemizer.data.beans.CraftsRoot;
 import com.onaple.itemizer.data.beans.ICraftRecipes;
 import com.onaple.itemizer.data.beans.ItemBean;
 import com.onaple.itemizer.data.beans.ItemsRoot;
-import com.onaple.itemizer.data.beans.MinerBean;
 import com.onaple.itemizer.data.beans.PoolBean;
-import com.onaple.itemizer.data.beans.PoolBeanRoot;
+import com.onaple.itemizer.data.beans.PoolsRoot;
 import com.onaple.itemizer.data.serializers.ItemBeanRefOrItemIdAdapter;
-import com.onaple.itemizer.data.serializers.PoolSerializer;
 import com.onaple.itemizer.utils.ConfigUtils;
 import lombok.NoArgsConstructor;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
@@ -43,12 +41,6 @@ public class ConfigurationHandler {
     @ConfigDir(sharedRoot = true)
     private Path configDir;
 
-
-    private final List<MinerBean> minerList = new ArrayList<>();
-
-    public List<MinerBean> getMinerList() {
-        return minerList;
-    }
 
     private final List<ItemBean> itemList = new ArrayList<>();
 
@@ -93,7 +85,7 @@ public class ConfigurationHandler {
     public int readCraftConfiguration() throws ObjectMappingException, IOException {
         Path path =Paths.get(configDir + "/itemizer/", "crafts.conf");
         initDefaultConfig(path);
-        Crafts crafts = ConfigUtils.load(Crafts.class, path);
+        CraftsRoot crafts = ConfigUtils.load(CraftsRoot.class, path);
         if(crafts != null) {
             craftList.clear();
             craftList.addAll(crafts.getCraftingRecipes());
@@ -109,9 +101,8 @@ public class ConfigurationHandler {
     public int readPoolsConfiguration() throws ObjectMappingException, IOException {
         Path path =Paths.get(configDir + "/itemizer/", "pools.conf");
         initDefaultConfig(path);
-        TypeSerializers.getDefaultSerializers().registerType(TypeToken.of(PoolBean.class), new PoolSerializer());
         TypeSerializers.getDefaultSerializers().registerType(TypeToken.of(ItemStack.class), new ItemBeanRefOrItemIdAdapter());
-        PoolBeanRoot pools = ConfigUtils.load(PoolBeanRoot.class, path);
+        PoolsRoot pools = ConfigUtils.load(PoolsRoot.class, path);
         if (pools != null) {
             poolList.clear();
             poolList.addAll(pools.getPoolList());
