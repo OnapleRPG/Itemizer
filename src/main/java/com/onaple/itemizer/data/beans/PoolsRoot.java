@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @ConfigSerializable
-public class PoolBeanRoot {
+public class PoolsRoot {
 
     @Setting("pools")
     @AsCollectionImpl(ArrayList.class)
