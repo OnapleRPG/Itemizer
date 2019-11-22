@@ -1,4 +1,4 @@
-package com.onaple.itemizer.recipes;
+package com.onaple.itemizer.data.beans.recipes;
 
 import com.onaple.itemizer.data.beans.ICraftRecipes;
 import com.onaple.itemizer.data.serializers.ItemBeanRefOrItemIdAdapter;

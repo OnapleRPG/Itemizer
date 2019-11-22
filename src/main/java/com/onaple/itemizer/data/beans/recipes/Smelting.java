@@ -1,4 +1,4 @@
-package com.onaple.itemizer.recipes;
+package com.onaple.itemizer.data.beans.recipes;
 
 import com.onaple.itemizer.data.serializers.ItemBeanRefOrItemIdAdapter;
 import cz.neumimto.config.blackjack.and.hookers.annotations.CustomAdapter;
