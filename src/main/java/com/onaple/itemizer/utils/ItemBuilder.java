@@ -1,5 +1,6 @@
 package com.onaple.itemizer.utils;
 
+import com.onaple.itemizer.ItemizerKeys;
 import com.onaple.itemizer.data.beans.ItemBean;
 import com.onaple.itemizer.data.beans.ItemNbtFactory;
 import org.spongepowered.api.item.inventory.ItemStack;
@@ -19,6 +20,7 @@ public class ItemBuilder {
     public ItemStack buildItemStack(ItemBean itemBean) {
 
         ItemStack item = itemBean.getItemStackSnapshot().createStack();
+        item.offer(ItemizerKeys.ITEM_ID,itemBean.getId());
         setCustomDatamanipulators( item, itemBean.getThirdParties());
         return item;
     }

@@ -18,6 +18,7 @@ import com.onaple.itemizer.data.access.PoolDAO;
 import com.onaple.itemizer.data.beans.ICraftRecipes;
 import com.onaple.itemizer.data.beans.recipes.Smelting;
 import com.onaple.itemizer.data.handlers.ConfigurationHandler;
+import com.onaple.itemizer.data.manipulators.IdDataManipulator;
 import com.onaple.itemizer.service.IItemService;
 import com.onaple.itemizer.service.ItemService;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
@@ -26,6 +27,7 @@ import org.spongepowered.api.CatalogTypes;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandSpec;
+import org.spongepowered.api.data.DataRegistration;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.GameRegistryEvent;
 import org.spongepowered.api.event.game.state.GameConstructionEvent;
@@ -122,7 +124,7 @@ public class Itemizer {
     @Listener
     public void gameConstruct(GameConstructionEvent event) {
         itemizer = this;
-        Sponge.getServiceManager().setProvider(getInstance(), IItemService.class, new ItemService());
+        Sponge.getServiceManager().setProvider(getInstance(), IItemService.class, itemService);
     }
 
     @Listener
@@ -147,6 +149,14 @@ public class Itemizer {
     public void preInit(GamePreInitializationEvent event) {
 
         logger.warn("This version use a new config file format for items.");
+        new ItemizerKeys();
+        DataRegistration.builder()
+                .name("itemizer id")
+                .id("item_id") // prefix is added for you and you can't add it yourself
+                .dataClass(IdDataManipulator.class)
+                .immutableClass(IdDataManipulator.Immutable.class)
+                .builder(new IdDataManipulator.Builder())
+                .build();
 
         loadGlobalConfig();
         try {

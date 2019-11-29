@@ -1,6 +1,7 @@
 package com.onaple.itemizer.service;
 
 import com.onaple.itemizer.data.beans.ItemBean;
+import com.onaple.itemizer.exception.BadWorldNameException;
 import com.onaple.itemizer.exception.ItemNotPresentException;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.item.inventory.ItemStack;
@@ -16,6 +17,8 @@ public interface IItemService {
 
     Optional<ItemStack> retrieve(String id);
 
+    Optional<ItemStack> retrieve(String id, int qte);
+
     ItemStack construct(ItemBean item);
 
     boolean hasItem(Player player, String id, int quantity) throws ItemNotPresentException;
@@ -25,4 +28,9 @@ public interface IItemService {
     void update(String id, ItemStackSnapshot snapshot);
 
     void instantiate(ItemStack itemStack, Location<World> location) throws ItemNotPresentException;
+
+    void instanciate(ItemStack itemStack, String worldName, double x, double y, double z) throws BadWorldNameException;
+
+    void removeItem(Player player, String id, Integer quantity) throws ItemNotPresentException;
+
 }
