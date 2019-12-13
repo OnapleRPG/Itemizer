@@ -158,6 +158,7 @@ public class Itemizer {
                 .builder(new IdDataManipulator.Builder())
                 .build();
 
+        configurationHandler.createItemizerDirectory();
         loadGlobalConfig();
         try {
             int size = configurationHandler.readItemsConfiguration();

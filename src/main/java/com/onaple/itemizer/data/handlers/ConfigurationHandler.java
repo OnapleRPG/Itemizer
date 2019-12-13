@@ -25,6 +25,7 @@ import org.spongepowered.api.plugin.PluginContainer;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -60,6 +61,17 @@ public class ConfigurationHandler {
         return craftList;
     }
 
+
+    public void createItemizerDirectory(){
+        Path configPath = Paths.get(configDir + "/itemizer/");
+        if(!Files.exists(configPath)){
+            try {
+                Files.createDirectories(configPath);
+            } catch (IOException e) {
+                Itemizer.getLogger().error("Can't create config dir", e);
+            }
+        }
+    }
 
     /**
      * Read items configuration and interpret it
@@ -154,9 +166,10 @@ public class ConfigurationHandler {
                 getLogger().info("No config file set for {} default config will be loaded",path);
                 if (itemsDefaultConfigFile.isPresent()) {
                     try {
+
                         itemsDefaultConfigFile.get().copyToFile(path);
                     } catch (IOException e) {
-                        getLogger().error("Error while setting default configuration : {}", e.getMessage());
+                        getLogger().error("Error while setting default configuration : ", e);
                     }
                 } else {
                     getLogger().warn("Default config not found");

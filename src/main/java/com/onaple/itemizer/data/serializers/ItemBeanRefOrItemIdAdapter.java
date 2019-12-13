@@ -41,10 +41,9 @@ public class ItemBeanRefOrItemIdAdapter implements TypeSerializer<ItemStack> {
                 return ItemStack.of(type);
             }
             if(ref == null){
-                Itemizer.getLogger().error("No 'name' or 'ref' provided.");
-                throw new ObjectMappingException();
+                throw new ObjectMappingException("No 'name' or 'ref' provided.");
             }
-            return Itemizer.getItemService().retrieve(ref).orElseThrow(ObjectMappingException::new);
+            return Itemizer.getItemService().retrieve(ref).orElseThrow(() ->new ObjectMappingException("Invalid name ["+ type+"] or reference ["+ ref +"]"));
         }
     }
 }
