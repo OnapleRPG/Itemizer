@@ -1,6 +1,8 @@
 package com.onaple.itemizer.data.beans;
 
 import com.onaple.itemizer.Itemizer;
+import com.onaple.itemizer.ItemizerKeys;
+import com.onaple.itemizer.data.manipulators.IdDataManipulator;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ninja.leaping.configurate.objectmapping.Setting;
@@ -131,8 +133,10 @@ public class ItemBean {
     public static ItemBean from(String itemId, ItemStack itemStack) {
 
         ItemBean itemBean = new ItemBean();
-        itemStack = setId(itemStack,itemId);
+        //itemStack = setId(itemStack,itemId);
         itemBean.setId(itemId);
+        itemStack.offer(itemStack.getOrCreate(IdDataManipulator.class).get());
+        itemStack.offer(ItemizerKeys.ITEM_ID, itemId);
         //item type
         itemBean.setItemStackSnapshot(itemStack.createSnapshot());
         return itemBean;

@@ -28,19 +28,25 @@ import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.data.DataRegistration;
+import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.entity.living.humanoid.player.RespawnPlayerEvent;
+import org.spongepowered.api.event.filter.cause.First;
 import org.spongepowered.api.event.game.GameRegistryEvent;
 import org.spongepowered.api.event.game.state.GameConstructionEvent;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.event.game.state.GameStoppedServerEvent;
+import org.spongepowered.api.event.network.ClientConnectionEvent;
 import org.spongepowered.api.item.recipe.crafting.CraftingRecipe;
 import org.spongepowered.api.item.recipe.smelting.SmeltingRecipe;
+import org.spongepowered.api.network.PlayerConnection;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.text.Text;
 
 import javax.inject.Inject;
+import javax.sql.ConnectionEvent;
 import java.io.IOException;
 
 @Plugin(id = "itemizer", name = "Itemizer", version = "3.0",
@@ -149,10 +155,9 @@ public class Itemizer {
     public void preInit(GamePreInitializationEvent event) {
 
         logger.warn("This version use a new config file format for items.");
-        new ItemizerKeys();
         DataRegistration.builder()
-                .name("itemizer id")
-                .id("item_id") // prefix is added for you and you can't add it yourself
+                .name("Itemizer id")
+                .id("item.id") // prefix is added for you and you can't add it yourself
                 .dataClass(IdDataManipulator.class)
                 .immutableClass(IdDataManipulator.Immutable.class)
                 .builder(new IdDataManipulator.Builder())
@@ -282,12 +287,9 @@ public class Itemizer {
         CommandSpec hasItemCommand = CommandSpec.builder()
                 .description(Text.of("Display if a player have an Item."))
                 .arguments(
-                        GenericArguments.onlyOne(
-                                GenericArguments.player(Text.of("Player"))),
-                        GenericArguments.onlyOne(
-                                GenericArguments.string(Text.of("Ref"))),
-                        GenericArguments.optional(
-                                GenericArguments.integer(Text.of("Quantity")))
+                        GenericArguments.onlyOne(GenericArguments.player(Text.of("player"))),
+                        GenericArguments.onlyOne(GenericArguments.string(Text.of("reference"))),
+                        GenericArguments.optional(GenericArguments.integer(Text.of("quantity")))
                 )
                 .permission(HAS_ITEM_PERMISSION)
                 .executor(new HasItemCommand()).build();
@@ -296,6 +298,7 @@ public class Itemizer {
 
         logger.info("ITEMIZER initialized.");
     }
+
 
     @Listener
     public void onServerStop(GameStoppedServerEvent event) {

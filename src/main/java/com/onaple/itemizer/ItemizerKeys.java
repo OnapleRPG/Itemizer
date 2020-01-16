@@ -4,18 +4,19 @@ import com.google.common.reflect.TypeToken;
 import org.spongepowered.api.data.DataQuery;
 import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.data.value.mutable.Value;
+import org.spongepowered.api.util.TypeTokens;
 
 public class ItemizerKeys {
 
-    public static Key<Value<String>> ITEM_ID;
+    private ItemizerKeys() {}
+    public static final Key<Value<String>> ITEM_ID;
 
-    public ItemizerKeys() {
+    static {
         ITEM_ID = Key.builder()
-                .id("itemid")
+                .id("item.id")
                 .name("Item ID")
-                .type(new TypeToken<Value<String>>() {
-                })
-                .query(DataQuery.of("id"))
+                .type(TypeTokens.STRING_VALUE_TOKEN)
+                .query(DataQuery.of(".","id"))
                 .build();
     }
 

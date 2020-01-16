@@ -1,6 +1,7 @@
 package com.onaple.itemizer.service;
 
 import com.flowpowered.math.vector.Vector3d;
+import com.onaple.itemizer.ItemizerKeys;
 import com.onaple.itemizer.data.access.ItemDAO;
 import com.onaple.itemizer.data.access.PoolDAO;
 import com.onaple.itemizer.data.beans.ItemBean;
@@ -15,6 +16,7 @@ import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.item.inventory.Inventory;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.item.inventory.ItemStackSnapshot;
 import org.spongepowered.api.item.inventory.query.QueryOperationTypes;
@@ -98,9 +100,14 @@ public class ItemService implements IItemService {
      */
     @Override
     public boolean hasItem(Player player, String id, int quantity) throws ItemNotPresentException {
-        ItemStack itemStack = retrieve(id).orElseThrow(() -> new ItemNotPresentException(id));
-        itemStack.setQuantity(quantity);
-          return player.getInventory().contains(itemStack);
+        Inventory query = player.getInventory().query(QueryOperationTypes.ITEM_STACK_CUSTOM.of(itemStack1 -> {
+            Optional<String> optionalId = itemStack1.get(ItemizerKeys.ITEM_ID);
+            if (optionalId.isPresent() && optionalId.get().equals(id)) {
+                return true;
+            }
+            return false;
+        }));
+        return query.capacity()>=quantity;
     }
 
     @Override

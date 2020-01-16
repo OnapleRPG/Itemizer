@@ -19,8 +19,9 @@ import java.util.Optional;
 
 public class IdDataManipulator extends AbstractSingleData<String,IdDataManipulator, IdDataManipulator.Immutable> {
 
+    public static int CONTENT_VERSION = 1;
 
-    protected IdDataManipulator(Key<? extends Value<String>> usedKey, String value) {
+    public IdDataManipulator(Key<? extends Value<String>> usedKey, String value) {
         super(usedKey, value);
     }
 
@@ -40,9 +41,19 @@ public class IdDataManipulator extends AbstractSingleData<String,IdDataManipulat
         return Optional.of(this);
     }
 
+
     @Override
     public Optional<IdDataManipulator> from(DataContainer container) {
-        return Optional.of(this);
+        return from((DataView) container);
+    }
+
+    public Optional<IdDataManipulator> from(DataView view) {
+        if (view.contains(ItemizerKeys.ITEM_ID.getQuery())) {
+            setValue(view.getString(ItemizerKeys.ITEM_ID.getQuery()).get());
+            return Optional.of(this);
+        } else {
+            return Optional.empty();
+        }
     }
 
     @Override
@@ -57,7 +68,7 @@ public class IdDataManipulator extends AbstractSingleData<String,IdDataManipulat
 
     @Override
     public int getContentVersion() {
-        return 0;
+        return CONTENT_VERSION;
     }
 
     public static class Immutable extends AbstractImmutableSingleData<String, IdDataManipulator.Immutable, IdDataManipulator> {
@@ -78,7 +89,7 @@ public class IdDataManipulator extends AbstractSingleData<String,IdDataManipulat
 
         @Override
         public int getContentVersion() {
-            return 1;
+            return CONTENT_VERSION;
         }
     }
     public static class Builder extends AbstractDataBuilder<IdDataManipulator> implements DataManipulatorBuilder<IdDataManipulator, Immutable> {
