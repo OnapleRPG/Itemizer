@@ -8,9 +8,10 @@ import org.spongepowered.api.util.TypeTokens;
 
 public class ItemizerKeys {
 
-    private ItemizerKeys() {}
-    public static final Key<Value<String>> ITEM_ID;
 
+    public static Key<Value<String>> ITEM_ID;
+    private ItemizerKeys() {}
+    static void dummy() {} // invoke static constructor
     static {
         ITEM_ID = Key.builder()
                 .id("item.id")

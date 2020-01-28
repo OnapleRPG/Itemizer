@@ -3,6 +3,7 @@ package com.onaple.itemizer.commands;
 
 import com.onaple.itemizer.Itemizer;
 import com.onaple.itemizer.data.beans.ItemBean;
+import com.onaple.itemizer.utils.ItemBuilder;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
@@ -15,9 +16,16 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.text.format.TextStyles;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.Optional;
 
+@Singleton
 public class RegisterCommand implements CommandExecutor {
+
+    @Inject
+    ItemBuilder builder;
+
 
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
@@ -32,12 +40,11 @@ public class RegisterCommand implements CommandExecutor {
             }
             Optional<ItemStack> itemStackOptional = ((Player) src).getItemInHand(HandTypes.MAIN_HAND);
             if(itemStackOptional.isPresent()){
-                ItemStack itemToRegister = itemStackOptional.get();
-                ItemBean itemRegistred = ItemBean.from(itemId,itemToRegister);
-                Itemizer.getConfigurationHandler().getItemList().add(itemRegistred);
-                ((Player) src).setItemInHand(HandTypes.MAIN_HAND,itemRegistred.getItemStackSnapshot().createStack());
-                src.sendMessage(Text.builder( "Object succesfully added to the database with the index ")
-                        .append(Text.of(TextColors.GOLD, TextStyles.BOLD,itemRegistred.getId()))
+                ItemBean itemRegistered = builder.registerItem(itemId, itemStackOptional.get());
+                ItemStack buildItemStack = builder.buildItemStack(itemRegistered);
+                ((Player) src).setItemInHand(HandTypes.MAIN_HAND,buildItemStack);
+                src.sendMessage(Text.builder( "Item successfully added to the configuration with the ID :")
+                        .append(Text.of(TextColors.GOLD, TextStyles.BOLD,itemRegistered.getId()))
                         .build());
             }
         }

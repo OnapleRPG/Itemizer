@@ -17,7 +17,7 @@ import org.spongepowered.api.data.value.mutable.Value;
 
 import java.util.Optional;
 
-public class IdDataManipulator extends AbstractSingleData<String,IdDataManipulator, IdDataManipulator.Immutable> {
+public class IdDataManipulator extends AbstractSingleData<String, IdDataManipulator, IdDataManipulator.Immutable> {
 
     public static int CONTENT_VERSION = 1;
 
@@ -32,7 +32,7 @@ public class IdDataManipulator extends AbstractSingleData<String,IdDataManipulat
 
     @Override
     public Optional<IdDataManipulator> fill(DataHolder dataHolder, MergeFunction overlap) {
-         Optional<IdDataManipulator> data_ = dataHolder.get(IdDataManipulator.class);
+        Optional<IdDataManipulator> data_ = dataHolder.get(IdDataManipulator.class);
         if (data_.isPresent()) {
             IdDataManipulator data = data_.get();
             IdDataManipulator finalData = overlap.merge(this, data);
@@ -58,12 +58,12 @@ public class IdDataManipulator extends AbstractSingleData<String,IdDataManipulat
 
     @Override
     public IdDataManipulator copy() {
-        return new IdDataManipulator(ItemizerKeys.ITEM_ID,getValue());
+        return new IdDataManipulator(ItemizerKeys.ITEM_ID, getValue());
     }
 
     @Override
     public Immutable asImmutable() {
-        return new Immutable(ItemizerKeys.ITEM_ID,getValue());
+        return new Immutable(ItemizerKeys.ITEM_ID, getValue());
     }
 
     @Override
@@ -71,45 +71,58 @@ public class IdDataManipulator extends AbstractSingleData<String,IdDataManipulat
         return CONTENT_VERSION;
     }
 
-    public static class Immutable extends AbstractImmutableSingleData<String, IdDataManipulator.Immutable, IdDataManipulator> {
+    @Override
+    public DataContainer toContainer() {
+        return super.toContainer().set(ItemizerKeys.ITEM_ID.getQuery(), getValue());
 
-        protected Immutable(Key<? extends Value<String>> usedKey, String value) {
-            super(usedKey, value);
-        }
-
-        @Override
-        protected ImmutableValue<?> getValueGetter() {
-            return Sponge.getRegistry().getValueFactory().createValue(ItemizerKeys.ITEM_ID, getValue()).asImmutable();
-        }
-
-        @Override
-        public IdDataManipulator asMutable() {
-            return new IdDataManipulator(ItemizerKeys.ITEM_ID, getValue());
-        }
-
-        @Override
-        public int getContentVersion() {
-            return CONTENT_VERSION;
-        }
     }
-    public static class Builder extends AbstractDataBuilder<IdDataManipulator> implements DataManipulatorBuilder<IdDataManipulator, Immutable> {
-        public Builder() {
-            super(IdDataManipulator.class, 1);
-        }
 
-        @Override
-        public IdDataManipulator create() {
-            return new IdDataManipulator(ItemizerKeys.ITEM_ID,"no-id");
-        }
+public static class Immutable extends AbstractImmutableSingleData<String, IdDataManipulator.Immutable, IdDataManipulator> {
 
-        @Override
-        public Optional<IdDataManipulator> createFrom(DataHolder dataHolder) {
-            return create().fill(dataHolder);
-        }
-
-        @Override
-        protected Optional<IdDataManipulator> buildContent(DataView container) throws InvalidDataException {
-            return Optional.of(create());
-        }
+    protected Immutable(Key<? extends Value<String>> usedKey, String value) {
+        super(usedKey, value);
     }
+
+    @Override
+    protected ImmutableValue<?> getValueGetter() {
+        return Sponge.getRegistry().getValueFactory().createValue(ItemizerKeys.ITEM_ID, getValue()).asImmutable();
+    }
+
+    @Override
+    public IdDataManipulator asMutable() {
+        return new IdDataManipulator(ItemizerKeys.ITEM_ID, getValue());
+    }
+
+    @Override
+    public int getContentVersion() {
+        return CONTENT_VERSION;
+    }
+
+    @Override
+    public DataContainer toContainer() {
+        return super.toContainer().set(ItemizerKeys.ITEM_ID.getQuery(), getValue());
+
+    }
+}
+
+public static class Builder extends AbstractDataBuilder<IdDataManipulator> implements DataManipulatorBuilder<IdDataManipulator, Immutable> {
+    public Builder() {
+        super(IdDataManipulator.class, 1);
+    }
+
+    @Override
+    public IdDataManipulator create() {
+        return new IdDataManipulator(ItemizerKeys.ITEM_ID, "no-id");
+    }
+
+    @Override
+    public Optional<IdDataManipulator> createFrom(DataHolder dataHolder) {
+        return create().fill(dataHolder);
+    }
+
+    @Override
+    protected Optional<IdDataManipulator> buildContent(DataView container) throws InvalidDataException {
+        return create().from(container);
+    }
+}
 }

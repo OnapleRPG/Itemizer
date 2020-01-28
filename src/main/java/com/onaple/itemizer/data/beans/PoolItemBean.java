@@ -1,6 +1,7 @@
 package com.onaple.itemizer.data.beans;
 
 import com.onaple.itemizer.data.serializers.ItemBeanRefOrItemIdAdapter;
+import com.onaple.itemizer.probability.Probable;
 import cz.neumimto.config.blackjack.and.hookers.annotations.CustomAdapter;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,17 +16,17 @@ import java.util.Random;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PoolItemBean {
+public class PoolItemBean implements Probable {
     private static final Random RANDOM = new Random();
 
     @Setting("probability")
-    private Double probability;
+    private double probability;
 
     @Setting("maxQuantity")
-    private Integer higherQuantityBound = 1;
+    private int higherQuantityBound = 1;
 
     @Setting("minQuantity")
-    private Integer lowerQuantityBound = 1;
+    private int lowerQuantityBound = 1;
 
     @Setting("item")
     @CustomAdapter(ItemBeanRefOrItemIdAdapter.class)

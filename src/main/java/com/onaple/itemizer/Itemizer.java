@@ -15,7 +15,7 @@ import com.onaple.itemizer.commands.globalConfiguration.ConfigureRewriteCommand;
 import com.onaple.itemizer.commands.manager.LoreManagerCommand;
 import com.onaple.itemizer.data.access.ItemDAO;
 import com.onaple.itemizer.data.access.PoolDAO;
-import com.onaple.itemizer.data.beans.ICraftRecipes;
+import com.onaple.itemizer.data.beans.crafts.ICraftRecipes;
 import com.onaple.itemizer.data.beans.recipes.Smelting;
 import com.onaple.itemizer.data.handlers.ConfigurationHandler;
 import com.onaple.itemizer.data.manipulators.IdDataManipulator;
@@ -28,25 +28,18 @@ import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.data.DataRegistration;
-import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
-import org.spongepowered.api.event.entity.living.humanoid.player.RespawnPlayerEvent;
-import org.spongepowered.api.event.filter.cause.First;
 import org.spongepowered.api.event.game.GameRegistryEvent;
 import org.spongepowered.api.event.game.state.GameConstructionEvent;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
-import org.spongepowered.api.event.game.state.GameStoppedServerEvent;
-import org.spongepowered.api.event.network.ClientConnectionEvent;
 import org.spongepowered.api.item.recipe.crafting.CraftingRecipe;
 import org.spongepowered.api.item.recipe.smelting.SmeltingRecipe;
-import org.spongepowered.api.network.PlayerConnection;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.text.Text;
 
 import javax.inject.Inject;
-import javax.sql.ConnectionEvent;
 import java.io.IOException;
 
 @Plugin(id = "itemizer", name = "Itemizer", version = "3.0",
@@ -119,6 +112,8 @@ public class Itemizer {
     @Inject
     private PoolDAO poolDAO;
 
+    @Inject RegisterCommand registerCommand;
+
     public static PluginContainer getInstance() {
         return Sponge.getPluginManager().getPlugin("itemizer").orElse(null);
     }
@@ -155,6 +150,7 @@ public class Itemizer {
     public void preInit(GamePreInitializationEvent event) {
 
         logger.warn("This version use a new config file format for items.");
+         ItemizerKeys.dummy();
         DataRegistration.builder()
                 .name("Itemizer id")
                 .id("item.id") // prefix is added for you and you can't add it yourself
@@ -165,6 +161,12 @@ public class Itemizer {
 
         configurationHandler.createItemizerDirectory();
         loadGlobalConfig();
+        try {
+            int size = configurationHandler.readAffixConfiguration();
+            getLogger().info("{} affix loaded from configuration.", size);
+        } catch (ObjectMappingException | IOException e) {
+            Itemizer.getLogger().warn("Error while reading configuration 'affix'.", e);
+        }
         try {
             int size = configurationHandler.readItemsConfiguration();
             getLogger().info("{} items loaded from configuration.", size);
@@ -183,6 +185,7 @@ public class Itemizer {
         } catch (ObjectMappingException | IOException e) {
             Itemizer.getLogger().warn("Error while reading configuration 'crafts'.", e);
         }
+
     }
 
     @Listener
@@ -228,7 +231,7 @@ public class Itemizer {
                 .description(Text.of("Register an new itemizer item from main hand."))
                 .arguments(GenericArguments.onlyOne(GenericArguments.string(Text.of("id"))))
                 .permission(REGISTER_PERMISSION)
-                .executor(new RegisterCommand()).build();
+                .executor(registerCommand).build();
         Sponge.getCommandManager().register(this, register, "register");
 
 
@@ -298,13 +301,7 @@ public class Itemizer {
 
         logger.info("ITEMIZER initialized.");
     }
-
-
-    @Listener
-    public void onServerStop(GameStoppedServerEvent event) {
-        Itemizer.getConfigurationHandler().saveItemConfig();
-    }
-
+    
     public void saveGlobalConfig() {
         getConfigurationHandler().saveGlobalConfiguration();
     }

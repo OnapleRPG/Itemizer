@@ -31,12 +31,11 @@ public class FetchCommand implements CommandExecutor {
             throw new CommandException(Text.builder(src.getName() + "is not a valid player").toText());
         }
         if (pool.isPresent()) {
-            ItemStack optionalItem = pool.get().fetch();
-            if (optionalItem.isEmpty()) {
+            Optional<ItemStack> optionalItem = Itemizer.getItemService().fetch(pool.get().getId());
+            if (!optionalItem.isPresent()) {
                 src.sendMessage(Text.of("Bad luck! Pool " + pool.get().getId() + " returned nothing."));
             } else {
-                target.getInventory().offer(optionalItem);
-
+                target.getInventory().offer(optionalItem.get());
             }
             return CommandResult.success();
         } else {

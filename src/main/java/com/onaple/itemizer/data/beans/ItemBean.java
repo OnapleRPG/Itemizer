@@ -2,7 +2,11 @@ package com.onaple.itemizer.data.beans;
 
 import com.onaple.itemizer.Itemizer;
 import com.onaple.itemizer.ItemizerKeys;
+import com.onaple.itemizer.data.beans.affix.AffixBean;
+import com.onaple.itemizer.data.beans.affix.AffixFactory;
 import com.onaple.itemizer.data.manipulators.IdDataManipulator;
+import com.onaple.itemizer.data.serializers.AffixNameAdapter;
+import cz.neumimto.config.blackjack.and.hookers.annotations.CustomAdapter;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ninja.leaping.configurate.objectmapping.Setting;
@@ -34,6 +38,10 @@ public class ItemBean {
 
     @Setting("thirdParties")
     private Set<ItemNbtFactory> thirdParties = new TreeSet<>();
+
+    @Setting("affix")
+    @CustomAdapter(AffixNameAdapter.class)
+    private AffixBean affix;
 
     private static ItemStack setCustomData(ItemStack item, String queryPath, Object value) {
         List<String> queryList;
@@ -123,9 +131,6 @@ public class ItemBean {
         }
 
 
-    public static ItemStack setId(ItemStack item,String id){
-        return setCustomData(item,"id",id );
-    }
     public static String getId(ItemStack item){
         return (String) getCustomData(item,"id").orElse("");
     }
@@ -133,7 +138,6 @@ public class ItemBean {
     public static ItemBean from(String itemId, ItemStack itemStack) {
 
         ItemBean itemBean = new ItemBean();
-        //itemStack = setId(itemStack,itemId);
         itemBean.setId(itemId);
         itemStack.offer(itemStack.getOrCreate(IdDataManipulator.class).get());
         itemStack.offer(ItemizerKeys.ITEM_ID, itemId);

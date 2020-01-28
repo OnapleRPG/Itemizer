@@ -3,8 +3,10 @@ package com.onaple.itemizer.data.handlers;
 import com.google.common.reflect.TypeToken;
 import com.onaple.itemizer.GlobalConfig;
 import com.onaple.itemizer.Itemizer;
-import com.onaple.itemizer.data.beans.CraftsRoot;
-import com.onaple.itemizer.data.beans.ICraftRecipes;
+import com.onaple.itemizer.data.beans.affix.AffixBean;
+import com.onaple.itemizer.data.beans.affix.AffixRoot;
+import com.onaple.itemizer.data.beans.crafts.CraftsRoot;
+import com.onaple.itemizer.data.beans.crafts.ICraftRecipes;
 import com.onaple.itemizer.data.beans.ItemBean;
 import com.onaple.itemizer.data.beans.ItemsRoot;
 import com.onaple.itemizer.data.beans.PoolBean;
@@ -29,6 +31,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,10 +64,15 @@ public class ConfigurationHandler {
         return craftList;
     }
 
+    private final List<AffixBean> affixBeans = new ArrayList<>();
 
-    public void createItemizerDirectory(){
+    public List<AffixBean> getAffixBeans() {
+        return affixBeans;
+    }
+
+    public void createItemizerDirectory() {
         Path configPath = Paths.get(configDir + "/itemizer/");
-        if(!Files.exists(configPath)){
+        if (!Files.exists(configPath)) {
             try {
                 Files.createDirectories(configPath);
             } catch (IOException e) {
@@ -77,33 +85,36 @@ public class ConfigurationHandler {
      * Read items configuration and interpret it
      */
     public int readItemsConfiguration() throws IOException, ObjectMappingException {
-        Path path =Paths.get(configDir + "/itemizer/", "items.conf");
+        itemList.clear();
+        itemList.addAll(readConfiguration("items.conf", ItemsRoot.class).getItems());
+        return itemList.size();
+    }
+
+    private <T> T readConfiguration(String file, Class<T> clazz) throws IOException, ObjectMappingException {
+        Path path = Paths.get(configDir + "/itemizer/", file);
         getLogger().info("path to file", path);
         initDefaultConfig(path);
-        ItemsRoot itemRoot = ConfigUtils.load(ItemsRoot.class, path);
-        if(itemRoot != null) {
-            itemList.clear();
-            itemList.addAll(itemRoot.getItems());
+        T root = ConfigUtils.load(clazz, path);
+        if (root != null) {
+            return root;
         } else {
             getLogger().warn("Empty config file");
+            throw new IOException();
         }
+    }
 
-        return itemList.size();
+    public int readAffixConfiguration() throws IOException, ObjectMappingException {
+        affixBeans.clear();
+        affixBeans.addAll(readConfiguration("affix.conf", AffixRoot.class).getAffixes());
+        return affixBeans.size();
     }
 
     /**
      * Read Craft configuration and interpret it
      */
     public int readCraftConfiguration() throws ObjectMappingException, IOException {
-        Path path =Paths.get(configDir + "/itemizer/", "crafts.conf");
-        initDefaultConfig(path);
-        CraftsRoot crafts = ConfigUtils.load(CraftsRoot.class, path);
-        if(crafts != null) {
-            craftList.clear();
-            craftList.addAll(crafts.getCraftingRecipes());
-        } else {
-            getLogger().warn("Crafing config is empty");
-        }
+        craftList.clear();
+        craftList.addAll(readConfiguration("craft.conf", CraftsRoot.class).getCraftingRecipes());
         return craftList.size();
     }
 
@@ -111,21 +122,15 @@ public class ConfigurationHandler {
      * Read pools configuration and interpret it. Must be the last config file read.
      */
     public int readPoolsConfiguration() throws ObjectMappingException, IOException {
-        Path path =Paths.get(configDir + "/itemizer/", "pools.conf");
-        initDefaultConfig(path);
-        TypeSerializers.getDefaultSerializers().registerType(TypeToken.of(ItemStack.class), new ItemBeanRefOrItemIdAdapter());
-        PoolsRoot pools = ConfigUtils.load(PoolsRoot.class, path);
-        if (pools != null) {
-            poolList.clear();
-            poolList.addAll(pools.getPoolList());
-        }
+        poolList.clear();
+        poolList.addAll(readConfiguration("pools.conf", PoolsRoot.class).getPoolList());
         return poolList.size();
     }
 
     public GlobalConfig readGlobalConfig() throws IOException, ObjectMappingException {
-        Path path =Paths.get(configDir + "/itemizer/", "global.conf");
+        Path path = Paths.get(configDir + "/itemizer/", "global.conf");
         initDefaultConfig(path);
-        return ConfigUtils.load(GlobalConfig.class,path );
+        return ConfigUtils.load(GlobalConfig.class, path);
     }
 
     public void saveGlobalConfiguration() {
@@ -163,7 +168,7 @@ public class ConfigurationHandler {
             PluginContainer pluginInstance = Itemizer.getInstance();
             if (pluginInstance != null) {
                 Optional<Asset> itemsDefaultConfigFile = pluginInstance.getAsset(path.getFileName().toString());
-                getLogger().info("No config file set for {} default config will be loaded",path);
+                getLogger().info("No config file set for {} default config will be loaded", path);
                 if (itemsDefaultConfigFile.isPresent()) {
                     try {
 

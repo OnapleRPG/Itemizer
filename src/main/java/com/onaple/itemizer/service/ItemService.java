@@ -6,8 +6,10 @@ import com.onaple.itemizer.data.access.ItemDAO;
 import com.onaple.itemizer.data.access.PoolDAO;
 import com.onaple.itemizer.data.beans.ItemBean;
 import com.onaple.itemizer.data.beans.PoolBean;
+import com.onaple.itemizer.data.beans.PoolItemBean;
 import com.onaple.itemizer.exception.BadWorldNameException;
 import com.onaple.itemizer.exception.ItemNotPresentException;
+import com.onaple.itemizer.probability.ProbabilityFetcher;
 import com.onaple.itemizer.utils.ItemBuilder;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.NotImplementedException;
@@ -41,6 +43,9 @@ public class ItemService implements IItemService {
     @Inject
     private PoolDAO poolDAO;
 
+    @Inject
+    private ProbabilityFetcher probabilityFetcher;
+
     /**
      * try to get an item from an item pool.
      *
@@ -49,7 +54,15 @@ public class ItemService implements IItemService {
      */
     @Override
     public Optional<ItemStack> fetch(String id) {
-        return poolDAO.getPool(id).map(PoolBean::fetch);
+        Optional<PoolItemBean> poolItemBean = poolDAO.getPool(id).flatMap(pool -> probabilityFetcher.fetcher(pool.getItems()));
+        if(poolItemBean.isPresent()){
+            ItemStack item = poolItemBean.get().getItem();
+            item.setQuantity(poolItemBean.get().getRandomQuantity());
+            return Optional.of(item);
+        }
+
+        return Optional.empty();
+
     }
 
 
