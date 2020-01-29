@@ -200,7 +200,6 @@ public class Itemizer {
                 .permission(RETRIEVE_PERMISSION)
                 .executor(new RetrieveCommand()).build();
         Sponge.getCommandManager().register(this, retrieve, "retrieve");
-
         CommandSpec fetch = CommandSpec.builder()
                 .description(Text.of("Try to retrieve an item from a pool describes in a configuration file with its id."))
                 .arguments(new PoolIdElement(Text.of("pool"),poolDAO),
@@ -315,4 +314,5 @@ public class Itemizer {
         }
 
     }
+
 }

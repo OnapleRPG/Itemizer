@@ -3,6 +3,7 @@ package com.onaple.itemizer.data.handlers;
 import com.google.common.reflect.TypeToken;
 import com.onaple.itemizer.GlobalConfig;
 import com.onaple.itemizer.Itemizer;
+import com.onaple.itemizer.ItemizerKeys;
 import com.onaple.itemizer.data.beans.affix.AffixBean;
 import com.onaple.itemizer.data.beans.affix.AffixRoot;
 import com.onaple.itemizer.data.beans.crafts.CraftsRoot;
@@ -11,6 +12,7 @@ import com.onaple.itemizer.data.beans.ItemBean;
 import com.onaple.itemizer.data.beans.ItemsRoot;
 import com.onaple.itemizer.data.beans.PoolBean;
 import com.onaple.itemizer.data.beans.PoolsRoot;
+import com.onaple.itemizer.data.manipulators.IdDataManipulator;
 import com.onaple.itemizer.data.serializers.ItemBeanRefOrItemIdAdapter;
 import com.onaple.itemizer.utils.ConfigUtils;
 import lombok.NoArgsConstructor;
@@ -21,6 +23,7 @@ import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import ninja.leaping.configurate.objectmapping.serialize.TypeSerializers;
 import org.spongepowered.api.asset.Asset;
 import org.spongepowered.api.config.ConfigDir;
+import org.spongepowered.api.entity.Item;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.plugin.PluginContainer;
 
@@ -81,15 +84,6 @@ public class ConfigurationHandler {
         }
     }
 
-    /**
-     * Read items configuration and interpret it
-     */
-    public int readItemsConfiguration() throws IOException, ObjectMappingException {
-        itemList.clear();
-        itemList.addAll(readConfiguration("items.conf", ItemsRoot.class).getItems());
-        return itemList.size();
-    }
-
     private <T> T readConfiguration(String file, Class<T> clazz) throws IOException, ObjectMappingException {
         Path path = Paths.get(configDir + "/itemizer/", file);
         getLogger().info("path to file", path);
@@ -101,6 +95,16 @@ public class ConfigurationHandler {
             getLogger().warn("Empty config file");
             throw new IOException();
         }
+    }
+
+    /**
+     * Read items configuration and interpret it
+     */
+    public int readItemsConfiguration() throws IOException, ObjectMappingException {
+        itemList.clear();
+        itemList.addAll(setIdtoItems(readConfiguration("items.conf", ItemsRoot.class).getItems()));
+        saveItemConfig();
+        return itemList.size();
     }
 
     public int readAffixConfiguration() throws IOException, ObjectMappingException {
@@ -181,5 +185,19 @@ public class ConfigurationHandler {
                 }
             }
         }
+    }
+    private List<ItemBean> setIdtoItems(List<ItemBean> itemBeanList)
+    {
+        List<ItemBean> items = new ArrayList<>();
+        itemBeanList.forEach(itemBean -> {
+            ItemStack stack = itemBean.getItemStackSnapshot().createStack();
+            if (!stack.get(ItemizerKeys.ITEM_ID).isPresent()) {
+                IdDataManipulator id = new IdDataManipulator(ItemizerKeys.ITEM_ID, itemBean.getId());
+                stack.offer(id);
+                itemBean.setItemStackSnapshot(stack.createSnapshot());
+            }
+            items.add(itemBean);
+        });
+        return items;
     }
 }
