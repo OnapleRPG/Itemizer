@@ -11,6 +11,7 @@ import org.spongepowered.api.item.inventory.ItemStack;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.Comparator;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
@@ -56,9 +57,11 @@ public class ItemBuilder {
     }
 
     private ItemStack applyAffix(ItemStack itemStack, ItemBean item) {
-        Optional<AffixFactory> optionalAffixFactory = probabilityFetcher.fetcher(item.getAffix().getTiers());
-        if (optionalAffixFactory.isPresent()) {
-            itemStack = optionalAffixFactory.get().apply(itemStack);
+        if (Objects.nonNull(item.getAffix())) {
+            Optional<AffixFactory> optionalAffixFactory = probabilityFetcher.fetcher(item.getAffix().getTiers());
+            if (optionalAffixFactory.isPresent()) {
+                itemStack = optionalAffixFactory.get().apply(itemStack);
+            }
         }
         return itemStack;
     }

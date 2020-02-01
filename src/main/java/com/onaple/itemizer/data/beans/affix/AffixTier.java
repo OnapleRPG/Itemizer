@@ -10,6 +10,7 @@ import ninja.leaping.configurate.objectmapping.Setting;
 import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable;
 import org.spongepowered.api.data.DataContainer;
 import org.spongepowered.api.data.DataQuery;
+import org.spongepowered.api.data.DataView;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.entity.Item;
 import org.spongepowered.api.item.inventory.ItemStack;
@@ -35,7 +36,8 @@ public class AffixTier extends AbstractAffix {
     }
 
     private ItemStack setAttribute(ItemStack itemStack) {
-        List<DataContainer> containers = new ArrayList<>();
+        List<DataView> containers = itemStack.toContainer().getViewList(DataQuery.of("UnsafeData", "AttributeModifiers")).orElse(new ArrayList<>());
+
         if (getAttributes().isEmpty()) {
             return itemStack;
         }

@@ -2,6 +2,7 @@ package com.onaple.itemizer.commands;
 
 
 import com.onaple.itemizer.Itemizer;
+import com.onaple.itemizer.ItemizerKeys;
 import com.onaple.itemizer.data.beans.ItemBean;
 import com.onaple.itemizer.utils.ItemBuilder;
 import org.spongepowered.api.command.CommandException;
@@ -40,6 +41,9 @@ public class RegisterCommand implements CommandExecutor {
             }
             Optional<ItemStack> itemStackOptional = ((Player) src).getItemInHand(HandTypes.MAIN_HAND);
             if(itemStackOptional.isPresent()){
+                if(itemStackOptional.get().get(ItemizerKeys.ITEM_ID).isPresent()) {
+                    throw new CommandException(Text.of("Item already registered"));
+                }
                 ItemBean itemRegistered = builder.registerItem(itemId, itemStackOptional.get());
                 ItemStack buildItemStack = builder.buildItemStack(itemRegistered);
                 ((Player) src).setItemInHand(HandTypes.MAIN_HAND,buildItemStack);

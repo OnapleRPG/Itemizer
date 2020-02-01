@@ -26,6 +26,6 @@ public class AffixNameAdapter implements TypeSerializer<AffixBean> {
 
     @Override
     public void serialize(@NonNull TypeToken<?> type, @Nullable AffixBean obj, @NonNull ConfigurationNode value) throws ObjectMappingException {
-
+            value.setValue(obj.getGroupName());
     }
 }
