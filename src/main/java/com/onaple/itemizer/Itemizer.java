@@ -42,7 +42,7 @@ import org.spongepowered.api.text.Text;
 import javax.inject.Inject;
 import java.io.IOException;
 
-@Plugin(id = "itemizer", name = "Itemizer", version = "3.0",
+@Plugin(id = "itemizer", name = "Itemizer", version = "3.2",
         description = "Custom item generation with crafting and pool system",
         url = "http://onaple.fr",
         authors = {"Zessirb", "Selki"})
@@ -296,7 +296,7 @@ public class Itemizer {
                 .permission(HAS_ITEM_PERMISSION)
                 .executor(new HasItemCommand()).build();
 
-        Sponge.getCommandManager().register(this, hasItemCommand, "hasitem");
+        Sponge.getCommandManager().register(this, hasItemCommand, "hasitem","has-item");
 
         logger.info("ITEMIZER initialized.");
     }

@@ -36,7 +36,6 @@ public class ItemBuilder {
     public ItemStack buildItemStack(ItemBean itemBean) {
         ItemStack item = itemBean.getItemStackSnapshot().createStack();
         Optional<String> stringOptional = item.get(ItemizerKeys.ITEM_ID);
-        Itemizer.getLogger().info("generateItem from bean {}, and is it supported {}", stringOptional, item.supports(ItemizerKeys.ITEM_ID));
         setCustomDatamanipulators(item, itemBean.getThirdParties());
         item = applyAffix(item, itemBean);
         return item;

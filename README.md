@@ -1,45 +1,39 @@
 # Itemizer  [![Build Status](https://travis-ci.org/OnapleRPG/Itemizer.svg?branch=master)](https://travis-ci.org/OnapleRPG/Itemizer) ![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=Itemizer&metric=alert_status)   [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) [![sponge version](https://img.shields.io/badge/sponge-7.2.0-yellow.svg)](https://www.spongepowered.org/)
 
 
-Itemizer is a Sponge Minecraft plugin that allows custom item creation as described in configuration files, as well as random item generation.  
-You can edit most of the item's informations like :  
+Itemizer is a Sponge Minecraft plugin that allows custom item creation. Store plenty of custom objects in configurations files.
+ Once item registered, you can also register :
+ * crafts : register crafts (with or without shape) and smelting recipe.
+ * pools : assign items to pools with a probability and fetch them randmly.
+ * affixes : for more customisation item can be modified afterward by affix (also pick in a pool) to slighly modify their characteristics.
 
-* Item name
-* Item lore
-* Enchantements
-* Durability
-* *can mine* property
-* Attribute modifiers
-    * *maxHealth*
-    * *followRange*
-    * *knockbackResistance*
-    * *movementSpeed*
-    * *attackDamage*
-    * *armor*
-    * *armorToughness*
-    * *attackSpeed*
-    * *luck*  
+An examples of each config file is loaded at the first launch of the plugin under the folder `/config/itemizer/` you can see how they work.
+>Don't be afraid by item complexity, they can be generated in-game)
 If you want more details about *AttributeModifiers* check the Minecraft [wiki](https://minecraft.gamepedia.com/Attribute)
 
 
 ## Installation
 To install this plugin, you must have a sponge server 1.12. Download the [latest release](https://github.com/OnapleRPG/Itemizer/releases) and drag and drop it into your server's `mods/` folder. Then restart your server.
+Check in the `/config/itemizer/` folder if default configuration is well copied and in logs if files is well loaded.
 
 ## Minecraft Commands
 
+* `/register <newId>` : register item into the config. I advise you to use this [generator](http://mapmaking.fr/give1.12/). to give you the item before registering them.
+once registered, you will see te item in your configuration file and you will be able to edit it.
+Permission : *itemizer.command.register*
 * `/retrieve <itemId> [quantity] [player]` : Obtain an item specified in the configuration file for the given id.  
 Permission : *itemizer.command.rerieve*
-* `fetch <poolId> [quantity] [player]` : Try to obtain an item from a configured pool in the configuration file with its *id*.  
+* `/fetch <poolId> [quantity] [player]` : Try to obtain an item from a configured pool in the configuration file with its *id*.
 Permission : *itemizer.command.fetch*
-* ``reload-itemizer`` : Reload each configuration file.  
+* `/has-item <player> <itemId> [quantity]` : check if a player has an specific item in his inventory
+Permission : *itemizer.command.hasitem*
+* `/reload-itemizer` : Reload each configuration file.
 Permission : *itemizer.command.reload*
-* ``/analyse`` : give information about data stored in the item hold in main 
-Permission : *itemizer.command.analyse*
-* ``/register <newId>`` : register item into the config with his *name*,*lore*,*durability*,*enchants* and *attributes*
 
 ## Configuration files
 
-All configuration files use HOCON format. When you first install the plugin a default configuration with example is loaded in your `config/itemizer/` folder.
+All configuration files use HOCON format. they are loaded at the plugin start. you can force a reload with the command `/reload-itemizer`
+> I higly recommend you to backup your files to avoid any loss.
 
 ### Global  configuration
 In the global configuration file you can change plugin settings : 
@@ -59,89 +53,71 @@ __Be careful the command override the file change__
 
 A file named __*items.conf*__ stores the items that can be retrieved from the plugin.
 
-The root element has to be __items__. 
+The root element has to be __items__.
+For each  item you have the following properties :
 For each item configured, the following data can be provided :
-* The mandatory __id__ field is used as a key identifier
-* The mandatory __type__ is the item type that will be generated
-* __name__ can override default item name
-* __lore__ can be set to provide an item description
-* __unbreakable__ is a boolean to prevent tool consumption, defaulting to false
-* __durability__ is the amount of uses a tool can be used before breaking
-* __enchants__ is a list of enchants that will be added to the item
-* __miners__ are references to harvesting profiles, that enable to break blocks when the item is held (_see next section_)
-* __attributes__ is a list of modification, an attribute is defined by :
-    * The __name__ of modifier (example : `generic.attackDamage`) you can get the
-    complete list [here](https://minecraft.gamepedia.com/Attribute).
-    * The __amount__ of the attribute.
-    * The __operation__ is how the amount is applied. 0 for an addition,
-    1 for a additive percent,and 2 for a multiplicative percent.
-    * The __slot__ is where the item must be for applying the attribute. It can be `head` ,`mainhand`
-    `offhand`, `chest`, `legs` or `feet`. 
-    
-    You can also add any NBT you want to your item, with its path and its value.
+* The mandatory `id` field is used as a key identifier
+* The mandatory `item` who contain all the item data. I advise you to generate the data with a `/give` command and register it. sadly I haven't implemented update yet
+* __thirdParties__ allows third party plugin to update your item (by now only [Jessie tags](https://github.com/OnapleRPG/Jessie-Tags) is available)
+* __Affix__ pick in a pool of affix to randomly affect item statistics.
+
 #### Example
+An example of an battle axe indexed as _barbarian_axe_ with some attribute modifiers and an affix in _damage_ pool.
 ```
-items = [
     {
-        id: 1,
-        type: "minecraft:stone_axe",
-        lore: "This axe is not really efficient...\nHowever it is sharp on your finger.",
-        unbreakable: true,
-        enchants {
-            efficiency {level = 3}
-        },
-        miners: [
-            2
-        ]
-    },
-    {
-        id: 2,
-        type: "wooden_sword",
-        durability: 5,
-        name: "Training stick",
-        attributes : [
-            {
-            name: "generic.attackDamage"
-            amount : 5
-            operation : 0
-            slot : "mainhand"
+        id="barbarian_axe"
+        item {
+            ContentVersion=2
+            Count=1
+            Data=[
+                {
+                    ContentVersion=2
+                    ManipulatorData {
+                        "." {
+                            id="barbarian_axe"
+                        }
+                        ContentVersion=1
+                    }
+                    ManipulatorId="itemizer:item.id"
+                }
+            ]
+            ItemType="minecraft:iron_axe"
+            UnsafeDamage=0
+            UnsafeData {
+                AttributeModifiers=[
+                    {
+                        Amount=5
+                        AttributeName="generic.attackDamage"
+                        Name="generic.attackDamage"
+                        Operation=0
+                        Slot=mainhand
+                        UUIDLeast=160005
+                        UUIDMost=13658
+                    },
+                    {
+                        Amount=-0.1
+                        AttributeName="generic.attackSpeed"
+                        Name="generic.attackSpeed"
+                        Operation=1
+                        Slot=mainhand
+                        UUIDLeast=169991
+                        UUIDMost=15894
+                    }
+                ]
+                display {
+                    Lore=[
+                        "Nobody have whet this blade yet",
+                        "however it still can sharp your finger"
+                    ]
+                    Name="Barbarian Axe"
+                }
             }
-        ]
-    }
-]
-```
-
-### Harvesting capabilities
-
-A file named __*miners.conf*__ defines profiles to allow block destruction when given items are in hand.
-
-The root element must be __miners__.
-For each profile, you can define the following elements :
-* __id__ is used to reference the profile from an item configuration
-* __mine_types__ is a list of blocks that are breakable with the associated profile
-* __inherit__ is an optional list of ids to include all the blocks of different profiles
-
-```
-miners = [
-    {
-        id: 1,
-        mine_types: {
-           "coal" : "minecraft:coal_ore",
-           "iron" : "minecraft:iron_ore"
         }
-    },
-    {
-        id: 2,
-        mine_types: {
-            "gold" :"minecraft:gold_ore"
-        },
-        inherit: [
-            1
-        ]
+        thirdParties=[],
+         affix=damage
     }
-]
 ```
-_An item referencing miner 1 will be able to break coal and iron ore, whereas referencing miner 2 allow breaking of coal, iron and gold ore._
+don't be afraid all data in `item` are generated.
 
 ### Items pool
 
@@ -220,6 +196,9 @@ and the third one is used to craft the item referenced "2" with three sticks ali
 
 ## For developer
 If you are willing to use **Itemizer** in your plugin development, we provide services to ease interactions.  
+you can also use it with js (like with customNPC).
+
+you can check the [javadoc](https://onaplerpg.github.io/Itemizer/javadoc/) for more information.
  
 ### Services
 * **IItemService** : Give access to the object getters functions to a plugin.
@@ -241,7 +220,7 @@ If you are willing to use **Itemizer** in your plugin development, we provide se
  ```
  dependencies {
       compile 'org.spongepowered:spongeapi:7.0.0'
-      implementation 'com.github.OnapleRPG:Itemizer:V1.1.0'
+      implementation 'com.github.OnapleRPG:Itemizer:V3.1.0'
   }
  ```
  * Use services 

@@ -2,11 +2,8 @@
 .idea
 .mixin.out
 build
-gradle
 logs
 logs/latest.log
 scripts
 *.iml
-gradlew
 gradlew.bat
-gradle.properties
