@@ -107,9 +107,10 @@ public class ItemService implements IItemService {
      * @param quantity the amount.
      * @return Return <b>true</b> if the targeted player have the item in enough quantity and <b>false</b> if he
      * * haven't
+     * @throws ItemNotPresentException if the id does not exist
      */
     @Override
-    public boolean hasItem(Player player, String id, int quantity) {
+    public boolean hasItem(Player player, String id, int quantity) throws ItemNotPresentException {
         Inventory query = player.getInventory().query(QueryOperationTypes.ITEM_STACK_CUSTOM.of(itemStack1 -> {
             Optional<String> optionalId = itemStack1.get(ItemizerKeys.ITEM_ID);
             if (optionalId.isPresent() && optionalId.get().equals(id)) {
