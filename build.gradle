@@ -5,6 +5,8 @@ plugins {
     id "org.sonarqube" version "2.5"
     id "eu.davidea.grabver" version "1.0.0"
     id 'org.spongepowered.plugin' version '0.8.1'
+    id 'maven-publish'
+        // Other library plugins...
 }
 
 compileJava.options.encoding = 'UTF-8'
@@ -69,5 +71,22 @@ allprojects {
 jar {
     from {
         configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/OnapleRPG/Itemizer")
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+                password = project.findProperty("gpr.key") ?: System.getenv("PASSWORD")
+            }
+        }
+    }
+    publications {
+        gpr(MavenPublication) {
+            from(components.java)
+        }
     }
 }
