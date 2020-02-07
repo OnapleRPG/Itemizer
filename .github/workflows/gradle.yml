@@ -21,7 +21,7 @@ jobs:
       run: chmod +x gradlew
     - name: Build with Gradle
       run: ./gradlew build
-    - name: update javadocs
-      run: ./gradlew javadocs
+    - name: update javadoc
+      run: ./gradlew javadoc
     - name: update package
-      run: mvn deploy -Dregistry=https://maven.pkg.github.com/OnapleRPG -Dtoken=${{ secrets.GITHUB_TOKEN }}
+      run: ./gradlew publish
