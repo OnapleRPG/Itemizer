@@ -79,8 +79,8 @@ publishing {
             name = "GitHubPackages"
             url = uri("https://maven.pkg.github.com/OnapleRPG/Itemizer")
             credentials {
-                username = System.getenv("username")
-                password = System.getenv("token")
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
             }
         }
     }
