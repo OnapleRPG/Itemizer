@@ -28,7 +28,7 @@ versioning {
     // required (number)
     major = 3
     minor = 2
-    patch = 0
+    patch = 1
 }
 group = 'com.onaple'
 version = versioning.name
