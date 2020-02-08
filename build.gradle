@@ -78,11 +78,8 @@ apply plugin: 'maven'
 uploadArchives {
     repositories {
         mavenDeployer {
-            repository(url: "https://maven.pkg.github.com/OnapleRPG/Itemizer"){
+            repository(url: "https://maven.pkg.github.com/OnapleRPG"){
                 authentication(userName: project.findProperty("gpr.user") ?: System.getenv("USERNAME"), password: project.findProperty("gpr.key") ?: System.getenv("PASSWORD"))
-            }
-            snapshotRepository(url: "http://repo-snapshotRepository"){
-                authentication(userName: "yankee", password: "doodle")
             }
         }
     }
