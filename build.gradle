@@ -73,20 +73,17 @@ jar {
         configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
     }
 }
-publishing {
+apply plugin: 'maven'
+
+uploadArchives {
     repositories {
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/OnapleRPG/Itemizer")
-            credentials {
-                username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
-                password = project.findProperty("gpr.key") ?: System.getenv("PASSWORD")
+        mavenDeployer {
+            repository(url: "https://maven.pkg.github.com/OnapleRPG/Itemizer"){
+                authentication(userName: project.findProperty("gpr.user") ?: System.getenv("USERNAME"), password: project.findProperty("gpr.key") ?: System.getenv("PASSWORD"))
             }
-        }
-    }
-    publications {
-        gpr(MavenPublication) {
-            from(components.java)
+            snapshotRepository(url: "http://repo-snapshotRepository"){
+                authentication(userName: "yankee", password: "doodle")
+            }
         }
     }
 }
