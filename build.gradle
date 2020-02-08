@@ -73,14 +73,20 @@ jar {
         configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
     }
 }
-apply plugin: 'maven'
-
-uploadArchives {
+publishing {
     repositories {
-        mavenDeployer {
-            repository(url: "https://maven.pkg.github.com/OnapleRPG"){
-                authentication(userName: project.findProperty("gpr.user") ?: System.getenv("USERNAME"), password: project.findProperty("gpr.key") ?: System.getenv("PASSWORD"))
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/OnapleRPG")
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+                password = project.findProperty("gpr.key") ?: System.getenv("PASSWORD")
             }
+        }
+    }
+    publications {
+        gpr(MavenPublication) {
+            from(components.java)
         }
     }
 }
