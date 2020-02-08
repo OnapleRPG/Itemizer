@@ -32,6 +32,6 @@ jobs:
         # we can get the release name.
       run: |
           NEW_VERSION=$(echo "${GITHUB_REF}" | cut -d "/" -f3)
-          echo "New version: ${NEW_VERSION}"
+          echo "New version: ${GITHUB_TOKEN}"
           echo "Github username: ${GITHUB_ACTOR}"
-          ./gradlew -Pversion=${NEW_VERSION} publish
+          ./gradlew publish -Pversion=${NEW_VERSION} -Dregistry=https://maven.pkg.github.com/OnapleRPG
