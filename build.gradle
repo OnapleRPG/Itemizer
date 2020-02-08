@@ -31,7 +31,7 @@ versioning {
     patch = 0
 }
 group = 'com.onaple'
-version = versioning.name+'-'+versioning.build
+version = versioning.name
 
 repositories {
     mavenCentral()
