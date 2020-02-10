@@ -7,7 +7,7 @@ Itemizer is a Sponge Minecraft plugin that allows custom item creation. Store pl
  * pools : assign items to pools with a probability and fetch them randmly.
  * affixes : for more customisation item can be modified afterward by affix (also pick in a pool) to slighly modify their characteristics.
 
-An examples of each config file is loaded at the first launch of the plugin under the folder `/config/itemizer/` you can see how they work.
+An examples of each config file is loaded at the first launch of the plugin under the folder `/config/itemizer/`.This way you can see how they're build.
 >Don't be afraid by item complexity, they can be generated in-game)
 
 ## Installation
@@ -194,22 +194,25 @@ and the third one is used to craft the item referenced "2" with three sticks ali
 
 ### Affix
 
-Affix are modifiers who can be applied to item. They are pre-registered in pools (not items pools :wink:).
-The root is `affixes`, it contains a list of affix groups. a group is categorized by is `group` name : it's a schematic name only used for configuration like
-damage, speed, balanced, only_negative, etc...  
+Affix are modifiers who can be applied to items. They are pre-registered in pools (different from the pools used for items). They are stored 
+in the `affix.conf` file as an HOCON file.
+The root is `affixes`, it contains a list of affix groups.  
+   
+ A group is categorized by its `group` name.
+it's a schematic name only used for configuration like damage, speed, balanced, only_negative, etc... It will be 
+used to attach a group to an item.
    
  And then the multiples `tiers` of each affix.
  A tier is like a power level. `__class__` is the implementation of the affix, you can use your own
  (leave it as is if you don't know what that mean). 
    
    
- You can set a `prefix` and `suffix` who modify the name item. Don't leave space before and after,
- these arguments they will be set afterward.  
- The `probability` is the chance to chose this tiers more than another. the less it is, the less chance you have
- to get this tier. Be careful to stay under the probability of one otherwise the tiers higher than one will 
- never get picked.
+ You can set a `prefix` and `suffix` which modify the name item. Don't leave space before and after,
+ these arguments will be set afterward.  
+ The `probability` is the chance to choose this tiers more than another. the smaller it is, the less chance you have
+ to get this tier. Be careful to stay under the probability of one otherwise the tier which total probability exceeds 1 will never get picked.
    
- And then : the **attributes**, `attributes` are the modifiers of the data who change the item statistics, 
+ And then : the **attributes**, `attributes` are the modifiers of the data who change the item statistics.
  you have 4 properties , `name`, `slot`, `amount` and `operation`. value are the same than vanilla.
 If you want more details about *AttributeModifiers* check the Minecraft [wiki](https://minecraft.gamepedia.com/Attribute)
   
@@ -245,18 +248,17 @@ you can check the [javadoc](https://onaplerpg.github.io/Itemizer/javadoc/) for m
 ### Services
 * **IItemService** : Give access to the object getters functions to a plugin.  
 
-   | return |  Method and Description |
+   | return |  Method and  |
    | :--- | :--- |
-   | org.spongepowered.api.item.inventory.ItemStack | 	construct(ItemBean item) |
-   | java.util.Optional<org.spongepowered.api.item.inventory.ItemStack> |	fetch(java.lang.String id) |
-   | boolean |	hasItem(org.spongepowered.api.entity.living.player.Player player, java.lang.String id, int quantity) |
-   | void |	instanciate(org.spongepowered.api.item.inventory.ItemStack itemStack, java.lang.String worldName, double x, double y, double z) |
-   | void |	instantiate(org.spongepowered.api.item.inventory.ItemStack itemStack, org.spongepowered.api.world.Location<org.spongepowered.api.world.World> location) |
-   | void |	register(java.lang.String id, org.spongepowered.api.item.inventory.ItemStackSnapshot snapshot) |
-   | void |	removeItem(org.spongepowered.api.entity.living.player.Player player, java.lang.String id, java.lang.Integer quantity) |
-   | java.util.Optional<org.spongepowered.api.item.inventory.ItemStack> |	retrieve(java.lang.String id) |
-   | java.util.Optional<org.spongepowered.api.item.inventory.ItemStack> |	retrieve(java.lang.String id, int qte) |
-   | void |	update(java.lang.String id, org.spongepowered.api.item.inventory.ItemStackSnapshot snapshot) |
+   | `org.spongepowered.api.item.inventory.ItemStack` | 	`construct(ItemBean item)` |
+   | `java.util.Optional<org.spongepowered.api.item.inventory.ItemStack>` |	`fetch(java.lang.String id)` |
+   | `boolean` |	`hasItem(org.spongepowered.api.entity.living.player.Player player, java.lang.String id, int quantity)` |
+   | `void` |	`instanciate(org.spongepowered.api.item.inventory.ItemStack itemStack, java.lang.String worldName, double x, double y, double z)` |
+   | `void` |	`instantiate(org.spongepowered.api.item.inventory.ItemStack itemStack, org.spongepowered.api.world.Location<org.spongepowered.api.world.World> location)` |
+   | `void` |	`register(java.lang.String id, org.spongepowered.api.item.inventory.ItemStackSnapshot snapshot)` |
+   | `void` |	`removeItem(org.spongepowered.api.entity.living.player.Player player, java.lang.String id, java.lang.Integer quantity)` |
+   | `java.util.Optional<org.spongepowered.api.item.inventory.ItemStack>` |	`retrieve(java.lang.String id)` |
+   | `java.util.Optional<org.spongepowered.api.item.inventory.ItemStack>` |	`retrieve(java.lang.String id, int qte)` |
    
     ### Installation with Gradle
  
