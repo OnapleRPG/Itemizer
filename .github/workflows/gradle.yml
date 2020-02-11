@@ -1,4 +1,4 @@
-name: Java CI
+name: Build
 
 on:
   # Trigger the workflow on push or pull request,
@@ -23,15 +23,3 @@ jobs:
       run: ./gradlew build
     - name: update javadoc
       run: ./gradlew javadoc
-    - name: Publish artifact
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-        # The GITHUB_REF tag comes in the format 'refs/tags/xxx'.
-        # If we split on '/' and take the 3rd value,
-        # we can get the release name.
-      run: |
-          NEW_VERSION=$(echo "${GITHUB_REF}" | cut -d "/" -f3)
-          echo "New version: ${GITHUB_TOKEN}"
-          echo "Github username: ${GITHUB_ACTOR}"
-          ./gradlew publish -Pversion=${NEW_VERSION} -Dregistry=https://maven.pkg.github.com/OnapleRPG

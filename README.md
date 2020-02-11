@@ -1,4 +1,4 @@
-# Itemizer  [![Build Status](https://travis-ci.org/OnapleRPG/Itemizer.svg?branch=master)](https://travis-ci.org/OnapleRPG/Itemizer) ![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=Itemizer&metric=alert_status)   [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) [![sponge version](https://img.shields.io/badge/sponge-7.2.0-yellow.svg)](https://www.spongepowered.org/)
+# Itemizer  ![Java CI](https://github.com/OnapleRPG/Itemizer/workflows/Java%20CI/badge.svg?branch=master) ![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=Itemizer&metric=alert_status)   [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) [![sponge version](https://img.shields.io/badge/sponge-7.2.0-yellow.svg)](https://www.spongepowered.org/)
 
 
 Itemizer is a Sponge Minecraft plugin that allows custom item creation. Store plenty of custom objects in configurations files.
@@ -7,10 +7,8 @@ Itemizer is a Sponge Minecraft plugin that allows custom item creation. Store pl
  * pools : assign items to pools with a probability and fetch them randmly.
  * affixes : for more customisation item can be modified afterward by affix (also pick in a pool) to slighly modify their characteristics.
 
-An examples of each config file is loaded at the first launch of the plugin under the folder `/config/itemizer/` you can see how they work.
+An examples of each config file is loaded at the first launch of the plugin under the folder `/config/itemizer/`.This way you can see how they're build.
 >Don't be afraid by item complexity, they can be generated in-game)
-If you want more details about *AttributeModifiers* check the Minecraft [wiki](https://minecraft.gamepedia.com/Attribute)
-
 
 ## Installation
 To install this plugin, you must have a sponge server 1.12. Download the [latest release](https://github.com/OnapleRPG/Itemizer/releases) and drag and drop it into your server's `mods/` folder. Then restart your server.
@@ -194,6 +192,53 @@ crafts = [
 _The first craft requires a stone axe to craft the item referenced "1", the second craft enable us to cook a cooked_porkchop into a coal, 
 and the third one is used to craft the item referenced "2" with three sticks aligned in a vertical centered line (notice the whitespaces before and after the "a")_
 
+### Affix
+
+Affix are modifiers who can be applied to items. They are pre-registered in pools (different from the pools used for items). They are stored 
+in the `affix.conf` file as an HOCON file.
+The root is `affixes`, it contains a list of affix groups.  
+   
+ A group is categorized by its `group` name.
+it's a schematic name only used for configuration like damage, speed, balanced, only_negative, etc... It will be 
+used to attach a group to an item.
+   
+ And then the multiples `tiers` of each affix.
+ A tier is like a power level. `__class__` is the implementation of the affix, you can use your own
+ (leave it as is if you don't know what that mean). 
+   
+   
+ You can set a `prefix` and `suffix` which modify the name item. Don't leave space before and after,
+ these arguments will be set afterward.  
+ The `probability` is the chance to choose this tiers more than another. the smaller it is, the less chance you have
+ to get this tier. Be careful to stay under the probability of one otherwise the tier which total probability exceeds 1 will never get picked.
+   
+ And then : the **attributes**, `attributes` are the modifiers of the data who change the item statistics.
+ you have 4 properties , `name`, `slot`, `amount` and `operation`. value are the same than vanilla.
+If you want more details about *AttributeModifiers* check the Minecraft [wiki](https://minecraft.gamepedia.com/Attribute)
+  
+  
+```
+affixes = [
+     {
+       group:damage
+       tiers : [
+         {
+           __class__ : com.onaple.itemizer.data.beans.affix.AffixTier
+           suffix : "of stupidity"
+           probability : 1
+           attributes : [
+             {
+               name : attackDamage
+               slot: mainHand
+               amount : 10
+               operation :0
+             }
+           ]
+         }
+       ]
+     }
+   ]
+```
 ## For developer
 If you are willing to use **Itemizer** in your plugin development, we provide services to ease interactions.  
 you can also use it with js (like with customNPC).
@@ -201,10 +246,21 @@ you can also use it with js (like with customNPC).
 you can check the [javadoc](https://onaplerpg.github.io/Itemizer/javadoc/) for more information.
  
 ### Services
-* **IItemService** : Give access to the object getters functions to a plugin.
-    * ```Optional<ItemStack retrieve(String id)``` : Try to retrieve a configured item.
-    * ```Optional<ItemStack> fetch(String id)``` : Try to fetch an item from a configured item pool.
- ### Installation with Gradle
+* **IItemService** : Give access to the object getters functions to a plugin.  
+
+   | Return |  Method  |
+   | :--- | :--- |
+   | `org.spongepowered.api.item.inventory.ItemStack` | 	`construct(ItemBean item)` |
+   | `java.util.Optional<org.spongepowered.api.item.inventory.ItemStack>` |	`fetch(java.lang.String id)` |
+   | `boolean` |	`hasItem(org.spongepowered.api.entity.living.player.Player player, java.lang.String id, int quantity)` |
+   | `void` |	`instanciate(org.spongepowered.api.item.inventory.ItemStack itemStack, java.lang.String worldName, double x, double y, double z)` |
+   | `void` |	`instantiate(org.spongepowered.api.item.inventory.ItemStack itemStack, org.spongepowered.api.world.Location<org.spongepowered.api.world.World> location)` |
+   | `void` |	`register(java.lang.String id, org.spongepowered.api.item.inventory.ItemStackSnapshot snapshot)` |
+   | `void` |	`removeItem(org.spongepowered.api.entity.living.player.Player player, java.lang.String id, java.lang.Integer quantity)` |
+   | `java.util.Optional<org.spongepowered.api.item.inventory.ItemStack>` |	`retrieve(java.lang.String id)` |
+   | `java.util.Optional<org.spongepowered.api.item.inventory.ItemStack>` |	`retrieve(java.lang.String id, int qte)` |
+   
+    ### Installation with Gradle
  
  * Add [Jitpack](https://jitpack.io/) into your repositories
  ```
@@ -220,7 +276,7 @@ you can check the [javadoc](https://onaplerpg.github.io/Itemizer/javadoc/) for m
  ```
  dependencies {
       compile 'org.spongepowered:spongeapi:7.0.0'
-      implementation 'com.github.OnapleRPG:Itemizer:V3.1.0'
+      implementation 'com.github.OnapleRPG:Itemizer:V3.2'
   }
  ```
  * Use services 
