@@ -1,4 +1,4 @@
-# Itemizer  [![Build Status](https://travis-ci.org/OnapleRPG/Itemizer.svg?branch=master)](https://travis-ci.org/OnapleRPG/Itemizer) ![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=Itemizer&metric=alert_status)   [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) [![sponge version](https://img.shields.io/badge/sponge-7.2.0-yellow.svg)](https://www.spongepowered.org/)
+# Itemizer  ![Java CI](https://github.com/OnapleRPG/Itemizer/workflows/Java%20CI/badge.svg?branch=master) ![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=Itemizer&metric=alert_status)   [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) [![sponge version](https://img.shields.io/badge/sponge-7.2.0-yellow.svg)](https://www.spongepowered.org/)
 
 
 Itemizer is a Sponge Minecraft plugin that allows custom item creation. Store plenty of custom objects in configurations files.
@@ -248,7 +248,7 @@ you can check the [javadoc](https://onaplerpg.github.io/Itemizer/javadoc/) for m
 ### Services
 * **IItemService** : Give access to the object getters functions to a plugin.  
 
-   | return |  Method and  |
+   | Return |  Method  |
    | :--- | :--- |
    | `org.spongepowered.api.item.inventory.ItemStack` | 	`construct(ItemBean item)` |
    | `java.util.Optional<org.spongepowered.api.item.inventory.ItemStack>` |	`fetch(java.lang.String id)` |
