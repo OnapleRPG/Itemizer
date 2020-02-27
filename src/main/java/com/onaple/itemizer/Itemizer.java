@@ -40,7 +40,7 @@ import org.spongepowered.api.text.Text;
 import javax.inject.Inject;
 import java.io.IOException;
 
-@Plugin(id = "itemizer", name = "Itemizer", version = "3.0",
+@Plugin(id = "itemizer", name = "Itemizer", version = "3.2.1",
         description = "Custom item generation with crafting and pool system",
         url = "http://onaple.fr",
         authors = {"Zessirb", "Selki"})

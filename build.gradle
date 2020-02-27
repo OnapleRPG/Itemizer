@@ -25,11 +25,11 @@ targetCompatibility = 1.8
 versioning {
     // required (number)
     major = 3
-    minor = 0
-    patch = 0
+    minor = 2
+    patch = 1
 }
 group = 'com.onaple'
-version = versioning.name+'-'+versioning.build
+version = versioning.name
 
 repositories {
     mavenCentral()
