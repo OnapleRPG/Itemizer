@@ -123,28 +123,31 @@ don't be afraid all data in `item` are generated.
 
 A file named __*pools.conf*__ defines pools to select item randomly from.
 
-The root element must be __pools__.
-* An __id__ is used to enable a pool to be referenced.
-* __items__ is an array containing the items obtainable, it contains :
-    * A __probability__ between 0 and 1, giving the actual chances of having a given item. _The last item in a pool can have a probability of 1, it would then be the default drop_
-    * __ref__ is used as a reference to a configured item id (see _item creation_)
-    * __type__ will be used if _ref_ is absent or if no item were returned to generate an item with a given type
-
+The root element must be `pools`.
+* An `id` is used to enable a pool to be referenced.
+* `items` is an array containing the items obtainable, it contains :
+    * A `probability` between 0 and 1, giving the actual chances of having a given item. _The last item in a pool can have a probability of 1, it would then be the default drop_
+    * An `Item` reference, it could be its _name_ or its _ref_ 
+        * `ref` is used as a reference to a configured item id
+        * `type` will be used if _ref_ is absent or if no item were returned to generate an item with a given type
+    * Two quantity (optional) `maxQuantity` and `minDauntity` 
 ```
 pools = [
-    {
-        id: 1,
-        items: [
-            {
-                probability: 0.5,
-                type: "minecraft:cooked_porkchop"
-            },
-            {
-                probability: 0.2,
-                ref: 1
-            }
-        ]
-    }
+  {
+    id: 1,
+    items: [
+      {
+        probability: 0.5,
+        item : {name: "minecraft:cooked_porkchop"},
+        maxQuantity : 3, #default 1
+        minQuantity : 1  #default 1
+      },
+      {
+        probability: 0.2,
+        item : {ref: "training_stick"}
+      }
+    ]
+  }
 ]
 ```
 _The first pool of item has a 50% chance of getting a porkchop, 20% chance of getting the configured item with id 1, and 30% chance of getting nothing._
@@ -153,16 +156,16 @@ _The first pool of item has a 50% chance of getting a porkchop, 20% chance of ge
 
 A file named __*crafts.conf*__ defines new crafts to be implemented in game.
 
-The root element must be __crafts__.
-* An __id__ must be defined.
-* The __type__ can be of three types : *ShapelessCrafting*, *Smelting* or *ShapedCrafting*.
+The root element must be `crafts`.
+* An `id` must be defined.
+* The `type` can be of three types : *ShapelessCrafting*, *Smelting* or *ShapedCrafting*.
 * The result must be an object containing one of the following fields :
-    * Using __name__ followed by a string can be used to reference a minecraft item.
-    * Using __ref__ with a number or a string can be used to retrieve an item from Itemizer's items.
-* The __recipe__ is used for ShapelessCrafting and Smelting to define the item needed for the recipe. It must contain an object containing the following element :
-    * __name__ associated with a string to match a minecraft item
-* The __pattern__ is used for ShapedCrafting to define the pattern which will be used to craft an item *(An example is available below)*
-* The __ingredients__ are used to match the characters used in the pattern for a ShapedCrafting.
+    * Using `name` followed by a string can be used to reference a minecraft item.
+    * Using `ref` with a number or a string can be used to retrieve an item from Itemizer's items.
+* The `recipe` is used for ShapelessCrafting and Smelting to define the item needed for the recipe. It must contain an object containing the following element :
+    * `name` associated with a string to match a minecraft item
+* The `pattern` is used for ShapedCrafting to define the pattern which will be used to craft an item *(An example is available below)*
+* The `ingredients` are used to match the characters used in the pattern for a ShapedCrafting.
     * Each different character used in the pattern must be used as a key with the following object :
         * An object with "name" as a key and the item name as a value
 
