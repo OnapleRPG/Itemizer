@@ -156,7 +156,10 @@ A file named __*crafts.conf*__ defines new crafts to be implemented in game.
 
 The root element must be `crafts`.
 * An `id` must be defined.
-* The `type` can be of three types : *ShapelessCrafting*, *Smelting* or *ShapedCrafting*.
+* The `__class__` can be one of these tree :
+    * choose`com.onaple.itemizer.data.beans.recipes.ShapelessCrafting` if you want simple craft without shape.
+    * choose `com.onaple.itemizer.data.beans.recipes.Smelting` for smelting purpose.
+    *  more elaborated craft with shape , use `com.onaple.itemizer.data.beans.recipes.ShapedCrafting`
 * The result must be an object containing one of the following fields :
     * Using `name` followed by a string can be used to reference a minecraft item.
     * Using `ref` with a number or a string can be used to retrieve an item from Itemizer's items.
@@ -170,24 +173,24 @@ The root element must be `crafts`.
 ```
 crafts = [
   {
+    __class__ : "com.onaple.itemizer.data.beans.recipes.ShapelessCrafting"
     id : 1
-    type : "ShapelessCrafting"
     result : {ref : 1},
     recipe : {name : "stone_axe"}
   },
   {
+    __class__ : "com.onaple.itemizer.data.beans.recipes.Smelting"
     id : 2
-    type : "Smelting"
     result : {name : "coal"},
     recipe : {name : "cooked_porkchop"}
   },
   {
+    __class__ : "com.onaple.itemizer.data.beans.recipes.ShapedCrafting"
     id : 3
-    type : "ShapedCrafting"
-    result : {ref : 2},
+    result : {ref : "king_sword"},
     pattern : [" a "," a "," a "],
     ingredients : {
-      a : {name: "stick"},
+      a : {name: "minecraft:stick"},
     }
   }
 ]
