@@ -19,8 +19,6 @@ import java.util.Set;
 @Singleton
 public class ItemBuilder {
 
-    @Inject
-    java.util.logging.Logger logger;
 
     @Inject
     private ProbabilityFetcher probabilityFetcher;
@@ -35,7 +33,6 @@ public class ItemBuilder {
      */
     public ItemStack buildItemStack(ItemBean itemBean) {
         ItemStack item = itemBean.getItemStackSnapshot().createStack();
-        Optional<String> stringOptional = item.get(ItemizerKeys.ITEM_ID);
         setCustomDatamanipulators(item, itemBean.getThirdParties());
         item = applyAffix(item, itemBean);
         return item;
