@@ -156,38 +156,41 @@ A file named __*crafts.conf*__ defines new crafts to be implemented in game.
 
 The root element must be `crafts`.
 * An `id` must be defined.
-* The `type` can be of three types : *ShapelessCrafting*, *Smelting* or *ShapedCrafting*.
-* The result must be an object containing one of the following fields :
+* The `__class__` can be of three types : *com.onaple.itemizer.data.beans.recipes.ShapelessCrafting*, *com.onaple.itemizer.data.beans.recipes.Smelting* or *com.onaple.itemizer.data.beans.recipes.ShapedCrafting*.
+* Used in all crafting recipes the the result must be an object containing one of the following fields:
     * Using `name` followed by a string can be used to reference a minecraft item.
     * Using `ref` with a number or a string can be used to retrieve an item from Itemizer's items.
-* The `recipe` is used for ShapelessCrafting and Smelting to define the item needed for the recipe. It must contain an object containing the following element :
-    * `name` associated with a string to match a minecraft item
-* The `pattern` is used for ShapedCrafting to define the pattern which will be used to craft an item *(An example is available below)*
+* The `recipe` is used for ShapelessCrafting and Smelting only and is used to define the item needed for the recipe. It must contain an object containing one of the following fields:
+    * Using `name` associated with a string to match a minecraft item.
+    * Using `ref` with a number or a string for the desired Itemizer id of the item.
+* The `pattern` is used for ShapedCrafting only to define the pattern which will be used to craft an item *(An example is available and explained below)*
 * The `ingredients` are used to match the characters used in the pattern for a ShapedCrafting.
     * Each different character used in the pattern must be used as a key with the following object :
-        * An object with "name" as a key and the item name as a value
+        * An object with "name" as a key and the item name as a value (e.g: `{name: "minecraft:stick"}`)
+        * An object with "ref" as a key and the itemizer id as a value (e.g: `{ref: 1}`)
 
 ```
+
 crafts = [
   {
+    __class__ : "com.onaple.itemizer.data.beans.recipes.ShapelessCrafting"
     id : 1
-    type : "ShapelessCrafting"
     result : {ref : 1},
     recipe : {name : "stone_axe"}
   },
   {
+    __class__ : "com.onaple.itemizer.data.beans.recipes.Smelting"
     id : 2
-    type : "Smelting"
     result : {name : "coal"},
     recipe : {name : "cooked_porkchop"}
   },
   {
+    __class__ : "com.onaple.itemizer.data.beans.recipes.ShapedCrafting"
     id : 3
-    type : "ShapedCrafting"
-    result : {ref : 2},
+    result : {ref : "king_sword"},
     pattern : [" a "," a "," a "],
     ingredients : {
-      a : {name: "stick"},
+      a : {name: "minecraft:stick"},
     }
   }
 ]
