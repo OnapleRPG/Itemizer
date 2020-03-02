@@ -7,3 +7,4 @@ logs/latest.log
 scripts
 *.iml
 gradlew.bat
+gradle

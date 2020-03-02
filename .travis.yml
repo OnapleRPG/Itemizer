@@ -1,9 +1,7 @@
 language: java
+dist: trusty
 jdk:
-  - oraclejdk15
-
-services:
-  - docker
+  - oraclejdk8
 
 before_install:
   - gradle wrapper
