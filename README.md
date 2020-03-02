@@ -1,4 +1,4 @@
-# Itemizer  ![Java CI](https://github.com/OnapleRPG/Itemizer/workflows/Java%20CI/badge.svg?branch=master) ![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=Itemizer&metric=alert_status)   [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) [![sponge version](https://img.shields.io/badge/sponge-7.2.0-yellow.svg)](https://www.spongepowered.org/)
+# Itemizer  ![Java CI](https://github.com/OnapleRPG/Itemizer/workflows/Java%20CI/badge.svg?branch=master) [![Build Status](https://travis-ci.org/OnapleRPG/Itemizer.svg?branch=master)](https://travis-ci.org/OnapleRPG/Itemizer) ![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=Itemizer&metric=reliability_rating) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) [![sponge version](https://img.shields.io/badge/sponge-7.2.0-yellow.svg)](https://www.spongepowered.org/)
 
 
 Itemizer is a Sponge Minecraft plugin that allows custom item creation. Store plenty of custom objects in configurations files.
@@ -34,7 +34,7 @@ All configuration files use HOCON format. they are loaded at the plugin start. y
 > I higly recommend you to backup your files to avoid any loss.
 
 ### Global  configuration
-In the global configuration file you can change plugin settings : 
+In the global configuration file you can change plugin settings :
 * __RewriteParts__ instead of using default Minecraft notation for _enchantments_, _modifiers_ , _undreakable_ , _canMine_ .
 You can chose to rewrite them manually. set `False` to let default look or `True` to rewrite It.
 * __DefaulColor__ if you decide to rewrite a part you can chose the color of each elements.
@@ -42,7 +42,7 @@ You can chose to rewrite them manually. set `False` to let default look or `True
 * __ModifierRewrite__ (AttributeModifier like `generic.attackDamage`) you can rewrite his name.
 * __CanMineRewrite__ and __UnbreakableRewrite__ set the text of your choice for it.
 
-You can chose to edit the config file or use `/configure <Type> <Key> [value]` command. 
+You can chose to edit the config file or use `/configure <Type> <Key> [value]` command.
 
 __Be careful the command override the file change__
 
@@ -125,10 +125,10 @@ The root element must be `pools`.
 * An `id` is used to enable a pool to be referenced.
 * `items` is an array containing the items obtainable, it contains :
     * A `probability` between 0 and 1, giving the actual chances of having a given item. _The last item in a pool can have a probability of 1, it would then be the default drop_
-    * An `Item` reference, it could be its _name_ or its _ref_ 
+    * An `Item` reference, it could be its _name_ or its _ref_
         * `ref` is used as a reference to a configured item id
         * `type` will be used if _ref_ is absent or if no item were returned to generate an item with a given type
-    * Two quantity (optional) `maxQuantity` and `minDauntity` 
+    * Two quantity (optional) `maxQuantity` and `minDauntity`
 ```
 pools = [
   {
@@ -195,34 +195,34 @@ crafts = [
   }
 ]
 ```
-_The first craft requires a stone axe to craft the item referenced "1", the second craft enable us to cook a cooked_porkchop into a coal, 
+_The first craft requires a stone axe to craft the item referenced "1", the second craft enable us to cook a cooked_porkchop into a coal,
 and the third one is used to craft the item referenced "2" with three sticks aligned in a vertical centered line (notice the whitespaces before and after the "a")_
 
 ### Affix
 
-Affix are modifiers who can be applied to items. They are pre-registered in pools (different from the pools used for items). They are stored 
+Affix are modifiers who can be applied to items. They are pre-registered in pools (different from the pools used for items). They are stored
 in the `affix.conf` file as an HOCON file.
 The root is `affixes`, it contains a list of affix groups.  
-   
+
  A group is categorized by its `group` name.
-it's a schematic name only used for configuration like damage, speed, balanced, only_negative, etc... It will be 
+it's a schematic name only used for configuration like damage, speed, balanced, only_negative, etc... It will be
 used to attach a group to an item.
-   
+
  And then the multiples `tiers` of each affix.
  A tier is like a power level. `__class__` is the implementation of the affix, you can use your own
- (leave it as is if you don't know what that mean). 
-   
-   
+ (leave it as is if you don't know what that mean).
+
+
  You can set a `prefix` and `suffix` which modify the name item. Don't leave space before and after,
  these arguments will be set afterward.  
  The `probability` is the chance to choose this tiers more than another. the smaller it is, the less chance you have
  to get this tier. Be careful to stay under the probability of one otherwise the tier which total probability exceeds 1 will never get picked.
-   
+
  And then : the **attributes**, `attributes` are the modifiers of the data who change the item statistics.
  you have 4 properties , `name`, `slot`, `amount` and `operation`. value are the same than vanilla.
 If you want more details about *AttributeModifiers* check the Minecraft [wiki](https://minecraft.gamepedia.com/Attribute)
-  
-  
+
+
 ```
 affixes = [
      {
@@ -250,7 +250,7 @@ If you are willing to use **Itemizer** in your plugin development, we provide se
 you can also use it with js (like with customNPC).
 
 you can check the [javadoc](https://onaplerpg.github.io/Itemizer/javadoc/) for more information.
- 
+
 ### Services
 * **IItemService** : Give access to the object getters functions to a plugin.  
 
@@ -265,9 +265,9 @@ you can check the [javadoc](https://onaplerpg.github.io/Itemizer/javadoc/) for m
    | `void` |	`removeItem(org.spongepowered.api.entity.living.player.Player player, java.lang.String id, java.lang.Integer quantity)` |
    | `java.util.Optional<org.spongepowered.api.item.inventory.ItemStack>` |	`retrieve(java.lang.String id)` |
    | `java.util.Optional<org.spongepowered.api.item.inventory.ItemStack>` |	`retrieve(java.lang.String id, int qte)` |
-   
+
     ### Installation with Gradle
- 
+
  * Add [Jitpack](https://jitpack.io/) into your repositories
  ```
    repositories {
@@ -285,7 +285,7 @@ you can check the [javadoc](https://onaplerpg.github.io/Itemizer/javadoc/) for m
       implementation 'com.github.OnapleRPG:Itemizer:V3.2'
   }
  ```
- * Use services 
+ * Use services
  ```java
 Optional<IItemService> optionalIItemService = Sponge.getServiceManager().provide(IItemService.class);
             if (optionalIItemService.isPresent()) {
@@ -293,4 +293,3 @@ Optional<IItemService> optionalIItemService = Sponge.getServiceManager().provide
                 optionalItem = iItemService.retrieve(itemId);
             }
 ```
- 
