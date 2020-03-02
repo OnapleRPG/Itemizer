@@ -85,7 +85,12 @@ public class Itemizer {
         return itemService;
     }
 
-    private GlobalConfig globalConfig;
+    private static GlobalConfig globalConfig;
+
+
+    public static GlobalConfig getGlobalConfig(){
+        return globalConfig;
+    }
 
     public static Itemizer getItemizer() {
         return itemizer;
@@ -116,10 +121,6 @@ public class Itemizer {
 
     public static PluginContainer getInstance() {
         return Sponge.getPluginManager().getPlugin("itemizer").orElse(null);
-    }
-
-    public GlobalConfig getGlobalConfig() {
-        return globalConfig;
     }
 
     @Listener
@@ -307,7 +308,7 @@ public class Itemizer {
 
     private void loadGlobalConfig() {
         try {
-            this.globalConfig = configurationHandler.readGlobalConfig();
+            globalConfig = configurationHandler.readGlobalConfig();
 
         } catch (Exception e) {
             logger.error(e.toString());

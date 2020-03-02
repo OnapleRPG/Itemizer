@@ -1,16 +1,24 @@
 package com.onaple.itemizer.utils;
 
+import com.onaple.itemizer.GlobalConfig;
 import com.onaple.itemizer.Itemizer;
-import com.onaple.itemizer.ItemizerKeys;
 import com.onaple.itemizer.data.beans.ItemBean;
 import com.onaple.itemizer.data.beans.ItemNbtFactory;
 import com.onaple.itemizer.data.beans.affix.AffixFactory;
 import com.onaple.itemizer.probability.ProbabilityFetcher;
+import org.slf4j.Logger;
+import org.spongepowered.api.data.key.Keys;
+import org.spongepowered.api.item.enchantment.Enchantment;
 import org.spongepowered.api.item.inventory.ItemStack;
+import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.format.TextColor;
+import org.spongepowered.api.text.format.TextColors;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.Comparator;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
@@ -19,9 +27,14 @@ import java.util.Set;
 @Singleton
 public class ItemBuilder {
 
+    @Inject
+    Logger logger;
+
 
     @Inject
     private ProbabilityFetcher probabilityFetcher;
+
+    private GlobalConfig globalConfig = Itemizer.getGlobalConfig();
 
     private static final Random RANDOM = new Random();
 
@@ -35,7 +48,51 @@ public class ItemBuilder {
         ItemStack item = itemBean.getItemStackSnapshot().createStack();
         setCustomDatamanipulators(item, itemBean.getThirdParties());
         item = applyAffix(item, itemBean);
+        rewrite(item);
         return item;
+    }
+
+    private ItemStack rewrite(ItemStack itemStack) {
+        logger.info("rewrite flags {}",globalConfig.getHiddenFlags());
+        List<Text> lore = itemStack.get(Keys.ITEM_LORE).orElse(new ArrayList<>());
+        itemStack.offer(Keys.HIDE_ATTRIBUTES, globalConfig.getHiddenFlags().get("Attributes_modifiers"));
+        itemStack.offer(Keys.HIDE_CAN_DESTROY, globalConfig.getHiddenFlags().get("CanDestroy"));
+        itemStack.offer(Keys.HIDE_CAN_PLACE, globalConfig.getHiddenFlags().get("CanPlaceOn"));
+        Boolean enchantments = globalConfig.getHiddenFlags().get("Enchantments");
+        if(enchantments){
+            itemStack.offer(Keys.HIDE_ENCHANTMENTS, enchantments);
+            rewriteEnchantment(itemStack,lore);
+        }
+        itemStack.offer(Keys.HIDE_MISCELLANEOUS, globalConfig.getHiddenFlags().get("Others"));
+        Boolean unbreakable = globalConfig.getHiddenFlags().get("Unbreakable");
+        if(unbreakable){
+            itemStack.offer(Keys.HIDE_UNBREAKABLE, unbreakable);
+            rewirteUnbreakable(itemStack,lore);
+        }
+        itemStack.offer(Keys.ITEM_LORE,lore);
+        return itemStack;
+    }
+
+    private void rewirteUnbreakable(ItemStack itemStack, List<Text> lore) {
+        if (itemStack.get(Keys.UNBREAKABLE).orElse(false)) {
+            TextColor unbreakableColor = globalConfig.getColorMap().getOrDefault("unbreakable", TextColors.WHITE);
+            lore.add(Text.of(globalConfig.getUnbreakableRewrite(), unbreakableColor));
+        }
+    }
+
+    private void rewriteEnchantment(ItemStack itemStack, List<Text> lore) {
+        List<Enchantment> enchantments = itemStack.get(Keys.ITEM_ENCHANTMENTS).orElse(Collections.emptyList());
+        TextColor enchantColor = globalConfig.getColorMap().getOrDefault("enchantments", TextColors.WHITE);
+        for (Enchantment enchantment : enchantments) {
+            String enchantmentName = globalConfig.getEnchantRewrite().get(enchantment.getType());
+            if (enchantmentName != null) {
+                lore.add(Text.of(enchantmentName + " " + enchantment.getLevel(), enchantColor));
+            }
+        }
+    }
+
+    private void rewriteAttribute(ItemStack itemStack) {
+
     }
 
 

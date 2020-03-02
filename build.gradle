@@ -27,8 +27,8 @@ targetCompatibility = 1.8
 versioning {
     // required (number)
     major = 3
-    minor = 2
-    patch = 1
+    minor = 3
+    patch = 0
 }
 group = 'com.onaple'
 version = versioning.name

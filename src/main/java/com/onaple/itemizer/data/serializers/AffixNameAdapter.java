@@ -21,7 +21,7 @@ public class AffixNameAdapter implements TypeSerializer<AffixBean> {
                 .stream()
                 .filter(affixBean -> affixBean.getGroupName().equals(groupName))
                 .findFirst()
-                .orElseThrow(ObjectMappingException::new);
+                .orElseThrow(() -> new ObjectMappingException(String.format("No group name called [%s].",groupName)));
     }
 
     @Override
