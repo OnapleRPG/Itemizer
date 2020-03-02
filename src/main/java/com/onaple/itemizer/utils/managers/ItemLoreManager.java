@@ -2,10 +2,7 @@ package com.onaple.itemizer.utils.managers;
 
 import com.onaple.itemizer.data.beans.ItemBean;
 import com.onaple.itemizer.utils.ItemDataManager;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.text.Text;
@@ -16,10 +13,29 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Setter
-@Getter
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+
 public class ItemLoreManager implements ItemDataManager {
+
+    private ItemLoreManager(ItemBean itemBean, List<Text> lore) {
+        this.itemBean = itemBean;
+        this.lore = lore;
+    }
+
+    public ItemBean getItemBean() {
+        return itemBean;
+    }
+
+    public void setItemBean(ItemBean itemBean) {
+        this.itemBean = itemBean;
+    }
+
+    public List<Text> getLore() {
+        return lore;
+    }
+
+    public void setLore(List<Text> lore) {
+        this.lore = lore;
+    }
 
     private ItemBean itemBean;
     private ItemLoreManager(ItemBean itemBean){

@@ -7,8 +7,6 @@ import com.onaple.itemizer.data.beans.affix.AffixFactory;
 import com.onaple.itemizer.data.manipulators.IdDataManipulator;
 import com.onaple.itemizer.data.serializers.AffixNameAdapter;
 import cz.neumimto.config.blackjack.and.hookers.annotations.CustomAdapter;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import ninja.leaping.configurate.objectmapping.Setting;
 import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable;
 import org.spongepowered.api.data.DataContainer;
@@ -25,9 +23,42 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 @ConfigSerializable
-@Data
-@NoArgsConstructor
 public class ItemBean {
+
+    public ItemBean() {
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public ItemStackSnapshot getItemStackSnapshot() {
+        return itemStackSnapshot;
+    }
+
+    public void setItemStackSnapshot(ItemStackSnapshot itemStackSnapshot) {
+        this.itemStackSnapshot = itemStackSnapshot;
+    }
+
+    public Set<ItemNbtFactory> getThirdParties() {
+        return thirdParties;
+    }
+
+    public void setThirdParties(Set<ItemNbtFactory> thirdParties) {
+        this.thirdParties = thirdParties;
+    }
+
+    public AffixBean getAffix() {
+        return affix;
+    }
+
+    public void setAffix(AffixBean affix) {
+        this.affix = affix;
+    }
 
     /** ID of the item in config **/
     @Setting("id")

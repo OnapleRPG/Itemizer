@@ -11,7 +11,6 @@ import com.onaple.itemizer.exception.BadWorldNameException;
 import com.onaple.itemizer.exception.ItemNotPresentException;
 import com.onaple.itemizer.probability.ProbabilityFetcher;
 import com.onaple.itemizer.utils.ItemBuilder;
-import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.NotImplementedException;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.key.Keys;
@@ -31,8 +30,10 @@ import javax.inject.Singleton;
 import java.util.Optional;
 
 @Singleton
-@NoArgsConstructor
 public class ItemService implements IItemService {
+
+    public ItemService() {
+    }
 
     @Inject
     private ItemBuilder itemBuilder;

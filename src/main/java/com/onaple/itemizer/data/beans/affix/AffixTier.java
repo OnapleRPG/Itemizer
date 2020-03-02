@@ -3,9 +3,7 @@ package com.onaple.itemizer.data.beans.affix;
 import com.onaple.itemizer.GlobalConfig;
 import com.onaple.itemizer.data.beans.AttributeBean;
 import com.onaple.itemizer.data.beans.ItemBean;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
 import ninja.leaping.configurate.objectmapping.Setting;
 import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable;
 import org.spongepowered.api.data.DataContainer;
@@ -21,10 +19,22 @@ import java.util.List;
 import java.util.UUID;
 
 @ConfigSerializable
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class AffixTier extends AbstractAffix {
+
+    public AffixTier() {
+    }
+
+    public AffixTier(List<AttributeBean> attributes) {
+        this.attributes = attributes;
+    }
+
+    public List<AttributeBean> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(List<AttributeBean> attributes) {
+        this.attributes = attributes;
+    }
 
     @Setting("attributes")
     private List<AttributeBean> attributes;

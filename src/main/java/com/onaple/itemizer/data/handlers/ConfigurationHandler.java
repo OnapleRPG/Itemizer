@@ -15,7 +15,6 @@ import com.onaple.itemizer.data.beans.PoolsRoot;
 import com.onaple.itemizer.data.manipulators.IdDataManipulator;
 import com.onaple.itemizer.data.serializers.ItemBeanRefOrItemIdAdapter;
 import com.onaple.itemizer.utils.ConfigUtils;
-import lombok.NoArgsConstructor;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
@@ -41,8 +40,10 @@ import java.util.Optional;
 import static com.onaple.itemizer.Itemizer.getLogger;
 
 @Singleton
-@NoArgsConstructor
 public class ConfigurationHandler {
+
+    public ConfigurationHandler() {
+    }
 
     @Inject
     @ConfigDir(sharedRoot = true)

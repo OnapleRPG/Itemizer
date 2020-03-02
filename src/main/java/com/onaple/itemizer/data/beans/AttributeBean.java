@@ -1,14 +1,48 @@
 package com.onaple.itemizer.data.beans;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
 import ninja.leaping.configurate.objectmapping.Setting;
 import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable;
 
 @ConfigSerializable
-@Data
-@NoArgsConstructor
+
 public class AttributeBean {
+
+    public AttributeBean() {
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSlot() {
+        return slot;
+    }
+
+    public void setSlot(String slot) {
+        this.slot = slot;
+    }
+
+    public float getAmount() {
+        return amount;
+    }
+
+    public void setAmount(float amount) {
+        this.amount = amount;
+    }
+
+    public int getOperation() {
+        return operation;
+    }
+
+    public void setOperation(int operation) {
+        this.operation = operation;
+    }
+
     /**
      * Name of the Attribute
      */
