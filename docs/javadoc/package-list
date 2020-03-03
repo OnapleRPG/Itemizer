@@ -1,7 +1,7 @@
 com.onaple.itemizer
 com.onaple.itemizer.commands
 com.onaple.itemizer.commands.elements
-com.onaple.itemizer.commands.globalConfiguration
+com.onaple.itemizer.commands.global
 com.onaple.itemizer.commands.manager
 com.onaple.itemizer.data.access
 com.onaple.itemizer.data.beans

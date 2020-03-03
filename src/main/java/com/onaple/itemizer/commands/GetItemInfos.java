@@ -40,47 +40,52 @@ public class GetItemInfos implements CommandExecutor {
             if (!objectInHandOpt.isPresent()) {
                 src.sendMessage(Text.of("You don't have any item in hand, to analyse a item put it in your main hand"));
                 return CommandResult.empty();
-            } else {
-                ItemStack objectToAnalyse = objectInHandOpt.get();
-                ItemBean bean = Itemizer.getItemDAO().getItem(ItemBean.getId(objectToAnalyse)).get();
-
-                ItemLoreManager loreManager = ItemLoreManager.of(bean);
-
-                Itemizer.getLogger().info("[potion type ={}]", objectToAnalyse.supports(Keys.POTION_TYPE));
-
-                Itemizer.getLogger().info("[{}]",objectToAnalyse.getContainers());
-
-                List<Text> content = new ArrayList<>();
-                content.add(displayName(objectToAnalyse));
-                if(loreManager.supports()) {
-                    content.add(loreManager.showResume());
-                }
-                content.add(displayEnchantmentsList(objectToAnalyse));
-                content.add(displayModifier(bean));
-                content.add(displayDurability(objectToAnalyse));
-               PaginationList.builder()
-                        .title(Text.of(TextColors.GOLD, TextStyles.BOLD, bean.getId()))
-                        .header(Text.of("Object Characteristics"))
-                        .contents(content)
-                       .linesPerPage(3)
-                        .footer(
-                                Text.builder().append(
-                                        loreManager.showModifyButton(),
-                                        Text.builder("[Modifiers]").color(TextColors.RED).onHover(TextActions.showText(Text.of("Add or Remove enchantments.")))
-                                                .onClick(TextActions.suggestCommand("/suggestion"))
-                                                .build(),
-                                        Text.builder("[Miners]").color(TextColors.GRAY).onHover(TextActions.showText(Text.of("Add or Remove enchantments.")))
-                                                .onClick(TextActions.suggestCommand("/suggestion"))
-                                                .build(),
-                                        Text.builder("[Durability]").color(TextColors.YELLOW).onHover(TextActions.showText(Text.of("Add or Remove enchantments.")))
-                                                .onClick(TextActions.suggestCommand("/suggestion"))
-                                                .build()
-                                ).build()
-                        )
-                        .build().sendTo(src);
-
-                return CommandResult.success();
             }
+            ItemStack objectToAnalyse = objectInHandOpt.get();
+            Optional<ItemBean> itemizerElementOptional = Itemizer.getItemDAO().getItem(ItemBean.getId(objectToAnalyse));
+            if (!itemizerElementOptional.isPresent()) {
+                src.sendMessage(Text.of("This object is not register in Itemizer. use /register first"));
+                return CommandResult.empty();
+            }
+            ItemBean bean = itemizerElementOptional.get();
+
+            ItemLoreManager loreManager = ItemLoreManager.of(bean);
+
+            Itemizer.getLogger().info("[potion type ={}]", objectToAnalyse.supports(Keys.POTION_TYPE));
+
+            Itemizer.getLogger().info("[{}]", objectToAnalyse.getContainers());
+
+            List<Text> content = new ArrayList<>();
+            content.add(displayName(objectToAnalyse));
+            if (loreManager.supports()) {
+                content.add(loreManager.showResume());
+            }
+            content.add(displayEnchantmentsList(objectToAnalyse));
+            content.add(displayModifier(bean));
+            content.add(displayDurability(objectToAnalyse));
+            PaginationList.builder()
+                    .title(Text.of(TextColors.GOLD, TextStyles.BOLD, bean.getId()))
+                    .header(Text.of("Object Characteristics"))
+                    .contents(content)
+                    .linesPerPage(3)
+                    .footer(
+                            Text.builder().append(
+                                    loreManager.showModifyButton(),
+                                    Text.builder("[Modifiers]").color(TextColors.RED).onHover(TextActions.showText(Text.of("Add or Remove enchantments.")))
+                                            .onClick(TextActions.suggestCommand("/suggestion"))
+                                            .build(),
+                                    Text.builder("[Miners]").color(TextColors.GRAY).onHover(TextActions.showText(Text.of("Add or Remove enchantments.")))
+                                            .onClick(TextActions.suggestCommand("/suggestion"))
+                                            .build(),
+                                    Text.builder("[Durability]").color(TextColors.YELLOW).onHover(TextActions.showText(Text.of("Add or Remove enchantments.")))
+                                            .onClick(TextActions.suggestCommand("/suggestion"))
+                                            .build()
+                            ).build()
+                    )
+                    .build().sendTo(src);
+
+            return CommandResult.success();
+
         }
         return CommandResult.empty();
     }
@@ -104,16 +109,17 @@ public class GetItemInfos implements CommandExecutor {
     }
 
     private Text displayModifier(ItemBean input) {
-           List<AttributeBean> attributes = input.getItemAttribute();
+        List<AttributeBean> attributes = input.getItemAttribute();
         Text.Builder textBuilder = Text.builder().append(Text.of(RED, "Modifiers : "));
-            List<Text> names =
-                    attributes.stream().map(attribute -> Text.of(attribute.getName() + " " + attribute.getCompiledAmount())).collect(Collectors.toList());
-            textBuilder.append(names);
+        List<Text> names =
+                attributes.stream().map(attribute -> Text.of(attribute.getName() + " " + attribute.getCompiledAmount())).collect(Collectors.toList());
+        textBuilder.append(names);
         return textBuilder.build();
     }
-    private Text displayDurability(ItemStack input){
+
+    private Text displayDurability(ItemStack input) {
         Optional<UseLimitProperty> maxDurability = input.getProperty(UseLimitProperty.class);
-        if(maxDurability.isPresent()) {
+        if (maxDurability.isPresent()) {
             Integer durability = input.get(Keys.ITEM_DURABILITY).orElse(0);
 
             Boolean unbreakable = input.get(Keys.UNBREAKABLE).orElse(false);

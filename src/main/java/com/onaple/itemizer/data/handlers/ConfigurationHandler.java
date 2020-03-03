@@ -76,7 +76,7 @@ public class ConfigurationHandler {
 
     public void createItemizerDirectory() {
         Path configPath = Paths.get(configDir + "/itemizer/");
-        if (!Files.exists(configPath)) {
+        if (!configPath.toFile().exists()) {
             try {
                 Files.createDirectories(configPath);
             } catch (IOException e) {
@@ -119,7 +119,7 @@ public class ConfigurationHandler {
      */
     public int readCraftConfiguration() throws ObjectMappingException, IOException {
         craftList.clear();
-        craftList.addAll(readConfiguration("craft.conf", CraftsRoot.class).getCraftingRecipes());
+        craftList.addAll(readConfiguration("crafts.conf", CraftsRoot.class).getCraftingRecipes());
         return craftList.size();
     }
 

@@ -1,7 +1,6 @@
-package com.onaple.itemizer.commands.globalConfiguration;
+package com.onaple.itemizer.commands.global;
 
 import com.onaple.itemizer.Itemizer;
-import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
@@ -11,7 +10,6 @@ import org.spongepowered.api.item.enchantment.EnchantmentType;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
-import java.util.Map;
 import java.util.Optional;
 
 public class ConfigureEnchantCommand implements CommandExecutor {
