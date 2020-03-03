@@ -50,7 +50,15 @@ public abstract class AbstractAffix implements AffixFactory {
     public ItemStack apply(ItemStack itemStack) {
         String name = itemStack.get(Keys.DISPLAY_NAME).map(Text::toPlain).orElse(itemStack.getType().getTranslation().get());
         TextFormat textFormat = itemStack.get(Keys.DISPLAY_NAME).map(text -> text.getFormat()).orElse(TextFormat.NONE);
-        itemStack.offer(Keys.DISPLAY_NAME, Text.of(getPrefix()+ " " + name +" " + getSuffix(),textFormat));
+        if(getPrefix()!= null && getSuffix() != null){
+            itemStack.offer(Keys.DISPLAY_NAME, Text.of(getPrefix()+ " " + name +" " + getSuffix(),textFormat));
+        }else if(getSuffix()!= null) {
+
+            itemStack.offer(Keys.DISPLAY_NAME, Text.of(name +" " + getSuffix(),textFormat));
+        }else if(getPrefix()!= null){
+
+            itemStack.offer(Keys.DISPLAY_NAME, Text.of(getPrefix()+ " " + name,textFormat));
+        }
         return itemStack;
     }
 }
