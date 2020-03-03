@@ -10,6 +10,7 @@ import org.spongepowered.api.text.format.TextColor;
 import java.util.Map;
 
 import javax.inject.Singleton;
+import javax.xml.stream.FactoryConfigurationError;
 
 @Singleton
 @ConfigSerializable
@@ -41,7 +42,7 @@ public class GlobalConfig {
 
     @Setting("RewriteParts")
     @CustomAdapter(HiddenFlagsAdapter.class)
-    private Map<String, Boolean> hiddenFlags;
+    private Map<Flags, Boolean> hiddenFlags;
 
     @Setting("EnchantRewrite")
     private Map<EnchantmentType, String> enchantRewrite;
@@ -57,13 +58,6 @@ public class GlobalConfig {
 
     @Setting("DefaultColor")
     private Map<RewriteFlagColorList, TextColor> colorMap;
-
-    /*
-    private Map<String,String> rewriteChoice = new HashMap<String,String>(){{
-        put("unbreakable","UnbreakableRewrite");
-        put("canMine","CanMineRewrite");
-    }};
-    */
 
     private int hiddenFlagsValue;
 
@@ -91,7 +85,7 @@ public class GlobalConfig {
         return hiddenFlagsValue;
     }
 
-    public Map<String, Boolean> getHiddenFlags() {
+    public Map<Flags, Boolean> getHiddenFlags() {
         return hiddenFlags;
     }
 

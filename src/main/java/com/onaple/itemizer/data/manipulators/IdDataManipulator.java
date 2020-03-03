@@ -19,7 +19,7 @@ import java.util.Optional;
 
 public class IdDataManipulator extends AbstractSingleData<String, IdDataManipulator, IdDataManipulator.Immutable> {
 
-    public static int CONTENT_VERSION = 1;
+    public static final int CONTENT_VERSION = 1;
 
     public IdDataManipulator(Key<? extends Value<String>> usedKey, String value) {
         super(usedKey, value);
@@ -49,7 +49,8 @@ public class IdDataManipulator extends AbstractSingleData<String, IdDataManipula
 
     public Optional<IdDataManipulator> from(DataView view) {
         if (view.contains(ItemizerKeys.ITEM_ID.getQuery())) {
-            setValue(view.getString(ItemizerKeys.ITEM_ID.getQuery()).get());
+            Optional<String> idValue = view.getString(ItemizerKeys.ITEM_ID.getQuery());
+            idValue.ifPresent(this::setValue);
             return Optional.of(this);
         } else {
             return Optional.empty();

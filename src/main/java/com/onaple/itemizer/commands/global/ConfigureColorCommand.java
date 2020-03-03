@@ -1,4 +1,4 @@
-package com.onaple.itemizer.commands.globalConfiguration;
+package com.onaple.itemizer.commands.global;
 
 import com.onaple.itemizer.GlobalConfig;
 import com.onaple.itemizer.Itemizer;
@@ -11,7 +11,6 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColor;
 import org.spongepowered.api.text.format.TextColors;
 
-import java.util.Map;
 import java.util.Optional;
 
 public class ConfigureColorCommand implements CommandExecutor {

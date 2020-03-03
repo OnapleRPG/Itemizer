@@ -9,7 +9,7 @@ import org.spongepowered.api.util.TypeTokens;
 public class ItemizerKeys {
 
 
-    public static Key<Value<String>> ITEM_ID;
+    public final static Key<Value<String>> ITEM_ID;
     private ItemizerKeys() {}
     static void dummy() {} // invoke static constructor
     static {

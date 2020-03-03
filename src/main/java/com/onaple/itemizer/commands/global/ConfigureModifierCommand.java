@@ -1,17 +1,14 @@
-package com.onaple.itemizer.commands.globalConfiguration;
+package com.onaple.itemizer.commands.global;
 
 import com.onaple.itemizer.Itemizer;
-import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.spec.CommandExecutor;
-import org.spongepowered.api.item.enchantment.EnchantmentType;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
-import java.util.Map;
 import java.util.Optional;
 
 public class ConfigureModifierCommand implements CommandExecutor{
@@ -26,9 +23,7 @@ public class ConfigureModifierCommand implements CommandExecutor{
         if (keyOpt.isPresent()) {
                 if (valueOpt.isPresent()) {
                     Itemizer.getItemizer().getGlobalConfig().getModifierRewrite()
-                            .putIfAbsent(keyOpt.get(), valueOpt.get().toString());
-                    Itemizer.getItemizer().getGlobalConfig().getModifierRewrite()
-                            .replace(keyOpt.get(), valueOpt.get().toString());
+                            .put(keyOpt.get(), valueOpt.get().toString());
                 } else {
                     String value = Itemizer.getItemizer().getGlobalConfig().getModifierRewrite().get(keyOpt.get());
                     if (value != null) {

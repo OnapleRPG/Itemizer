@@ -92,7 +92,6 @@ public class ItemBean {
     }
     private static Optional<Object> getCustomData(ItemStack target, String queryPath) {
         List<String> queryList ;
-
         if(queryPath.contains(".")) {
             String[] queries = queryPath.split(".");
             queryList = Arrays.stream(queries).collect(Collectors.toList());
@@ -170,8 +169,11 @@ public class ItemBean {
 
         ItemBean itemBean = new ItemBean();
         itemBean.setId(itemId);
-        itemStack.offer(itemStack.getOrCreate(IdDataManipulator.class).get());
-        itemStack.offer(ItemizerKeys.ITEM_ID, itemId);
+        Optional<IdDataManipulator> idManipulatorOpt = itemStack.getOrCreate(IdDataManipulator.class);
+        if (idManipulatorOpt.isPresent()) {
+            itemStack.offer(idManipulatorOpt.get());
+            itemStack.offer(ItemizerKeys.ITEM_ID, itemId);
+        }
         //item type
         itemBean.setItemStackSnapshot(itemStack.createSnapshot());
         return itemBean;

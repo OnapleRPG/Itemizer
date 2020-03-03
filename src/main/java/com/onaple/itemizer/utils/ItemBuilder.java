@@ -34,9 +34,10 @@ public class ItemBuilder {
     @Inject
     private ProbabilityFetcher probabilityFetcher;
 
-    private GlobalConfig globalConfig = Itemizer.getGlobalConfig();
+    private GlobalConfig globalConfig;
 
     private static final Random RANDOM = new Random();
+
 
     /**
      * Build an itemstack from an ItemBean
@@ -53,7 +54,7 @@ public class ItemBuilder {
     }
 
     private ItemStack rewrite(ItemStack itemStack) {
-        logger.info("rewrite flags {}",globalConfig.getHiddenFlags());
+        globalConfig = Itemizer.getGlobalConfig();
         List<Text> lore = itemStack.get(Keys.ITEM_LORE).orElse(new ArrayList<>());
         itemStack.offer(Keys.HIDE_ATTRIBUTES, globalConfig.getHiddenFlags().get("Attributes_modifiers"));
         itemStack.offer(Keys.HIDE_CAN_DESTROY, globalConfig.getHiddenFlags().get("CanDestroy"));
