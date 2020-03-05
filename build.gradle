@@ -58,6 +58,11 @@ sonarqube {
         property "sonar.host.url", "https://sonarcloud.io/"
     }
 }
+jar {
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
 
 allprojects {
     gradle.projectsEvaluated {

@@ -2,6 +2,7 @@ package com.onaple.itemizer.utils;
 
 import com.onaple.itemizer.GlobalConfig;
 import com.onaple.itemizer.Itemizer;
+import com.onaple.itemizer.data.beans.AttributeBean;
 import com.onaple.itemizer.data.beans.ItemBean;
 import com.onaple.itemizer.data.beans.ItemNbtFactory;
 import com.onaple.itemizer.data.beans.affix.AffixFactory;
@@ -59,15 +60,13 @@ public class ItemBuilder {
         itemStack.offer(Keys.HIDE_ATTRIBUTES, globalConfig.getHiddenFlags().get("Attributes_modifiers"));
         itemStack.offer(Keys.HIDE_CAN_DESTROY, globalConfig.getHiddenFlags().get("CanDestroy"));
         itemStack.offer(Keys.HIDE_CAN_PLACE, globalConfig.getHiddenFlags().get("CanPlaceOn"));
-        Boolean enchantments = globalConfig.getHiddenFlags().get("Enchantments");
-        if(enchantments){
-            itemStack.offer(Keys.HIDE_ENCHANTMENTS, enchantments);
+        if(globalConfig.getHiddenFlags().get("Enchantments")){
+            itemStack.offer(Keys.HIDE_ENCHANTMENTS, true);
             rewriteEnchantment(itemStack,lore);
         }
         itemStack.offer(Keys.HIDE_MISCELLANEOUS, globalConfig.getHiddenFlags().get("Others"));
-        Boolean unbreakable = globalConfig.getHiddenFlags().get("Unbreakable");
-        if(unbreakable){
-            itemStack.offer(Keys.HIDE_UNBREAKABLE, unbreakable);
+        if(globalConfig.getHiddenFlags().get("Unbreakable")){
+            itemStack.offer(Keys.HIDE_UNBREAKABLE, true);
             rewirteUnbreakable(itemStack,lore);
         }
         itemStack.offer(Keys.ITEM_LORE,lore);

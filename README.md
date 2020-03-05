@@ -125,9 +125,10 @@ The root element must be `pools`.
 * An `id` is used to enable a pool to be referenced.
 * `items` is an array containing the items obtainable, it contains :
     * A `probability` between 0 and 1, giving the actual chances of having a given item. _The last item in a pool can have a probability of 1, it would then be the default drop_
-    * An `Item` reference, it could be its _name_ or its _ref_
+    * An `Item` reference, it could be its _name_ , its _ref_ or directly is _type_
         * `ref` is used as a reference to a configured item id
-        * `type` will be used if _ref_ is absent or if no item were returned to generate an item with a given type
+        * `name` will be used if _ref_ is absent or if no item were returned to generate an item with a given type
+        * you can use `type` instead of the above both to set a full item configuration (same as item in _item property_ in item.conf) 
     * Two quantity (optional) `maxQuantity` and `minDauntity`
 ```
 pools = [
