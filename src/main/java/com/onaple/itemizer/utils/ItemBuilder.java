@@ -39,7 +39,6 @@ public class ItemBuilder {
 
     private static final Random RANDOM = new Random();
 
-
     /**
      * Build an itemstack from an ItemBean
      *
