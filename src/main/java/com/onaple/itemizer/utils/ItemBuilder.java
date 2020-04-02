@@ -2,7 +2,6 @@ package com.onaple.itemizer.utils;
 
 import com.onaple.itemizer.GlobalConfig;
 import com.onaple.itemizer.Itemizer;
-import com.onaple.itemizer.data.beans.AttributeBean;
 import com.onaple.itemizer.data.beans.ItemBean;
 import com.onaple.itemizer.data.beans.ItemNbtFactory;
 import com.onaple.itemizer.data.beans.affix.AffixFactory;
@@ -56,10 +55,10 @@ public class ItemBuilder {
     private ItemStack rewrite(ItemStack itemStack) {
         globalConfig = Itemizer.getGlobalConfig();
         List<Text> lore = itemStack.get(Keys.ITEM_LORE).orElse(new ArrayList<>());
-        itemStack.offer(Keys.HIDE_ATTRIBUTES, globalConfig.getHiddenFlags().get("Attributes_modifiers"));
-        itemStack.offer(Keys.HIDE_CAN_DESTROY, globalConfig.getHiddenFlags().get("CanDestroy"));
-        itemStack.offer(Keys.HIDE_CAN_PLACE, globalConfig.getHiddenFlags().get("CanPlaceOn"));
-        if(globalConfig.getHiddenFlags().get("Enchantments")){
+        itemStack.offer(Keys.HIDE_ATTRIBUTES, globalConfig.getHiddenFlags().get(GlobalConfig.Flags.Attributes_modifiers));
+        itemStack.offer(Keys.HIDE_CAN_DESTROY, globalConfig.getHiddenFlags().get(GlobalConfig.Flags.CanDestroy));
+        itemStack.offer(Keys.HIDE_CAN_PLACE, globalConfig.getHiddenFlags().get(GlobalConfig.Flags.CanPlaceOn));
+        if(globalConfig.getHiddenFlags().get(GlobalConfig.Flags.Enchantments)){
             itemStack.offer(Keys.HIDE_ENCHANTMENTS, true);
             rewriteEnchantment(itemStack,lore);
         }
@@ -74,14 +73,14 @@ public class ItemBuilder {
 
     private void rewirteUnbreakable(ItemStack itemStack, List<Text> lore) {
         if (itemStack.get(Keys.UNBREAKABLE).orElse(false)) {
-            TextColor unbreakableColor = globalConfig.getColorMap().getOrDefault("unbreakable", TextColors.WHITE);
+            TextColor unbreakableColor = globalConfig.getColorMap().getOrDefault(GlobalConfig.RewriteFlag.unbreakable, TextColors.WHITE);
             lore.add(Text.of(globalConfig.getUnbreakableRewrite(), unbreakableColor));
         }
     }
 
     private void rewriteEnchantment(ItemStack itemStack, List<Text> lore) {
         List<Enchantment> enchantments = itemStack.get(Keys.ITEM_ENCHANTMENTS).orElse(Collections.emptyList());
-        TextColor enchantColor = globalConfig.getColorMap().getOrDefault("enchantments", TextColors.WHITE);
+        TextColor enchantColor = globalConfig.getColorMap().getOrDefault(GlobalConfig.RewriteFlag.enchantments, TextColors.WHITE);
         for (Enchantment enchantment : enchantments) {
             String enchantmentName = globalConfig.getEnchantRewrite().get(enchantment.getType());
             if (enchantmentName != null) {

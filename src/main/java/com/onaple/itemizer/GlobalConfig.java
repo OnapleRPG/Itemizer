@@ -7,10 +7,8 @@ import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable;
 import org.spongepowered.api.item.enchantment.EnchantmentType;
 import org.spongepowered.api.text.format.TextColor;
 
-import java.util.Map;
-
 import javax.inject.Singleton;
-import javax.xml.stream.FactoryConfigurationError;
+import java.util.Map;
 
 @Singleton
 @ConfigSerializable
@@ -25,7 +23,7 @@ public class GlobalConfig {
         Others;
     }
 
-    public enum RewriteFlagColorList{
+    public enum RewriteFlag {
         attributesModifiersNegavite,
         attributesModifiersPositive,
         canDestroy,
@@ -57,7 +55,7 @@ public class GlobalConfig {
     private String CanMineRewrite;
 
     @Setting("DefaultColor")
-    private Map<RewriteFlagColorList, TextColor> colorMap;
+    private Map<RewriteFlag, TextColor> colorMap;
 
     private int hiddenFlagsValue;
 
@@ -69,7 +67,7 @@ public class GlobalConfig {
         return modifierRewrite;
     }
 
-    public Map<RewriteFlagColorList, TextColor> getColorMap() {
+    public Map<RewriteFlag, TextColor> getColorMap() {
         return colorMap;
     }
 

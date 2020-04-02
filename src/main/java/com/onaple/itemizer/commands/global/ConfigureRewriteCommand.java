@@ -39,7 +39,7 @@ public class ConfigureRewriteCommand implements CommandExecutor {
                     src.sendMessage(Text.builder(value.toString()).color(TextColors.GOLD).build());
                 }
             } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-               Itemizer.getLogger().error("{}",e);
+               Itemizer.getLogger().error("",e);
             }
         } else {
             src.sendMessage(Text.builder("Specify a key").color(TextColors.RED).build());

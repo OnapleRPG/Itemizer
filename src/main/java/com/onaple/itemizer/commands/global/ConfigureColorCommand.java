@@ -17,7 +17,7 @@ public class ConfigureColorCommand implements CommandExecutor {
 
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-        Optional<GlobalConfig.RewriteFlagColorList> keyOpt = args.<GlobalConfig.RewriteFlagColorList>getOne("Key");
+        Optional<GlobalConfig.RewriteFlag> keyOpt = args.<GlobalConfig.RewriteFlag>getOne("Key");
         Optional<TextColor> valueOpt = args.getOne("Color");
 
 

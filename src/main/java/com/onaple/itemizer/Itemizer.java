@@ -285,7 +285,7 @@ public class Itemizer {
                 .description(Text.of("Update global color configuration."))
                 .arguments(
                         GenericArguments.onlyOne(
-                                GenericArguments.enumValue(Text.of("Key"), GlobalConfig.RewriteFlagColorList.class)),
+                                GenericArguments.enumValue(Text.of("Key"), GlobalConfig.RewriteFlag.class)),
                         GenericArguments.optional(
                                 GenericArguments.catalogedElement(Text.of("Color"), CatalogTypes.TEXT_COLOR))
                 ).permission(REWRITE_PERMISSION)
