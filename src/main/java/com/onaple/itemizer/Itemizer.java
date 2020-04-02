@@ -1,5 +1,6 @@
 package com.onaple.itemizer;
 
+import com.onaple.itemizer.commands.CraftCommand;
 import com.onaple.itemizer.commands.FetchCommand;
 import com.onaple.itemizer.commands.GetItemInfos;
 import com.onaple.itemizer.commands.HasItemCommand;
@@ -27,7 +28,9 @@ import org.spongepowered.api.CatalogTypes;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandSpec;
+import org.spongepowered.api.data.DataManager;
 import org.spongepowered.api.data.DataRegistration;
+import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.GameRegistryEvent;
 import org.spongepowered.api.event.game.state.GameConstructionEvent;
@@ -117,7 +120,13 @@ public class Itemizer {
     @Inject
     private PoolDAO poolDAO;
 
+    @Inject
+    private CraftCommand craftCommand;
+
     @Inject RegisterCommand registerCommand;
+
+    private DataRegistration<IdDataManipulator, IdDataManipulator.Immutable> idDataRegistration;
+
 
     public static PluginContainer getInstance() {
         return Sponge.getPluginManager().getPlugin("itemizer").orElse(null);
@@ -146,22 +155,38 @@ public class Itemizer {
             }
         }
     }
+    @Listener
+    public void onKeyRegistration(GameRegistryEvent.Register<Key<?>> event) {
+        this.logger.info("onKeyRegistration");
+        ItemizerKeys.dummy();
+        event.register(ItemizerKeys.ITEM_ID);
+    }
 
     @Listener
-    public void preInit(GamePreInitializationEvent event) {
-
-        logger.warn("This version use a new config file format for items.");
-         ItemizerKeys.dummy();
-        DataRegistration.builder()
+    public void onDataRegistration(GameRegistryEvent.Register<DataRegistration<?, ?>> event) {
+        final DataManager dataManager = Sponge.getDataManager();
+        this.idDataRegistration = DataRegistration.builder()
                 .name("Itemizer id")
                 .id("item.id") // prefix is added for you and you can't add it yourself
                 .dataClass(IdDataManipulator.class)
                 .immutableClass(IdDataManipulator.Immutable.class)
                 .builder(new IdDataManipulator.Builder())
                 .build();
+    }
+
+    @Listener
+    public void preInit(GamePreInitializationEvent event) {
+
+        logger.warn("This version use a new config file format for items.");
 
         configurationHandler.createItemizerDirectory();
         loadGlobalConfig();
+
+    }
+
+    @Listener
+    public void onServerStart(GameStartedServerEvent event) {
+
         try {
             int size = configurationHandler.readAffixConfiguration();
             getLogger().info("{} affix loaded from configuration.", size);
@@ -187,11 +212,6 @@ public class Itemizer {
             Itemizer.getLogger().warn("Error while reading configuration 'crafts'.", e);
         }
 
-    }
-
-    @Listener
-    public void onServerStart(GameStartedServerEvent event) {
-
         CommandSpec retrieve = CommandSpec.builder()
                 .description(Text.of("Retrieve an item from a configuration file with its id."))
                 .arguments(new IdElement(Text.of("id")),
@@ -214,6 +234,11 @@ public class Itemizer {
                 .permission(RELOAD_PERMISSION)
                 .executor(new ReloadCommand()).build();
         Sponge.getCommandManager().register(this, reload, "reload-itemizer");
+
+        CommandSpec craftSpec = CommandSpec.builder()
+                .executor(craftCommand)
+                .build();
+        Sponge.getCommandManager().register(this,craftSpec,"craft");
 
         CommandSpec getInfo = CommandSpec.builder()
                 .description(Text.of("get information about item in main hand"))

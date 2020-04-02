@@ -47,7 +47,7 @@ repositories {
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 dependencies {
-    compileOnly 'org.spongepowered:spongeapi:7.2.0-SNAPSHOT'
+    compileOnly 'org.spongepowered:spongeapi:7.2.0'
     testCompile "junit:junit:4.11"
     compile 'com.github.Sponge-RPG-dev:ConfigurateButWithBlackjackAndHookers:39d5fc8afd'
 }
@@ -65,8 +65,8 @@ jar {
     }
 }
 bintray {
-    user = 'Hbeau'
-    key = '13d9483db9655883a6a1b8fae565481de77631a2'
+    user = System.getenv('BINTRAY_USER')
+    key = System.getenv('BINTRAY_TOKEN')
     publications = ['MyPublication']
     pkg {
         repo = 'onaple'

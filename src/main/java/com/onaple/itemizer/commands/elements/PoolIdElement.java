@@ -34,6 +34,14 @@ public class PoolIdElement extends CommandElement {
 
     @Override
     public List<String> complete(CommandSource src, CommandArgs args, CommandContext context) {
-        return Itemizer.getConfigurationHandler().getPoolList().stream().map(PoolBean::getId).collect(Collectors.toList());
+        try {
+            String id = args.next();
+            return Itemizer.getConfigurationHandler().getPoolList().stream().map(PoolBean::getId)
+                    .filter(s -> s.contains(id))
+                    .collect(Collectors.toList());
+        } catch (ArgumentParseException e) {
+            return Itemizer.getConfigurationHandler().getPoolList().stream().map(PoolBean::getId).collect(Collectors.toList());
+        }
+
     }
 }
