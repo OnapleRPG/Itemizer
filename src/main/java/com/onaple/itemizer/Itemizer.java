@@ -18,6 +18,7 @@ import com.onaple.itemizer.crafing.CraftEventListener;
 import com.onaple.itemizer.data.access.ItemDAO;
 import com.onaple.itemizer.data.access.PoolDAO;
 import com.onaple.itemizer.data.beans.crafts.ICraftRecipes;
+import com.onaple.itemizer.data.beans.recipes.RowCraft;
 import com.onaple.itemizer.data.beans.recipes.Smelting;
 import com.onaple.itemizer.data.handlers.ConfigurationHandler;
 import com.onaple.itemizer.data.manipulators.IdDataManipulator;
@@ -201,6 +202,7 @@ public class Itemizer {
         try {
             int size = configurationHandler.readCraftConfiguration();
             getLogger().info("{} crafting recipes loaded from configuration.", size);
+            initRowCraft();
         } catch (ObjectMappingException | IOException e) {
             Itemizer.getLogger().warn("Error while reading configuration 'crafts'.", e);
         }
@@ -213,10 +215,16 @@ public class Itemizer {
         Sponge.getEventManager().registerListeners(this, new CraftEventListener());
     }
 
+    private void initRowCraft(){
+        for(ICraftRecipes recipes : getConfigurationHandler().getCraftList()){
+            if(recipes instanceof RowCraft){
+                recipes.register(null);
+            }
+        }
+    }
+
     @Listener
     public void onServerStart(GameStartedServerEvent event) {
-
-
 
         CommandSpec retrieve = CommandSpec.builder()
                 .description(Text.of("Retrieve an item from a configuration file with its id."))

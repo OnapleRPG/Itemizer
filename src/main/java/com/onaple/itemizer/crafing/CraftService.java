@@ -3,6 +3,7 @@ package com.onaple.itemizer.crafing;
 import com.onaple.itemizer.Itemizer;
 import com.onaple.itemizer.ItemizerKeys;
 import com.onaple.itemizer.crafing.event.RowCraftEvent;
+import com.onaple.itemizer.data.beans.recipes.RowCraft;
 import com.onaple.itemizer.data.handlers.ConfigurationHandler;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.key.Keys;
@@ -50,6 +51,7 @@ public class CraftService {
                     craftList.put(itemId,quantity);
                 }
         );
+        Itemizer.getLogger().info("map from craft{}",craftList);
         return craftList;
     }
 

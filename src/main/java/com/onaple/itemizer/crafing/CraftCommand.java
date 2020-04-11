@@ -62,7 +62,7 @@ public class CraftCommand implements CommandExecutor {
                     if (inventoryEventSlot.isPresent()) {
                         Optional<SlotIndex> inventoryProperty = inventoryEventSlot.get().getInventoryProperty(SlotIndex.class);
                         if (inventoryProperty.isPresent() && inventoryProperty.get().getValue() <= 7) {
-                            craftService.craft(player,getIngredient(clickInventoryEvent.getTargetInventory()));
+                            craftService.craft(player, getIngredients(clickInventoryEvent.getTargetInventory()));
                         }
                     }
                 })
@@ -95,13 +95,22 @@ public class CraftCommand implements CommandExecutor {
                                 }
                             }
                         }
-                })
+                }).listener(ClickInventoryEvent.Open.class, open -> {
+                    reset(open.getTargetInventory());
+                }).listener(ClickInventoryEvent.Close.class, close -> {
+                    Player player = close.getCause().first(Player.class).get();
+                    List<ItemStack> ingredients = getIngredients(close.getTargetInventory());
+                    for(ItemStack stack  : ingredients){
+                        InventoryTransactionResult transactionResult = player.getInventory().offer(stack);
+
+                    }
+                } )
                 .build(pluginContainer);
-        reset(inventory);
+
         ((Player) src).openInventory(inventory);
         return CommandResult.empty();
     }
-    private List<ItemStack> getIngredient(Inventory craftInventory){
+    private List<ItemStack> getIngredients(Inventory craftInventory){
         List<ItemStack> stackList = new ArrayList<>();
         craftInventory
                 .query(QueryOperationTypes.INVENTORY_PROPERTY.of(

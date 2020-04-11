@@ -4,7 +4,6 @@ import com.google.common.reflect.TypeToken;
 import com.onaple.itemizer.GlobalConfig;
 import com.onaple.itemizer.Itemizer;
 import com.onaple.itemizer.ItemizerKeys;
-import com.onaple.itemizer.crafing.RowCraft;
 import com.onaple.itemizer.data.beans.ItemBean;
 import com.onaple.itemizer.data.beans.ItemsRoot;
 import com.onaple.itemizer.data.beans.PoolBean;
@@ -13,6 +12,7 @@ import com.onaple.itemizer.data.beans.affix.AffixBean;
 import com.onaple.itemizer.data.beans.affix.AffixRoot;
 import com.onaple.itemizer.data.beans.crafts.CraftsRoot;
 import com.onaple.itemizer.data.beans.crafts.ICraftRecipes;
+import com.onaple.itemizer.data.beans.recipes.RowCraft;
 import com.onaple.itemizer.data.manipulators.IdDataManipulator;
 import com.onaple.itemizer.utils.ConfigUtils;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
@@ -21,7 +21,6 @@ import ninja.leaping.configurate.loader.ConfigurationLoader;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import org.spongepowered.api.asset.Asset;
 import org.spongepowered.api.config.ConfigDir;
-import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.plugin.PluginContainer;
 
@@ -32,9 +31,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import static com.onaple.itemizer.Itemizer.getLogger;
@@ -43,14 +40,6 @@ import static com.onaple.itemizer.Itemizer.getLogger;
 public class ConfigurationHandler {
 
     public ConfigurationHandler() {
-        //TODO remove this
-        Map<String, Integer> craft = new HashMap<>();
-        craft.put(ItemTypes.CARROT.getName(), 1);
-        craft.put(ItemTypes.POTATO.getName(), 1);
-        craft.put(ItemTypes.FISH.getName(), 1);
-
-        RowCraft rowCraft = new RowCraft(craft, ItemStack.of(ItemTypes.RABBIT_STEW));
-        getRowCraftList().add(rowCraft);
     }
 
     @Inject
