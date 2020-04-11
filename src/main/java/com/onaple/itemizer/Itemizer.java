@@ -1,6 +1,5 @@
 package com.onaple.itemizer;
 
-import com.onaple.itemizer.commands.CraftCommand;
 import com.onaple.itemizer.commands.FetchCommand;
 import com.onaple.itemizer.commands.GetItemInfos;
 import com.onaple.itemizer.commands.HasItemCommand;
@@ -14,6 +13,8 @@ import com.onaple.itemizer.commands.global.ConfigureEnchantCommand;
 import com.onaple.itemizer.commands.global.ConfigureModifierCommand;
 import com.onaple.itemizer.commands.global.ConfigureRewriteCommand;
 import com.onaple.itemizer.commands.manager.LoreManagerCommand;
+import com.onaple.itemizer.crafing.CraftCommand;
+import com.onaple.itemizer.crafing.CraftEventListener;
 import com.onaple.itemizer.data.access.ItemDAO;
 import com.onaple.itemizer.data.access.PoolDAO;
 import com.onaple.itemizer.data.beans.crafts.ICraftRecipes;
@@ -139,31 +140,15 @@ public class Itemizer {
     }
 
     @Listener
-    public void preInit0(GameRegistryEvent.Register<CraftingRecipe> event) {
-        for (ICraftRecipes recipeRegister : configurationHandler.getCraftList()) {
-            if (!(recipeRegister instanceof Smelting)) {
-                recipeRegister.register(event);
-            }
-        }
-    }
-
-    @Listener
-    public void preInit1(GameRegistryEvent.Register<SmeltingRecipe> event) {
-        for (ICraftRecipes recipeRegister : configurationHandler.getCraftList()) {
-            if (recipeRegister instanceof Smelting) {
-                recipeRegister.register(event);
-            }
-        }
-    }
-    @Listener
     public void onKeyRegistration(GameRegistryEvent.Register<Key<?>> event) {
-        this.logger.info("onKeyRegistration");
+        this.logger.info("key registration");
         ItemizerKeys.dummy();
         event.register(ItemizerKeys.ITEM_ID);
     }
 
     @Listener
     public void onDataRegistration(GameRegistryEvent.Register<DataRegistration<?, ?>> event) {
+        this.logger.info("data registration");
         final DataManager dataManager = Sponge.getDataManager();
         this.idDataRegistration = DataRegistration.builder()
                 .name("Itemizer id")
@@ -175,18 +160,32 @@ public class Itemizer {
     }
 
     @Listener
-    public void preInit(GamePreInitializationEvent event) {
+    public void onCraftRegistration(GameRegistryEvent.Register<CraftingRecipe> event) {
+        getLogger().info("register crafts");
+        for (ICraftRecipes recipeRegister : configurationHandler.getCraftList()) {
+            if (!(recipeRegister instanceof Smelting)) {
+                recipeRegister.register(event);
+            }
+        }
+    }
 
+    @Listener
+    public void onSmeltingRegistration(GameRegistryEvent.Register<SmeltingRecipe> event) {
+        getLogger().info("register smelting");
+        for (ICraftRecipes recipeRegister : configurationHandler.getCraftList()) {
+            if (recipeRegister instanceof Smelting) {
+                recipeRegister.register(event);
+            }
+        }
+    }
+
+
+    @Listener
+    public void preInit(GamePreInitializationEvent event) {
         logger.warn("This version use a new config file format for items.");
 
         configurationHandler.createItemizerDirectory();
         loadGlobalConfig();
-
-    }
-
-    @Listener
-    public void onServerStart(GameStartedServerEvent event) {
-
         try {
             int size = configurationHandler.readAffixConfiguration();
             getLogger().info("{} affix loaded from configuration.", size);
@@ -200,17 +199,24 @@ public class Itemizer {
             Itemizer.getLogger().warn("Error while reading configuration 'items'.", e);
         }
         try {
-            int size = configurationHandler.readPoolsConfiguration();
-            getLogger().info("{} pools loaded from configuration.", size);
-        } catch (ObjectMappingException | IOException e) {
-            Itemizer.getLogger().warn("Error while reading configuration 'pools'.", e);
-        }
-        try {
             int size = configurationHandler.readCraftConfiguration();
             getLogger().info("{} crafting recipes loaded from configuration.", size);
         } catch (ObjectMappingException | IOException e) {
             Itemizer.getLogger().warn("Error while reading configuration 'crafts'.", e);
         }
+        try {
+            int size = configurationHandler.readPoolsConfiguration();
+            getLogger().info("{} pools loaded from configuration.", size);
+        } catch (ObjectMappingException | IOException e) {
+            Itemizer.getLogger().warn("Error while reading configuration 'pools'.", e);
+        }
+        Sponge.getEventManager().registerListeners(this, new CraftEventListener());
+    }
+
+    @Listener
+    public void onServerStart(GameStartedServerEvent event) {
+
+
 
         CommandSpec retrieve = CommandSpec.builder()
                 .description(Text.of("Retrieve an item from a configuration file with its id."))
@@ -326,6 +332,8 @@ public class Itemizer {
 
         logger.info("ITEMIZER initialized.");
     }
+
+
 
     public void saveGlobalConfig() {
         getConfigurationHandler().saveGlobalConfiguration();
