@@ -56,7 +56,7 @@ import javax.inject.Inject;
 import java.io.IOException;
 import java.util.Optional;
 
-@Plugin(id = "itemizer", name = "Itemizer", version = "3.4.0",
+@Plugin(id = "itemizer", name = "Itemizer", version = "3.5.0",
         description = "Custom item generation with crafting and pool system",
         url = "http://onaple.fr",
         authors = {"Zessirb", "Selki"})
