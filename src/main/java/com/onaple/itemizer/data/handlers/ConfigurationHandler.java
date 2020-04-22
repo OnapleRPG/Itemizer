@@ -92,7 +92,6 @@ public class ConfigurationHandler {
 
     private <T> T readConfiguration(String file, Class<T> clazz) throws IOException, ObjectMappingException {
         Path path = Paths.get(configDir + "/itemizer/", file);
-        getLogger().info("path to file", path);
         initDefaultConfig(path);
         T root = ConfigUtils.load(clazz, path);
         if (root != null) {
@@ -195,11 +194,11 @@ public class ConfigurationHandler {
     {
         List<ItemBean> items = new ArrayList<>();
         itemBeanList.forEach(itemBean -> {
-            ItemStack stack = itemBean.getItemStackSnapshot().createStack();
+            ItemStack stack = itemBean.getItemStack();
             if (!stack.get(ItemizerKeys.ITEM_ID).isPresent()) {
                 IdDataManipulator id = new IdDataManipulator(ItemizerKeys.ITEM_ID, itemBean.getId());
                 stack.offer(id);
-                itemBean.setItemStackSnapshot(stack.createSnapshot());
+                itemBean.setItemStack(stack);
             }
             items.add(itemBean);
         });

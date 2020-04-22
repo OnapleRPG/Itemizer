@@ -19,7 +19,11 @@ public interface IItemService {
 
     Optional<ItemStack> retrieve(String id, int qte);
 
+    Optional<ItemStack> retrieveBaseItem(String id);
+
     ItemStack construct(ItemBean item);
+
+    ItemStack constructBaseItem(ItemBean item);
 
     boolean hasItem(Player player, String id, int quantity) throws ItemNotPresentException;
 

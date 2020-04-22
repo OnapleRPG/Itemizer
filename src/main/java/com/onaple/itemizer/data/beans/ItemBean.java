@@ -3,7 +3,6 @@ package com.onaple.itemizer.data.beans;
 import com.onaple.itemizer.Itemizer;
 import com.onaple.itemizer.ItemizerKeys;
 import com.onaple.itemizer.data.beans.affix.AffixBean;
-import com.onaple.itemizer.data.beans.affix.AffixFactory;
 import com.onaple.itemizer.data.manipulators.IdDataManipulator;
 import com.onaple.itemizer.data.serializers.AffixNameAdapter;
 import cz.neumimto.config.blackjack.and.hookers.annotations.CustomAdapter;
@@ -36,12 +35,12 @@ public class ItemBean {
         this.id = id;
     }
 
-    public ItemStackSnapshot getItemStackSnapshot() {
-        return itemStackSnapshot;
+    public ItemStack getItemStack() {
+        return itemStack;
     }
 
-    public void setItemStackSnapshot(ItemStackSnapshot itemStackSnapshot) {
-        this.itemStackSnapshot = itemStackSnapshot;
+    public void setItemStack(ItemStack itemStack) {
+        this.itemStack = itemStack;
     }
 
     public Set<ItemNbtFactory> getThirdParties() {
@@ -65,7 +64,7 @@ public class ItemBean {
     private String id;
 
     @Setting("item")
-    private ItemStackSnapshot itemStackSnapshot;
+    private ItemStack itemStack;
 
     @Setting("thirdParties")
     private Set<ItemNbtFactory> thirdParties = new TreeSet<>();
@@ -91,7 +90,7 @@ public class ItemBean {
         return item;
     }
     private static Optional<Object> getCustomData(ItemStack target, String queryPath) {
-        List<String> queryList ;
+        List<String> queryList;
         if(queryPath.contains(".")) {
             String[] queries = queryPath.split(".");
             queryList = Arrays.stream(queries).collect(Collectors.toList());
@@ -107,7 +106,7 @@ public class ItemBean {
 
     public List<AttributeBean> getItemAttribute(){
 
-            Optional<Object> atributeOptional = getCustomData(this.itemStackSnapshot.createStack(), "AttributeModifiers");
+            Optional<Object> atributeOptional = getCustomData(this.itemStack, "AttributeModifiers");
             if (atributeOptional.isPresent()) {
                 Object atributes = atributeOptional.get();
                 if (atributes instanceof List) {
@@ -175,7 +174,7 @@ public class ItemBean {
             itemStack.offer(ItemizerKeys.ITEM_ID, itemId);
         }
         //item type
-        itemBean.setItemStackSnapshot(itemStack.createSnapshot());
+        itemBean.setItemStack(itemStack);
         return itemBean;
     }
 

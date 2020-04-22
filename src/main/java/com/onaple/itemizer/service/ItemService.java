@@ -5,7 +5,6 @@ import com.onaple.itemizer.ItemizerKeys;
 import com.onaple.itemizer.data.access.ItemDAO;
 import com.onaple.itemizer.data.access.PoolDAO;
 import com.onaple.itemizer.data.beans.ItemBean;
-import com.onaple.itemizer.data.beans.PoolBean;
 import com.onaple.itemizer.data.beans.PoolItemBean;
 import com.onaple.itemizer.exception.BadWorldNameException;
 import com.onaple.itemizer.exception.ItemNotPresentException;
@@ -78,9 +77,18 @@ public class ItemService implements IItemService {
     public Optional<ItemStack> retrieve(String id,int qte) {
         Optional<ItemBean> optionalItem = itemDAO.getItem(id);
         return optionalItem.map(itemBean -> {
-           ItemStack stack = itemBuilder.buildItemStack(itemBean);
+           ItemStack stack = itemBuilder.createItemStack(itemBean);
            stack.setQuantity(qte);
            return stack;
+        });
+    }
+
+    @Override
+    public Optional<ItemStack> retrieveBaseItem(String id) {
+        Optional<ItemBean> optionalItem = itemDAO.getItem(id);
+        return optionalItem.map(itemBean -> {
+            ItemStack stack = itemBuilder.createBaseItem(itemBean);
+            return stack;
         });
     }
 
@@ -97,7 +105,12 @@ public class ItemService implements IItemService {
 
     @Override
     public ItemStack construct(ItemBean item) {
-        return itemBuilder.buildItemStack(item);
+        return itemBuilder.createItemStack(item);
+    }
+
+    @Override
+    public ItemStack constructBaseItem(ItemBean item) {
+        return itemBuilder.createBaseItem(item);
     }
 
     /**

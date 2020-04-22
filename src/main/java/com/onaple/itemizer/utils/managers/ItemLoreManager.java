@@ -40,8 +40,8 @@ public class ItemLoreManager implements ItemDataManager {
     private ItemBean itemBean;
     private ItemLoreManager(ItemBean itemBean){
         this.itemBean = itemBean;
-        if(itemBean.getItemStackSnapshot().supports(Keys.ITEM_LORE)){
-            this.lore = itemBean.getItemStackSnapshot().get(Keys.ITEM_LORE).orElse(new ArrayList<>());
+        if(itemBean.getItemStack().supports(Keys.ITEM_LORE)){
+            this.lore = itemBean.getItemStack().get(Keys.ITEM_LORE).orElse(new ArrayList<>());
         } else {
            this.lore = new ArrayList<>();
         }
@@ -72,13 +72,13 @@ public class ItemLoreManager implements ItemDataManager {
 
     @Override
     public void apply() {
-       ItemStack newStack = itemBean.getItemStackSnapshot().createStack();
+       ItemStack newStack = itemBean.getItemStack();
        newStack.offer(Keys.ITEM_LORE,lore);
-       itemBean.setItemStackSnapshot(newStack.createSnapshot());
+       itemBean.setItemStack(newStack);
     }
 
     @Override
     public boolean supports() {
-        return itemBean.getItemStackSnapshot().supports(Keys.ITEM_LORE);
+        return itemBean.getItemStack().supports(Keys.ITEM_LORE);
     }
 }

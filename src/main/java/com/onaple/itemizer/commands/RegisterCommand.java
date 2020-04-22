@@ -45,7 +45,7 @@ public class RegisterCommand implements CommandExecutor {
                     throw new CommandException(Text.of("Item already registered"));
                 }
                 ItemBean itemRegistered = builder.registerItem(itemId, itemStackOptional.get());
-                ItemStack buildItemStack = builder.buildItemStack(itemRegistered);
+                ItemStack buildItemStack = builder.createItemStack(itemRegistered);
                 ((Player) src).setItemInHand(HandTypes.MAIN_HAND,buildItemStack);
                 src.sendMessage(Text.builder( "Item successfully added to the configuration with the ID :")
                         .append(Text.of(TextColors.GOLD, TextStyles.BOLD,itemRegistered.getId()))

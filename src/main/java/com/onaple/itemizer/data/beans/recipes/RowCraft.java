@@ -1,12 +1,15 @@
 package com.onaple.itemizer.data.beans.recipes;
 
 import com.onaple.itemizer.Itemizer;
+import com.onaple.itemizer.ItemizerKeys;
+import com.onaple.itemizer.data.beans.ItemBean;
 import ninja.leaping.configurate.objectmapping.Setting;
 import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable;
 import org.spongepowered.api.event.game.GameRegistryEvent;
 import org.spongepowered.api.item.inventory.ItemStack;
 
 import java.util.Map;
+import java.util.Optional;
 
 @ConfigSerializable
 public class RowCraft extends AbstractCraftingRecipe {

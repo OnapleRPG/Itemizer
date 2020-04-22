@@ -2,9 +2,12 @@ package com.onaple.itemizer.utils;
 
 import com.onaple.itemizer.GlobalConfig;
 import com.onaple.itemizer.Itemizer;
+import com.onaple.itemizer.ItemizerKeys;
 import com.onaple.itemizer.data.beans.ItemBean;
 import com.onaple.itemizer.data.beans.ItemNbtFactory;
 import com.onaple.itemizer.data.beans.affix.AffixFactory;
+import com.onaple.itemizer.data.manipulators.BaseNameDataManipulator;
+import com.onaple.itemizer.data.manipulators.IdDataManipulator;
 import com.onaple.itemizer.probability.ProbabilityFetcher;
 import org.slf4j.Logger;
 import org.spongepowered.api.data.key.Keys;
@@ -36,18 +39,34 @@ public class ItemBuilder {
 
     private GlobalConfig globalConfig;
 
-    private static final Random RANDOM = new Random();
-
     /**
      * Build an itemstack from an ItemBean
      *
      * @param itemBean Data of the item to build
      * @return Optional of the itemstack
      */
-    public ItemStack buildItemStack(ItemBean itemBean) {
-        ItemStack item = itemBean.getItemStackSnapshot().createStack();
+    public ItemStack createItemStack(ItemBean itemBean) {
+        ItemStack item = itemBean.getItemStack();
+
+        if (!item.get(ItemizerKeys.ITEM_ID).isPresent()) {
+            IdDataManipulator id = new IdDataManipulator(ItemizerKeys.ITEM_ID, itemBean.getId());
+            item.offer(id);
+        }
+        logger.info("item id = {}",item.get(ItemizerKeys.ITEM_ID));
         setCustomDatamanipulators(item, itemBean.getThirdParties());
         item = applyAffix(item, itemBean);
+        rewrite(item);
+        return item;
+    }
+
+    /**
+     * create item without apply affix
+     * @param itemBean
+     * @return
+     */
+    public ItemStack createBaseItem(ItemBean itemBean){
+        ItemStack item = itemBean.getItemStack();
+        setCustomDatamanipulators(item, itemBean.getThirdParties());
         rewrite(item);
         return item;
     }
@@ -109,6 +128,13 @@ public class ItemBuilder {
 
     private ItemStack applyAffix(ItemStack itemStack, ItemBean item) {
         if (Objects.nonNull(item.getAffix())) {
+
+            Optional<Text> text = itemStack.get(Keys.DISPLAY_NAME);
+            if(text.isPresent()){
+                BaseNameDataManipulator data = itemStack.getOrCreate(BaseNameDataManipulator.class).get();
+                data.set(ItemizerKeys.BASE_NAME, text.get());
+                itemStack.offer(data);
+            }
             Optional<AffixFactory> optionalAffixFactory = probabilityFetcher.fetcher(item.getAffix().getTiers());
             if (optionalAffixFactory.isPresent()) {
                 itemStack = optionalAffixFactory.get().apply(itemStack);
