@@ -51,8 +51,6 @@ public class GetItemInfos implements CommandExecutor {
 
             ItemLoreManager loreManager = ItemLoreManager.of(bean);
 
-            Itemizer.getLogger().info("[potion type ={}]", objectToAnalyse.supports(Keys.POTION_TYPE));
-
             Itemizer.getLogger().info("[{}]", objectToAnalyse.getContainers());
 
             List<Text> content = new ArrayList<>();

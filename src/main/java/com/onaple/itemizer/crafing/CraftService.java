@@ -51,18 +51,14 @@ public class CraftService {
                     craftList.put(itemId,quantity);
                 }
         );
-        Itemizer.getLogger().info("map from craft{}",craftList);
         return craftList;
     }
 
     private Optional<ItemStack> craft(List<ItemStack> ingredients){
-        Itemizer.getLogger().info("attempt a craft with [{}]",ingredients);
         Map<String, Integer> stringIntegerMap = convertList(ingredients);
-        Itemizer.getLogger().info("craftList [{}]",configurationHandler.getRowCraftList());
         Optional<RowCraft> craftOptional = configurationHandler.getRowCraftList().stream()
                 .filter(rowCraft -> rowCraft.getIngredients().equals(stringIntegerMap))
                 .findFirst();
-        Itemizer.getLogger().info("find maching craft {}",craftOptional);
         return craftOptional.map(rowCraft -> rowCraft.getResult());
     }
 

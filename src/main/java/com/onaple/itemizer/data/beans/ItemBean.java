@@ -146,14 +146,14 @@ public class ItemBean {
                                     });
                             attributeBeanList.add(attributeBean);
                         } else {
-                            Itemizer.getLogger().info(" {} is not instance of DataContainer", o.getClass().getName());
+                            Itemizer.getLogger().warn(" {} is not instance of DataContainer", o.getClass().getName());
 
                         }
 
                     }
                     return attributeBeanList;
                 } else {
-                    Itemizer.getLogger().info("{} is not instance of List", atributes.getClass().getName());
+                    Itemizer.getLogger().warn("{} is not instance of List", atributes.getClass().getName());
                 }
             }
             return new ArrayList<>();

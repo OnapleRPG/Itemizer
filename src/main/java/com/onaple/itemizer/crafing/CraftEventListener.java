@@ -35,7 +35,6 @@ public class CraftEventListener {
     public void onSuccessfulCraft(CraftSuccessfulEvent event,@First Inventory inventory){
 
         Optional<String> idOptional = event.getCraftResult().get(ItemizerKeys.ITEM_ID);
-        Itemizer.getLogger().info("SUCCESSFUL CRAFT {}",idOptional);
         if(idOptional.isPresent()){
             Optional<ItemStack> retrieve = Itemizer.getItemService().retrieve(idOptional.get());
             event.setCraftResult(retrieve.get());

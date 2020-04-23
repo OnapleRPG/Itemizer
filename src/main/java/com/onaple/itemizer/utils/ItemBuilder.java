@@ -52,7 +52,6 @@ public class ItemBuilder {
             IdDataManipulator id = new IdDataManipulator(ItemizerKeys.ITEM_ID, itemBean.getId());
             item.offer(id);
         }
-        logger.info("item id = {}",item.get(ItemizerKeys.ITEM_ID));
         setCustomDatamanipulators(item, itemBean.getThirdParties());
         item = applyAffix(item, itemBean);
         rewrite(item);

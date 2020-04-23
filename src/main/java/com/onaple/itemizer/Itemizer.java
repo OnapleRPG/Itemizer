@@ -56,7 +56,7 @@ import javax.inject.Inject;
 import java.io.IOException;
 import java.util.Optional;
 
-@Plugin(id = "itemizer", name = "Itemizer", version = "3.5.0",
+@Plugin(id = "itemizer", name = "Itemizer", version = "3.5.1",
         description = "Custom item generation with crafting and pool system",
         url = "http://onaple.fr",
         authors = {"Zessirb", "Selki"})
@@ -69,6 +69,7 @@ public class Itemizer {
     private static final String REGISTER_PERMISSION = "itemizer.command.register";
     private static final String REWRITE_PERMISSION = "itemizer.command.rewrite";
     private static final String HAS_ITEM_PERMISSION = "itemizer.command.hasitem";
+    private static final String CRAFT_PERMISSION = "itemizer.command.craft";
 
 
     private static Itemizer itemizer;
@@ -168,7 +169,6 @@ public class Itemizer {
 
     @Listener
     public void onCraftRegistration(GameRegistryEvent.Register<CraftingRecipe> event) throws InterruptedException {
-        getLogger().info("register crafting");
         int i = 0;
         for (ICraftRecipes recipeRegister : configurationHandler.getCraftList()) {
             if (!(recipeRegister instanceof Smelting)) {
@@ -180,7 +180,6 @@ public class Itemizer {
     }
     @Listener
     public void onSmeltingRegistration(GameRegistryEvent.Register<SmeltingRecipe> event) {
-        getLogger().info("register smelting");
         int i = 0;
         for (ICraftRecipes recipeRegister : configurationHandler.getCraftList()) {
             if (recipeRegister instanceof Smelting) {
@@ -264,6 +263,7 @@ public class Itemizer {
 
         CommandSpec craftSpec = CommandSpec.builder()
                 .executor(craftCommand)
+                .permission(CRAFT_PERMISSION)
                 .build();
         Sponge.getCommandManager().register(this,craftSpec,"craft");
 
