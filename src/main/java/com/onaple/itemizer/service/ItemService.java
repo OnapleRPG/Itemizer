@@ -132,7 +132,7 @@ public class ItemService implements IItemService {
             }
             return false;
         }));
-        return query.capacity()>=quantity;
+        return query.totalItems()>=quantity;
     }
 
     @Override

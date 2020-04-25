@@ -56,7 +56,7 @@ import javax.inject.Inject;
 import java.io.IOException;
 import java.util.Optional;
 
-@Plugin(id = "itemizer", name = "Itemizer", version = "3.5.1",
+@Plugin(id = "itemizer", name = "Itemizer", version = "3.6",
         description = "Custom item generation with crafting and pool system",
         url = "http://onaple.fr",
         authors = {"Zessirb", "Selki"})
@@ -213,6 +213,7 @@ public class Itemizer {
         }
         try {
             int size = configurationHandler.readCraftConfiguration();
+            getLogger().warn("Itemizer 3.6 breack craft configuration.");
             getLogger().info("{} crafting recipes loaded from configuration.", size);
             initRowCraft();
         } catch (ObjectMappingException | IOException e) {
@@ -265,7 +266,7 @@ public class Itemizer {
                 .executor(craftCommand)
                 .permission(CRAFT_PERMISSION)
                 .build();
-        Sponge.getCommandManager().register(this,craftSpec,"craft");
+        Sponge.getCommandManager().register(this,craftSpec,"craftwork");
 
         CommandSpec getInfo = CommandSpec.builder()
                 .description(Text.of("get information about item in main hand"))

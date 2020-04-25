@@ -7,7 +7,9 @@ import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable;
 import org.spongepowered.api.event.game.GameRegistryEvent;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.item.recipe.Recipe;
+import org.spongepowered.api.item.recipe.crafting.Ingredient;
 import org.spongepowered.api.item.recipe.smelting.SmeltingRecipe;
+import org.spongepowered.api.util.annotation.eventgen.PropertySettings;
 
 /**
  * Created by NeumimTo on 23.3.2019.
@@ -19,10 +21,13 @@ public class Smelting extends AbstractCraftingRecipe {
     @CustomAdapter(ItemBeanRefOrItemIdAdapter.class)
     private ItemStack ingredient;
 
+    @Setting("name")
+    private String ref;
+
     @Override
     public void register(GameRegistryEvent.Register event) {
         Recipe r = SmeltingRecipe.builder().
-                ingredient(ingredient).
+                ingredient(isSnapshotMatchingId(ref) ,ingredient.createSnapshot()).
                 result(result).
                 id("craft_itemizer%" + id).
                 build();
