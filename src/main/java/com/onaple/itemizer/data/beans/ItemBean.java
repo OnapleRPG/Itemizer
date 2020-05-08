@@ -35,11 +35,11 @@ public class ItemBean {
         this.id = id;
     }
 
-    public ItemStack getItemStack() {
+    public ItemStackSnapshot getItemStack() {
         return itemStack;
     }
 
-    public void setItemStack(ItemStack itemStack) {
+    public void setItemStack(ItemStackSnapshot itemStack) {
         this.itemStack = itemStack;
     }
 
@@ -64,7 +64,7 @@ public class ItemBean {
     private String id;
 
     @Setting("item")
-    private ItemStack itemStack;
+    private ItemStackSnapshot itemStack;
 
     @Setting("thirdParties")
     private Set<ItemNbtFactory> thirdParties = new TreeSet<>();
@@ -106,7 +106,7 @@ public class ItemBean {
 
     public List<AttributeBean> getItemAttribute(){
 
-            Optional<Object> atributeOptional = getCustomData(this.itemStack, "AttributeModifiers");
+            Optional<Object> atributeOptional = getCustomData(this.getItemStack().createStack(), "AttributeModifiers");
             if (atributeOptional.isPresent()) {
                 Object atributes = atributeOptional.get();
                 if (atributes instanceof List) {
@@ -174,7 +174,7 @@ public class ItemBean {
             itemStack.offer(ItemizerKeys.ITEM_ID, itemId);
         }
         //item type
-        itemBean.setItemStack(itemStack);
+        itemBean.setItemStack(itemStack.createSnapshot());
         return itemBean;
     }
 

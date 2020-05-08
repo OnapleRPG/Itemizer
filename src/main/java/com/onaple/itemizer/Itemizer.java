@@ -15,7 +15,6 @@ import com.onaple.itemizer.commands.global.ConfigureRewriteCommand;
 import com.onaple.itemizer.commands.manager.LoreManagerCommand;
 import com.onaple.itemizer.crafing.CraftCommand;
 import com.onaple.itemizer.crafing.CraftEventListener;
-import com.onaple.itemizer.crafing.event.CraftSuccessfulEvent;
 import com.onaple.itemizer.data.access.ItemDAO;
 import com.onaple.itemizer.data.access.PoolDAO;
 import com.onaple.itemizer.data.beans.crafts.ICraftRecipes;
@@ -32,20 +31,12 @@ import org.spongepowered.api.CatalogTypes;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandSpec;
-import org.spongepowered.api.data.DataManager;
 import org.spongepowered.api.data.DataRegistration;
-import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.event.Listener;
-import org.spongepowered.api.event.Order;
-import org.spongepowered.api.event.cause.Cause;
-import org.spongepowered.api.event.cause.EventContext;
-import org.spongepowered.api.event.cause.EventContextKeys;
 import org.spongepowered.api.event.game.GameRegistryEvent;
 import org.spongepowered.api.event.game.state.GameConstructionEvent;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
-import org.spongepowered.api.item.ItemType;
-import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.item.recipe.crafting.CraftingRecipe;
 import org.spongepowered.api.item.recipe.smelting.SmeltingRecipe;
 import org.spongepowered.api.plugin.Plugin;
@@ -54,9 +45,8 @@ import org.spongepowered.api.text.Text;
 
 import javax.inject.Inject;
 import java.io.IOException;
-import java.util.Optional;
 
-@Plugin(id = "itemizer", name = "Itemizer", version = "3.6",
+@Plugin(id = "itemizer", name = "Itemizer", version = "3.6.1",
         description = "Custom item generation with crafting and pool system",
         url = "http://onaple.fr",
         authors = {"Zessirb", "Selki"})
@@ -213,7 +203,7 @@ public class Itemizer {
         }
         try {
             int size = configurationHandler.readCraftConfiguration();
-            getLogger().warn("Itemizer 3.6 breack craft configuration.");
+            getLogger().warn("Itemizer 3.6 break craft configuration.");
             getLogger().info("{} crafting recipes loaded from configuration.", size);
             initRowCraft();
         } catch (ObjectMappingException | IOException e) {

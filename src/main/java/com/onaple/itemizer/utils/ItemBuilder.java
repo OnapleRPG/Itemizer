@@ -24,7 +24,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Random;
 import java.util.Set;
 
 @Singleton
@@ -46,7 +45,7 @@ public class ItemBuilder {
      * @return Optional of the itemstack
      */
     public ItemStack createItemStack(ItemBean itemBean) {
-        ItemStack item = itemBean.getItemStack();
+        ItemStack item = itemBean.getItemStack().createStack();
 
         if (!item.get(ItemizerKeys.ITEM_ID).isPresent()) {
             IdDataManipulator id = new IdDataManipulator(ItemizerKeys.ITEM_ID, itemBean.getId());
@@ -64,7 +63,7 @@ public class ItemBuilder {
      * @return
      */
     public ItemStack createBaseItem(ItemBean itemBean){
-        ItemStack item = itemBean.getItemStack();
+        ItemStack item = itemBean.getItemStack().createStack();
         setCustomDatamanipulators(item, itemBean.getThirdParties());
         rewrite(item);
         return item;

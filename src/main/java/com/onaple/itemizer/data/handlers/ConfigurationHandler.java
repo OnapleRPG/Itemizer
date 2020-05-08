@@ -3,7 +3,6 @@ package com.onaple.itemizer.data.handlers;
 import com.google.common.reflect.TypeToken;
 import com.onaple.itemizer.GlobalConfig;
 import com.onaple.itemizer.Itemizer;
-import com.onaple.itemizer.ItemizerKeys;
 import com.onaple.itemizer.data.beans.ItemBean;
 import com.onaple.itemizer.data.beans.ItemsRoot;
 import com.onaple.itemizer.data.beans.PoolBean;
@@ -13,7 +12,6 @@ import com.onaple.itemizer.data.beans.affix.AffixRoot;
 import com.onaple.itemizer.data.beans.crafts.CraftsRoot;
 import com.onaple.itemizer.data.beans.crafts.ICraftRecipes;
 import com.onaple.itemizer.data.beans.recipes.RowCraft;
-import com.onaple.itemizer.data.manipulators.IdDataManipulator;
 import com.onaple.itemizer.utils.ConfigUtils;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
@@ -21,7 +19,6 @@ import ninja.leaping.configurate.loader.ConfigurationLoader;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import org.spongepowered.api.asset.Asset;
 import org.spongepowered.api.config.ConfigDir;
-import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.plugin.PluginContainer;
 
 import javax.inject.Inject;
@@ -189,19 +186,5 @@ public class ConfigurationHandler {
                 }
             }
         }
-    }
-    private List<ItemBean> setIdToItems(List<ItemBean> itemBeanList)
-    {
-        List<ItemBean> items = new ArrayList<>();
-        itemBeanList.forEach(itemBean -> {
-            ItemStack stack = itemBean.getItemStack();
-            if (!stack.get(ItemizerKeys.ITEM_ID).isPresent()) {
-                IdDataManipulator id = new IdDataManipulator(ItemizerKeys.ITEM_ID, itemBean.getId());
-                stack.offer(id);
-                itemBean.setItemStack(stack);
-            }
-            items.add(itemBean);
-        });
-        return items;
     }
 }

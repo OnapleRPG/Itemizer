@@ -2,9 +2,7 @@ package com.onaple.itemizer.utils.managers;
 
 import com.onaple.itemizer.data.beans.ItemBean;
 import com.onaple.itemizer.utils.ItemDataManager;
-
 import org.spongepowered.api.data.key.Keys;
-import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
@@ -72,9 +70,9 @@ public class ItemLoreManager implements ItemDataManager {
 
     @Override
     public void apply() {
-       ItemStack newStack = itemBean.getItemStack();
+       /*ItemStack newStack = itemBean.getItemStack();
        newStack.offer(Keys.ITEM_LORE,lore);
-       itemBean.setItemStack(newStack);
+       itemBean.setItemStack(newStack);*/
     }
 
     @Override
