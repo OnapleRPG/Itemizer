@@ -75,7 +75,7 @@ public class ConfigUtils {
             File file = path.toFile();
             if (file.isDirectory()) {
                 for (String fileName: file.list()) {
-                    filesFound.addAll(getFilesFromPath(Path.of(fileName), recursion + 1));
+                    filesFound.addAll(getFilesFromPath(Paths.get(fileName), recursion + 1));
                 }
             }
         }

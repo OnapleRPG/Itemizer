@@ -25,6 +25,7 @@ public class Smelting extends AbstractCraftingRecipe {
     private String ref;
 
     @Override
+    @SuppressWarnings("unchecked")
     public void register(GameRegistryEvent.Register event) {
         Recipe r = SmeltingRecipe.builder().
                 ingredient(isSnapshotMatchingId(ref) ,ingredient.createSnapshot()).

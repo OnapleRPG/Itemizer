@@ -146,14 +146,14 @@ public class Itemizer {
                 .dataClass(IdDataManipulator.class)
                 .immutableClass(IdDataManipulator.Immutable.class)
                 .builder(new IdDataManipulator.Builder())
-                .buildAndRegister(getInstance());
+                .build();
         this.basenameDataRegistration = DataRegistration.builder()
                 .name("item base name")
                 .id("item.basename")
                 .dataClass(BaseNameDataManipulator.class)
                 .immutableClass(BaseNameDataManipulator.Immutable.class)
                 .builder(new BaseNameDataManipulator.Builder())
-                .buildAndRegister(getInstance());
+                .build();
         loadConfiguration();
     }
 

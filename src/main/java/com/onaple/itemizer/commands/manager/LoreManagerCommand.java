@@ -15,6 +15,7 @@ import java.util.Optional;
 
 public class LoreManagerCommand implements CommandExecutor {
     @Override
+    @SuppressWarnings("unchecked")
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
         Optional<ItemBean> item= args.getOne("id");
         List<Text> lore = args.<List>getOne("lore").orElse(new ArrayList<>());

@@ -100,14 +100,13 @@ public class ConfigurationHandler {
      */
     public int readItemsConfiguration() throws IOException, ObjectMappingException {
         itemList.clear();
-        readConfiguration("items", ItemsRoot.class).forEach(items -> itemList.addAll(setIdtoItems(items.getItems())));
-        saveItemConfig();
+        readConfiguration("items", ItemsRoot.class).forEach(itemRoot -> itemList.addAll(itemRoot.getItems()));
         return itemList.size();
     }
 
     public int readAffixConfiguration() throws IOException, ObjectMappingException {
         affixBeans.clear();
-        readConfiguration("affix", AffixRoot.class).forEach(affixes -> affixBeans.addAll(affixes.getAffixes()));
+        readConfiguration("affix", AffixRoot.class).forEach(affixRoot -> affixBeans.addAll(affixRoot.getAffixes()));
         return affixBeans.size();
     }
 
@@ -116,7 +115,7 @@ public class ConfigurationHandler {
      */
     public int readCraftConfiguration() throws ObjectMappingException, IOException {
         craftList.clear();
-        readConfiguration("craft", CraftsRoot.class).forEach(crafts -> craftList.addAll(crafts.getCraftingRecipes()));
+        readConfiguration("craft", CraftsRoot.class).forEach(craftRoot -> craftList.addAll(craftRoot.getCraftingRecipes()));
         return craftList.size();
     }
 
@@ -125,7 +124,7 @@ public class ConfigurationHandler {
      */
     public int readPoolsConfiguration() throws ObjectMappingException, IOException {
         poolList.clear();
-        readConfiguration("pools", PoolsRoot.class).forEach(pools -> poolList.addAll(pools.getPoolList()));
+        readConfiguration("pools", PoolsRoot.class).forEach(poolRoot -> poolList.addAll(poolRoot.getPoolList()));
         return poolList.size();
     }
 

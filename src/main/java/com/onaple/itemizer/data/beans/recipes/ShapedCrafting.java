@@ -26,6 +26,7 @@ public class ShapedCrafting extends AbstractCraftingRecipe {
 
 
     @Override
+    @SuppressWarnings("unchecked")
     public void register(GameRegistryEvent.Register event) {
         CraftingRecipe r = shapedBuilder().
                 aisle(this.pattern.stream().toArray(String[]::new)).
