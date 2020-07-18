@@ -89,8 +89,14 @@ public class ConfigurationHandler {
 
     private <T> List<T> readConfiguration(String file, Class<T> clazz) throws IOException, ObjectMappingException {
         Path path = Paths.get(configDir + "/itemizer/", file + ".conf");
-        initDefaultConfig(path);
-        List<T> rootList = ConfigUtils.loadMultiple(clazz, path);
+        Path folderPath = Paths.get(configDir + "/itemizer/" + file + "/");
+        List<T> rootList = new ArrayList<>();
+        if (!folderPath.toFile().exists()) {
+            initDefaultConfig(path);
+            rootList.add(ConfigUtils.load(clazz, path));
+        } else {
+            rootList = ConfigUtils.loadMultiple(clazz, folderPath);
+        }
         rootList.removeIf(root -> root == null);
         return rootList;
     }
@@ -115,7 +121,7 @@ public class ConfigurationHandler {
      */
     public int readCraftConfiguration() throws ObjectMappingException, IOException {
         craftList.clear();
-        readConfiguration("craft", CraftsRoot.class).forEach(craftRoot -> craftList.addAll(craftRoot.getCraftingRecipes()));
+        readConfiguration("crafts", CraftsRoot.class).forEach(craftRoot -> craftList.addAll(craftRoot.getCraftingRecipes()));
         return craftList.size();
     }
 
@@ -169,7 +175,7 @@ public class ConfigurationHandler {
             PluginContainer pluginInstance = Itemizer.getInstance();
             if (pluginInstance != null) {
                 Optional<Asset> itemsDefaultConfigFile = pluginInstance.getAsset(path.getFileName().toString());
-                getLogger().info("No config file set for {} default config will be loaded", path);
+                getLogger().info("No config file set for {}. default config will be loaded", path);
                 if (itemsDefaultConfigFile.isPresent()) {
                     try {
                         itemsDefaultConfigFile.get().copyToFile(path);

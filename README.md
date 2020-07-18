@@ -30,8 +30,9 @@ Permission : *itemizer.command.reload*
 
 ## Configuration files
 
-All configuration files use HOCON format. they are loaded at the plugin start. you can force a reload with the command `/reload-itemizer`
-> I higly recommend you to backup your files to avoid any loss.
+All configuration files use HOCON format. They are loaded at plugin start. You can force a reload with the command `/reload-itemizer` (crafts will require a server restart).  
+The configuration files are stored in the *config/itemizer* folder of your server. Default configuration files will be generated if they do not exist. You can also use a folder instead of a plain file, the plugin will then read every files within it (for instance, create a folder *items* instead of the *items.conf*, and put every HOCON files within it).  
+> I highly recommend you backup your files to avoid any loss.  
 
 ### Global  configuration
 In the global configuration file you can change plugin settings :
@@ -44,7 +45,7 @@ You can chose to rewrite them manually. set `False` to let default look or `True
 
 You can chose to edit the config file or use `/configure <Type> <Key> [value]` command.
 
-__Be careful the command override the file change__
+__Be careful using the command, it overrides the file__  
 
 
 ### Item creation
@@ -105,7 +106,7 @@ An example of an battle axe indexed as _barbarian_axe_ with some attribute modif
                 display {
                     Lore=[
                         "Nobody have whet this blade yet",
-                        "however it still can sharp your finger"
+                        "Nonetheless it is sharp on your finger"
                     ]
                     Name="Barbarian Axe"
                 }

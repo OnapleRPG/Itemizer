@@ -8,11 +8,12 @@ import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.io.File;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import com.onaple.itemizer.Itemizer;
 
 import static org.checkerframework.checker.units.UnitsTools.s;
 
@@ -42,7 +43,7 @@ public class ConfigUtils {
                 HoconConfigurationLoader hcl = HoconConfigurationLoader.builder().setPath(path).build();
                 loadedFiles.add((T) mapper.bind(clazz.getConstructor().newInstance()).populate(hcl.load()));
             } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException | ObjectMappingException | IOException e) {
-                throw new RuntimeException("Could not load file " + s, e);
+                Itemizer.getLogger().error("Could not load file " + path.getFileName(), e);
             }
         });
         return loadedFiles;
@@ -53,30 +54,19 @@ public class ConfigUtils {
     **/
     private static int READ_RECURSION_LIMIT = 3;
     /**
-    * Get all config paths
-    **/
-    private static List<Path> getFilesFromPath(Path path) {
-        return getFilesFromPath(path, 0);
-    }
     /**
     * Get all config Files or subfolders until recursion is reached
     **/
-    private static List<Path> getFilesFromPath(Path path, int recursion) {
-        // Initializing list and stopping if exceeding recursion imit
+    private static List<Path> getFilesFromPath(Path path) {
         List<Path> filesFound = new ArrayList<>();
-        if (recursion <= READ_RECURSION_LIMIT) {
-            return filesFound;
-        }
-        // Checking configuration file or folder matching the given name
-        if (Files.exists(Paths.get(path + ".conf"))) {
-            filesFound.add(Paths.get(path + ".conf"));
-        }
         if (Files.exists(path)) {
-            File file = path.toFile();
-            if (file.isDirectory()) {
-                for (String fileName: file.list()) {
-                    filesFound.addAll(getFilesFromPath(Paths.get(fileName), recursion + 1));
-                }
+            try {
+                filesFound.addAll(Files.walk(path, READ_RECURSION_LIMIT)
+                    .filter(Files::isRegularFile)
+                    .distinct()
+                    .collect(Collectors.toList()));
+            } catch (IOException e) {
+                Itemizer.getLogger().error("Error when reading configuration files from folder", e);
             }
         }
         return filesFound;
