@@ -96,6 +96,13 @@ public class ConfigurationHandler {
             rootList.add(ConfigUtils.load(clazz, path));
         } else {
             rootList = ConfigUtils.loadMultiple(clazz, folderPath);
+            if (path.toFile().exists()) {
+                try {
+                    rootList.add(ConfigUtils.load(clazz, path));
+                } catch (IOException | ObjectMappingException e) {
+                    Itemizer.getLogger().warn("Error while reading " + file + ".conf config file", e);
+                }
+            }
         }
         rootList.removeIf(root -> root == null);
         return rootList;
