@@ -23,7 +23,7 @@ public class IdElement extends CommandElement {
     protected Object parseValue(CommandSource source, CommandArgs args) throws ArgumentParseException {
         String id = args.next();
         Optional<ItemBean> itemBeanOptional =Itemizer.getItemDAO().getItem(id);
-        return itemBeanOptional.orElseThrow(() -> new ArgumentParseException(Text.of("Id not found"),source.getName(),1));
+        return itemBeanOptional.orElseThrow(() -> new ArgumentParseException(Text.of("Id not found"), id, 1));
     }
 
     @Override

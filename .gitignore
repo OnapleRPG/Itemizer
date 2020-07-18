@@ -8,3 +8,8 @@ scripts
 *.iml
 gradlew.bat
 gradle
+.classpath
+.project
+.settings
+.vscode
+bin

@@ -17,6 +17,7 @@ public class ShapelessCrafting extends AbstractCraftingRecipe {
     protected String content;
 
     @Override
+    @SuppressWarnings("unchecked")
     public void register(GameRegistryEvent.Register event) {
         Recipe r = CraftingRecipe.shapelessBuilder()
                 .addIngredient(Ingredient.builder().with(isMatchingId(content)).build())

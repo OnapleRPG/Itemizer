@@ -87,16 +87,25 @@ public class ConfigurationHandler {
         }
     }
 
-    private <T> T readConfiguration(String file, Class<T> clazz) throws IOException, ObjectMappingException {
-        Path path = Paths.get(configDir + "/itemizer/", file);
-        initDefaultConfig(path);
-        T root = ConfigUtils.load(clazz, path);
-        if (root != null) {
-            return root;
+    private <T> List<T> readConfiguration(String file, Class<T> clazz) throws IOException, ObjectMappingException {
+        Path path = Paths.get(configDir + "/itemizer/", file + ".conf");
+        Path folderPath = Paths.get(configDir + "/itemizer/" + file + "/");
+        List<T> rootList = new ArrayList<>();
+        if (!folderPath.toFile().exists()) {
+            initDefaultConfig(path);
+            rootList.add(ConfigUtils.load(clazz, path));
         } else {
-            getLogger().warn("Empty config file");
-            throw new IOException();
+            rootList = ConfigUtils.loadMultiple(clazz, folderPath);
+            if (path.toFile().exists()) {
+                try {
+                    rootList.add(ConfigUtils.load(clazz, path));
+                } catch (IOException | ObjectMappingException e) {
+                    Itemizer.getLogger().warn("Error while reading " + file + ".conf config file", e);
+                }
+            }
         }
+        rootList.removeIf(root -> root == null);
+        return rootList;
     }
 
     /**
@@ -104,13 +113,13 @@ public class ConfigurationHandler {
      */
     public int readItemsConfiguration() throws IOException, ObjectMappingException {
         itemList.clear();
-        itemList.addAll(readConfiguration("items.conf", ItemsRoot.class).getItems());
+        readConfiguration("items", ItemsRoot.class).forEach(itemRoot -> itemList.addAll(itemRoot.getItems()));
         return itemList.size();
     }
 
     public int readAffixConfiguration() throws IOException, ObjectMappingException {
         affixBeans.clear();
-        affixBeans.addAll(readConfiguration("affix.conf", AffixRoot.class).getAffixes());
+        readConfiguration("affix", AffixRoot.class).forEach(affixRoot -> affixBeans.addAll(affixRoot.getAffixes()));
         return affixBeans.size();
     }
 
@@ -119,7 +128,7 @@ public class ConfigurationHandler {
      */
     public int readCraftConfiguration() throws ObjectMappingException, IOException {
         craftList.clear();
-        craftList.addAll(readConfiguration("crafts.conf", CraftsRoot.class).getCraftingRecipes());
+        readConfiguration("crafts", CraftsRoot.class).forEach(craftRoot -> craftList.addAll(craftRoot.getCraftingRecipes()));
         return craftList.size();
     }
 
@@ -128,7 +137,7 @@ public class ConfigurationHandler {
      */
     public int readPoolsConfiguration() throws ObjectMappingException, IOException {
         poolList.clear();
-        poolList.addAll(readConfiguration("pools.conf", PoolsRoot.class).getPoolList());
+        readConfiguration("pools", PoolsRoot.class).forEach(poolRoot -> poolList.addAll(poolRoot.getPoolList()));
         return poolList.size();
     }
 
@@ -173,10 +182,9 @@ public class ConfigurationHandler {
             PluginContainer pluginInstance = Itemizer.getInstance();
             if (pluginInstance != null) {
                 Optional<Asset> itemsDefaultConfigFile = pluginInstance.getAsset(path.getFileName().toString());
-                getLogger().info("No config file set for {} default config will be loaded", path);
+                getLogger().info("No config file set for {}. default config will be loaded", path);
                 if (itemsDefaultConfigFile.isPresent()) {
                     try {
-
                         itemsDefaultConfigFile.get().copyToFile(path);
                     } catch (IOException e) {
                         getLogger().error("Error while setting default configuration : ", e);
@@ -188,3 +196,4 @@ public class ConfigurationHandler {
         }
     }
 }
+

@@ -146,14 +146,14 @@ public class Itemizer {
                 .dataClass(IdDataManipulator.class)
                 .immutableClass(IdDataManipulator.Immutable.class)
                 .builder(new IdDataManipulator.Builder())
-                .buildAndRegister(getInstance());
+                .build();
         this.basenameDataRegistration = DataRegistration.builder()
                 .name("item base name")
                 .id("item.basename")
                 .dataClass(BaseNameDataManipulator.class)
                 .immutableClass(BaseNameDataManipulator.Immutable.class)
                 .builder(new BaseNameDataManipulator.Builder())
-                .buildAndRegister(getInstance());
+                .build();
         loadConfiguration();
     }
 
@@ -166,7 +166,7 @@ public class Itemizer {
                 i++;
             }
         }
-        getLogger().info("registered {} crafting recipes",i);
+        getLogger().info("Registered {} crafting recipes",i);
     }
     @Listener
     public void onSmeltingRegistration(GameRegistryEvent.Register<SmeltingRecipe> event) {
@@ -177,7 +177,7 @@ public class Itemizer {
                 i++;
             }
         }
-        getLogger().info("registered {} smelting recipes",i);
+        getLogger().info("Registered {} smelting recipes",i);
     }
 
     public void loadConfiguration(){
@@ -191,13 +191,13 @@ public class Itemizer {
         }
         try {
             int size = configurationHandler.readItemsConfiguration();
-             getLogger().info("{} items loaded from configuration.", size);
+            getLogger().info("{} items loaded from configuration.", size);
         } catch (ObjectMappingException | IOException e) {
             Itemizer.getLogger().warn("Error while reading configuration 'items'.", e);
         }
         try {
             int size = configurationHandler.readPoolsConfiguration();
-                getLogger().info("{} pools loaded from configuration.", size);
+            getLogger().info("{} pools loaded from configuration.", size);
         } catch (ObjectMappingException | IOException e) {
             Itemizer.getLogger().warn("Error while reading configuration 'pools'.", e);
         }
