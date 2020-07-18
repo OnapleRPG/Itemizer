@@ -28,11 +28,11 @@ targetCompatibility = 1.8
 versioning {
     // required (number)
     major = 3
-    minor = 3
+    minor = 7
     patch = 1
 }
 group = 'com.onaple'
-version = "3.7.0"
+version = "3.7.1"
 
 repositories {
     mavenCentral()
@@ -70,14 +70,14 @@ bintray {
     publications = ['MyPublication']
     pkg {
         repo = 'onaple'
-        name = 'itemizer'
+        name = 'Itemizer'
         userOrg = 'onaplerpg'
         licenses = ['Apache-2.0']
         vcsUrl = 'git@github.com:OnapleRPG/Itemizer.git'
         version {
-            name = '3.7.0'
+            name = '3.7.1'
             released  = new Date()
-            vcsTag = '3.7.0'
+            vcsTag = '3.7.1'
         }
     }
 }
@@ -87,7 +87,7 @@ publishing {
             from components.java
             groupId 'com.onaple'
             artifactId 'itemizer'
-            version '3.7.0'
+            version '3.7.1'
         }
     }
 }

@@ -12,6 +12,7 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.onaple.itemizer.Itemizer;
 
@@ -60,8 +61,8 @@ public class ConfigUtils {
     private static List<Path> getFilesFromPath(Path path) {
         List<Path> filesFound = new ArrayList<>();
         if (Files.exists(path)) {
-            try {
-                filesFound.addAll(Files.walk(path, READ_RECURSION_LIMIT)
+            try(Stream<Path> files = Files.walk(path, READ_RECURSION_LIMIT)) {
+                filesFound.addAll(files
                     .filter(Files::isRegularFile)
                     .distinct()
                     .collect(Collectors.toList()));
