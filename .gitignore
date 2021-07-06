@@ -13,3 +13,4 @@ gradle
 .settings
 .vscode
 bin
+version.properties

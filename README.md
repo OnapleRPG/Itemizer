@@ -1,49 +1,49 @@
-# Itemizer  [![Build Status](https://travis-ci.org/OnapleRPG/Itemizer.svg?branch=master)](https://travis-ci.org/OnapleRPG/Itemizer) [![Download](https://api.bintray.com/packages/onaplerpg/onaple/Itemizer/images/download.svg)](https://bintray.com/onaplerpg/onaple/Itemizer/_latestVersion) [![Quality gate](https://sonarcloud.io/api/project_badges/measure?project=com.onaple%3AItemizer&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=com.onaple%3AItemizer) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) [![sponge version](https://img.shields.io/badge/sponge-7.2.0-yellow.svg)](https://www.spongepowered.org/)
+# Itemizer  [![Build Status](https://travis-ci.org/OnapleRPG/Itemizer.svg?branch=master)](https://travis-ci.org/OnapleRPG/Itemizer) [![Quality gate](https://sonarcloud.io/api/project_badges/measure?project=com.onaple%3AItemizer&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=com.onaple%3AItemizer) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) [![sponge version](https://img.shields.io/badge/sponge-7.2.0-yellow.svg)](https://www.spongepowered.org/)
 
 
-Itemizer is a Sponge Minecraft plugin that allows custom item creation. Store plenty of custom objects in configurations files.
- Once item registered, you can also register :
- * crafts : register crafts (with or without shape) and smelting recipe.
- * pools : assign items to pools with a probability and fetch them randmly.
- * affixes : for more customisation item can be modified afterward by affix (also pick in a pool) to slighly modify their characteristics.
+Itemizer is a Sponge Minecraft plugin that allows custom items creation. Store plenty of custom items in configurations files.  
+Once an item is registered, you can also register :
+* crafts : register new crafts (with or without shape) and smelting recipe.
+* pools : assign items to pools with a probability and fetch them randomly.
+* affixes : for additionnal customization, items can be modified afterward by affix (also pickable in a pool) to slighly modify their characteristics.
 
-An examples of each config file is loaded at the first launch of the plugin under the folder `/config/itemizer/`.This way you can see how they're build.
->Don't be afraid by item complexity, they can be generated in-game)
+An examples of each config file is loaded at the first launch of the plugin under the folder `/config/itemizer/`. This way you can see how they're structured.  
+>Don't be afraid by item config complexity, it can be generated from existing items in-game
 
 ## Installation
-To install this plugin, you must have a sponge server 1.12. Download the [latest release](https://github.com/OnapleRPG/Itemizer/releases) and drag and drop it into your server's `mods/` folder. Then restart your server.
-Check in the `/config/itemizer/` folder if default configuration is well copied and in logs if files is well loaded.
+This plugin needs a sponge server 1.12. Download the [latest release](https://github.com/OnapleRPG/Itemizer/releases) and copy it into your server's `mods/` folder. Then restart your server.  
+Check in the `/config/itemizer/` folder if default configuration is properly copied, and you should notice server logs mentionning the proper plugin loading.  
 
 ## Minecraft Commands
 
-* `/register <newId>` : register item into the config. I advise you to use this [generator](http://mapmaking.fr/give1.12/). to give you the item before registering them.
-once registered, you will see te item in your configuration file and you will be able to edit it.
-Permission : *itemizer.command.register*
-* `/retrieve <itemId> [quantity] [player]` : Obtain an item specified in the configuration file for the given id.  
-Permission : *itemizer.command.rerieve*
-* `/fetch <poolId> [quantity] [player]` : Try to obtain an item from a configured pool in the configuration file with its *id*.
-Permission : *itemizer.command.fetch*
-* `/has-item <player> <itemId> [quantity]` : check if a player has an specific item in his inventory
-Permission : *itemizer.command.hasitem*
-* `/reload-itemizer` : Reload each configuration file.
-Permission : *itemizer.command.reload*
+* `/register <newId>` : register item in hand into the config. I advise you to use this [generator](http://mapmaking.fr/give1.12/) to generate the item to register.  
+Once registered, the item will be saved into the configuration file, and you will be able to retrieve it.  
+Permission : *itemizer.command.register*  
+* `/retrieve <itemId> [quantity] [player]` : Obtain an item specified in the configuration file (see the `items.conf`) for the given id.  
+Permission : *itemizer.command.rerieve*  
+* `/fetch <poolId> [quantity] [player]` : Try to obtain an item from a configured pool (see the `pools.conf`) using its *id*.  
+Permission : *itemizer.command.fetch*  
+* `/has-item <player> <itemId> [quantity]` : check if a player has an specific item from configuration in his inventory  
+Permission : *itemizer.command.hasitem*  
+* `/reload-itemizer` : Reload all itemizer configuration files.  
+Permission : *itemizer.command.reload*  
 
 ## Configuration files
 
 All configuration files use HOCON format. They are loaded at plugin start. You can force a reload with the command `/reload-itemizer` (crafts will require a server restart).  
 The configuration files are stored in the *config/itemizer* folder of your server. Default configuration files will be generated if they do not exist. You can also use a folder instead of a plain file, the plugin will then read every files within it (for instance, create a folder *items* instead of the *items.conf*, and put every HOCON files within it).  
-> I highly recommend you backup your files to avoid any loss.  
+> I highly recommend to backup your files to avoid any unwanted loss.  
 
 ### Global  configuration
 In the global configuration file you can change plugin settings :
-* __RewriteParts__ instead of using default Minecraft notation for _enchantments_, _modifiers_ , _undreakable_ , _canMine_ .
+* __RewriteParts__ instead of using default Minecraft notation for _enchantments_, _modifiers_ , _unbreakable_ , _canMine_ .
 You can chose to rewrite them manually. set `False` to let default look or `True` to rewrite It.
-* __DefaulColor__ if you decide to rewrite a part you can chose the color of each elements.
+* __DefaulColor__ if you decide to rewrite a part you can choose the color of each element.
 * __EnchantRewrite__ you can change the name of enchantment. if you let an enchantment blank, it will not appear.
 * __ModifierRewrite__ (AttributeModifier like `generic.attackDamage`) you can rewrite his name.
 * __CanMineRewrite__ and __UnbreakableRewrite__ set the text of your choice for it.
 
-You can chose to edit the config file or use `/configure <Type> <Key> [value]` command.
+You can choose to edit the config file or use `/configure <Type> <Key> [value]` command.
 
 __Be careful using the command, it overrides the file__  
 
