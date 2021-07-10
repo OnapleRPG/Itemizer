@@ -7,7 +7,6 @@ logs/latest.log
 scripts
 *.iml
 gradlew.bat
-gradle
 .classpath
 .project
 .settings
