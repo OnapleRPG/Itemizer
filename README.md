@@ -3,16 +3,16 @@
 
 Itemizer is a Sponge Minecraft plugin that allows custom items creation. Store plenty of custom items in configurations files.  
 Once an item is registered, you can also register :
-* crafts : register new crafts (with or without shape) and smelting recipe.
-* pools : assign items to pools with a probability and fetch them randomly.
-* affixes : for additionnal customization, items can be modified afterward by affix (also pickable in a pool) to slighly modify their characteristics.
+* crafts : register new crafts (with or without shape) and smelting recipes
+* pools : assign items to pools with a probability, and fetch them randomly
+* affixes : for additionnal customization, items can be modified afterwards using affixes (also pickable in a pool) to slighly modify their characteristics.
 
-An examples of each config file is loaded at the first launch of the plugin under the folder `/config/itemizer/`. This way you can see how they're structured.  
+An examples of each config file is loaded at the first launch of the plugin, under the folder `/config/itemizer/`. This way you can see how they're structured.  
 >Don't be afraid by item config complexity, it can be generated from existing items in-game
 
 ## Installation
-This plugin needs a sponge server 1.12. Download the [latest release](https://github.com/OnapleRPG/Itemizer/releases) and copy it into your server's `mods/` folder. Then restart your server.  
-Check in the `/config/itemizer/` folder if default configuration is properly copied, and you should notice server logs mentionning the proper plugin loading.  
+This plugin needs a sponge server 1.12. Download our [latest release](https://github.com/OnapleRPG/Itemizer/releases) and copy it into your server's `mods/` folder. Then restart your server.  
+Check in the `/config/itemizer/` folder if default configuration is properly copied, and you should notice server logs mentionning the proper plugin loaded.  
 
 ## Minecraft Commands
 
@@ -34,103 +34,34 @@ All configuration files use HOCON format. They are loaded at plugin start. You c
 The configuration files are stored in the *config/itemizer* folder of your server. Default configuration files will be generated if they do not exist. You can also use a folder instead of a plain file, the plugin will then read every files within it (for instance, create a folder *items* instead of the *items.conf*, and put every HOCON files within it).  
 > I highly recommend to backup your files to avoid any unwanted loss.  
 
-### Global  configuration
-In the global configuration file you can change plugin settings :
-* __RewriteParts__ instead of using default Minecraft notation for _enchantments_, _modifiers_ , _unbreakable_ , _canMine_ .
-You can chose to rewrite them manually. set `False` to let default look or `True` to rewrite It.
-* __DefaulColor__ if you decide to rewrite a part you can choose the color of each element.
-* __EnchantRewrite__ you can change the name of enchantment. if you let an enchantment blank, it will not appear.
-* __ModifierRewrite__ (AttributeModifier like `generic.attackDamage`) you can rewrite his name.
-* __CanMineRewrite__ and __UnbreakableRewrite__ set the text of your choice for it.
-
-You can choose to edit the config file or use `/configure <Type> <Key> [value]` command.
-
-__Be careful using the command, it overrides the file__  
-
-
 ### Item creation
 
 A file named __*items.conf*__ stores the items that can be retrieved from the plugin.
 
-The root element has to be __items__.
-For each  item you have the following properties :
-For each item configured, the following data can be provided :
+The root element has to be __items__.  
+For each item configured, the following data can be provided :  
 * The mandatory `id` field is used as a key identifier
-* The mandatory `item` who contain all the item data. I advise you to generate the data with a `/give` command and register it. sadly I haven't implemented update yet
+* The mandatory `item` contains all the item data. I advise you to generate the item with a [generator](http://mapmaking.fr/give1.12/) using the `/give` command and register it using `/register`.   
 * __thirdParties__ allows third party plugin to update your item (by now only [Jessie tags](https://github.com/OnapleRPG/Jessie-Tags) is available)
-* __Affix__ pick in a pool of affix to randomly affect item statistics.
+* __Affix__ pick in a pool of affix to randomly affect item statistics.  
 
-#### Example
-An example of an battle axe indexed as _barbarian_axe_ with some attribute modifiers and an affix in _damage_ pool.
-```
-    {
-        id="barbarian_axe"
-        item {
-            ContentVersion=2
-            Count=1
-            Data=[
-                {
-                    ContentVersion=2
-                    ManipulatorData {
-                        "." {
-                            id="barbarian_axe"
-                        }
-                        ContentVersion=1
-                    }
-                    ManipulatorId="itemizer:item.id"
-                }
-            ]
-            ItemType="minecraft:iron_axe"
-            UnsafeDamage=0
-            UnsafeData {
-                AttributeModifiers=[
-                    {
-                        Amount=5
-                        AttributeName="generic.attackDamage"
-                        Name="generic.attackDamage"
-                        Operation=0
-                        Slot=mainhand
-                        UUIDLeast=160005
-                        UUIDMost=13658
-                    },
-                    {
-                        Amount=-0.1
-                        AttributeName="generic.attackSpeed"
-                        Name="generic.attackSpeed"
-                        Operation=1
-                        Slot=mainhand
-                        UUIDLeast=169991
-                        UUIDMost=15894
-                    }
-                ]
-                display {
-                    Lore=[
-                        "Nobody have whet this blade yet",
-                        "Nonetheless it is sharp on your finger"
-                    ]
-                    Name="Barbarian Axe"
-                }
-            }
-        }
-        thirdParties=[],
-         affix=damage
-    }
-```
-don't be afraid all data in `item` are generated.
+When starting the server with the plugin for the first time, [a default configuration](https://github.com/OnapleRPG/Itemizer/blob/master/src/main/resources/assets/itemizer/items.conf) will be generated (we didn't write those configurations manually).  
 
 ### Items pool
 
-A file named __*pools.conf*__ defines pools to select item randomly from.
+A file named __*pools.conf*__ defines pools to select item randomly from.  
+When fetching from a pool, it will randomly gives you one (or none) of the listed items.  
 
-The root element must be `pools`.
+The root element must be `pools`.  
 * An `id` is used to enable a pool to be referenced.
 * `items` is an array containing the items obtainable, it contains :
-    * A `probability` between 0 and 1, giving the actual chances of having a given item. _The last item in a pool can have a probability of 1, it would then be the default drop_
+    * A `probability` between 0 and 1, giving the actual chances of having a given item. _ex: 0.2 gives you a 20% chance of obtaining that item. The last item in a pool can have a probability of 1, it would then be the default drop_  
     * An `Item` reference, it could be its _name_ , its _ref_ or directly is _type_
         * `ref` is used as a reference to a configured item id
         * `name` will be used if _ref_ is absent or if no item were returned to generate an item with a given type
         * you can use `type` instead of the above both to set a full item configuration (same as item in _item property_ in item.conf) 
-    * Two quantity (optional) `maxQuantity` and `minDauntity`
+    * Two quantities (optional) `maxQuantity` and `minQuantity`.  
+      _if this item is fetched from the pool, you will obtain between minQuantity and maxQuantity of that item. By default 1._
 ```
 pools = [
   {
@@ -159,15 +90,15 @@ A file named __*crafts.conf*__ defines new crafts to be implemented in game.
 The root element must be `crafts`.
 * An `id` must be defined.
 * The `__class__` can be of three types : *com.onaple.itemizer.data.beans.recipes.ShapelessCrafting*, *com.onaple.itemizer.data.beans.recipes.Smelting* or *com.onaple.itemizer.data.beans.recipes.ShapedCrafting*.
-* Used in all crafting recipes the the result must be an object containing one of the following fields:
-    * Using `name` followed by a string can be used to reference a minecraft item.
-    * Using `ref` with a number or a string can be used to retrieve an item from Itemizer's items.
-* The `recipe` is used for ShapelessCrafting and Smelting only and is used to define the item needed for the recipe. It must contain an object containing one of the following fields:
-    * Using `name` associated with a string to match a minecraft item.
-    * Using `ref` with a number or a string for the desired Itemizer id of the item.
-* The `pattern` is used for ShapedCrafting only to define the pattern which will be used to craft an item *(An example is available and explained below)*
-* The `ingredients` are used to match the characters used in the pattern for a ShapedCrafting.
-    * Each different character used in the pattern must be used as a key with the following object :
+* Used in all crafting recipes the, `result` must be an object containing one of the following fields:
+    * `name` can be used with a string to reference a minecraft item
+    * `ref` used with a number or a string can be used to retrieve an item from Itemizer's items.
+* The `recipe` is used for ShapelessCrafting and Smelting only, and is used to define the item needed for the recipe. It must contain an object with one of the following fields:
+    * `name` associated with a string for a minecraft item.
+    * `ref` with a number or a string for the desired Itemizer id of the item.
+* The `pattern` is used for ShapedCrafting only to define the pattern which will be used to craft an item *(example available and explained below)*
+* The `ingredients` are used for ShapedCrafting to match pattern keys with ingredients:
+    * Each different character used in the pattern must be used as a key with one of the following:
         * An object with "name" as a key and the item name as a value (e.g: `{name: "minecraft:stick"}`)
         * An object with "ref" as a key and the itemizer id as a value (e.g: `{ref: 1}`)
 
@@ -197,31 +128,40 @@ crafts = [
   }
 ]
 ```
-_The first craft requires a stone axe to craft the item referenced "1", the second craft enable us to cook a cooked_porkchop into a coal,
-and the third one is used to craft the item referenced "2" with three sticks aligned in a vertical centered line (notice the whitespaces before and after the "a")_
+_The first craft requires a stone axe to craft the item referenced "1", the second craft enable us to cook a cooked_porkchop into a coal, and the third one is used to craft the item referenced "king_sword" with three sticks aligned in a vertical centered line (notice the whitespaces before and after the "a")_  
+_In case you wanted to make the same recipe with a square pattern: `pattern : ["aaa", "a a", "aaa"]`_  
+
+### Global configuration
+In the global configuration file, you can change plugin settings for default names in item descriptions.  
+* __RewriteParts__: instead of using default Minecraft notation for _enchantments_, _modifiers_ , _unbreakable_ , _canMine_ ; you can choose to change their name.  
+For each key in this object, set `false` to let default look or `true` to rewrite it.
+* __DefaulColor__: if you decide to rewrite a part, you can choose the color of each element in this object.  
+* __EnchantRewrite__: you can change the name of an enchantment in this object. If you let an enchantment blank, it will not appear.
+* __ModifierRewrite__: you can change an attribute name (AttributeModifier like `generic.attackDamage`) as you like in this object.  
+* __CanMineRewrite__ and __UnbreakableRewrite__ are string to overwrite the default text of those traits.  
+
+You can choose to edit the config file or use `/configure <Type> <Key> [value]` command. 
+__Be careful using the command, the file will be overwritten__  
 
 ### Affix
 
-Affix are modifiers who can be applied to items. They are pre-registered in pools (different from the pools used for items). They are stored
-in the `affix.conf` file as an HOCON file.
+Affix are buffs/debuffs that can be applied to items.  
+They are pre-registered in pools (*not* related to the pools used for items). They are stored in the `affix.conf` file as an HOCON file.  
+
+
 The root is `affixes`, it contains a list of affix groups.  
 
- A group is categorized by its `group` name.
-it's a schematic name only used for configuration like damage, speed, balanced, only_negative, etc... It will be
-used to attach a group to an item.
+A group is categorized by its `group` name.  
+it's a schematic name only used for configuration like damage, speed, balanced, only_negative, etc... It will be used to attach a group to an item.  
 
- And then the multiples `tiers` of each affix.
- A tier is like a power level. `__class__` is the implementation of the affix, you can use your own
- (leave it as is if you don't know what that mean).
+Then there are multiples `tiers` for each affix.  
+A tier is like a power level. `__class__` is the implementation of the affix, you can use your own (leave it as is if you don't know what that mean).  
 
+You can set a `prefix` and a `suffix` to modify the item name. Don't leave space before and after.  
+The `probability` is the chance to choose this tiers more than another. the smaller it is, the less chance you have to get this tier. Be careful to stay under the probability of 1, otherwise the tier which total probability exceeds 1 will never get picked.  
 
- You can set a `prefix` and `suffix` which modify the name item. Don't leave space before and after,
- these arguments will be set afterward.  
- The `probability` is the chance to choose this tiers more than another. the smaller it is, the less chance you have
- to get this tier. Be careful to stay under the probability of one otherwise the tier which total probability exceeds 1 will never get picked.
-
- And then : the **attributes**, `attributes` are the modifiers of the data who change the item statistics.
- you have 4 properties , `name`, `slot`, `amount` and `operation`. value are the same than vanilla.
+Then, the `attributes` are the data modifiers which change the item statistics.  
+You have 4 properties , `name`, `slot`, `amount` and `operation`. Value are the same than vanilla.  
 If you want more details about *AttributeModifiers* check the Minecraft [wiki](https://minecraft.gamepedia.com/Attribute)
 
 
@@ -247,13 +187,16 @@ affixes = [
      }
    ]
 ```
-## For developer
-If you are willing to use **Itemizer** in your plugin development, we provide services to ease interactions.  
-you can also use it with js (like with customNPC).
 
-you can check the [javadoc](https://onaplerpg.github.io/Itemizer/javadoc/) for more information.
+
+
+## For developer
+
+If you are willing to use **Itemizer** in your plugin development, we provide services to ease interactions.  
+You can also use it with js (like with customNPC).  
 
 ### Services
+
 * **IItemService** : Give access to the object getters functions to a plugin.  
 
    | Return |  Method  |
@@ -268,30 +211,30 @@ you can check the [javadoc](https://onaplerpg.github.io/Itemizer/javadoc/) for m
    | `java.util.Optional<org.spongepowered.api.item.inventory.ItemStack>` |	`retrieve(java.lang.String id)` |
    | `java.util.Optional<org.spongepowered.api.item.inventory.ItemStack>` |	`retrieve(java.lang.String id, int qte)` |
 
-    ### Installation with Gradle
+### Installation with Gradle
 
- * Add [Jitpack](https://jitpack.io/) into your repositories
- ```
-   repositories {
-     mavenCentral()
-     maven {
-         name = 'jitpack'
-         url = 'https://jitpack.io'
-     }
- }  
- ```
- * Add **Itemizer** to your dependencies
- ```
- dependencies {
-      compile 'org.spongepowered:spongeapi:7.0.0'
-      implementation 'com.github.OnapleRPG:Itemizer:V3.2'
+* Add [Jitpack](https://jitpack.io/) into your repositories
+```
+repositories {
+  mavenCentral()
+  maven {
+      name = 'jitpack'
+      url = 'https://jitpack.io'
   }
- ```
- * Use services
+}  
+```
+* Add **Itemizer** to your dependencies
+```
+dependencies {
+    compile 'org.spongepowered:spongeapi:7.0.0'
+    implementation 'com.github.OnapleRPG:Itemizer:V3.2'
+}
+```
+* Use services
  ```java
 Optional<IItemService> optionalIItemService = Sponge.getServiceManager().provide(IItemService.class);
-            if (optionalIItemService.isPresent()) {
-                IItemService iItemService = optionalIItemService.get();
-                optionalItem = iItemService.retrieve(itemId);
-            }
+    if (optionalIItemService.isPresent()) {
+        IItemService iItemService = optionalIItemService.get();
+        optionalItem = iItemService.retrieve(itemId);
+    }
 ```
