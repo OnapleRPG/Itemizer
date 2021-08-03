@@ -85,7 +85,7 @@ _The first pool of item has a 50% chance of getting a porkchop, 20% chance of ge
 
 ### Craft configuration
 
-A file named __*crafts.conf*__ defines new crafts to be implemented in game.
+A file named __*crafts.conf*__ defines new crafts to be implemented in game.  
 
 The root element must be `crafts`.
 * An `id` must be defined.
